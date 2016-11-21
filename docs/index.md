@@ -1,21 +1,16 @@
 --- 
-title: "A Minimal Bookdown Book"
-author: "Sean Kross"
-date: "2016-11-10"
+title: "Statistik_21"
+author: "Sebastian Sauer"
+date: "2016-11-21"
 site: bookdown::bookdown_site
-output:
- bookdown::html_chapters:
-   includes:
-     in_header: style.css
 documentclass: book
 bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: seankross/bookdown-start
-url: 'https\://github.com/seankross/bookdown-start'
-description: "Everything you need (and nothing more) to start a bookdown book."
+github-repo: sebastiansauer/Statistik_21
+description: "Ein Kurs in angewandter Statistik zu Beginn des 21. Jahrhunderts"
 ---
 
-# Preface {-}
+# Vorwort {-}
 
-This is the very first part of the book.
+Das ist das Vorwort

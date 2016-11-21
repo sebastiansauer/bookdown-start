@@ -1,5 +1,11 @@
 [
-["index.html", "A Minimal Bookdown Book Preface", " A Minimal Bookdown Book Sean Kross 2016-11-10 Preface This is the very first part of the book. "],
-["introduction.html", "Chapter 1 Introduction", " Chapter 1 Introduction This is the first real chapter. "],
-["diving-in.html", "Chapter 2 Diving In", " Chapter 2 Diving In Now let’s talk details. "]
+["index.html", "Statistik_21 Vorwort", " Statistik_21 Sebastian Sauer 2016-11-21 Vorwort Das ist das Vorwort "],
+["einfuhrung.html", "Kapitel 1 Einführung 1.1 Was ist Statistik? Wozu ist sie gut?", " Kapitel 1 Einführung 1.1 Was ist Statistik? Wozu ist sie gut? Diese zwei Fragen sollte man sich am Anfang der Beschäftigung mit jedem Thema stellen. Prädiktion als zentraler Zweck Im Gegensatz zu Parameter-Zentriertheit Parameter sind abstrakt, existieren nicht: Zu welcher Population bezieht sich ein Inferenzschluss? Bei bekannten Daten braucht man keine Parameter keine p-Werte Observation Based "],
+["trends.html", "Kapitel 2 Trends", " Kapitel 2 Trends Big Data Open Science Computerisierung Neue Methoden zur numerischen Vorhersage Textmining "],
+["unbehagen.html", "Kapitel 3 Unbehagen", " Kapitel 3 Unbehagen p-Werte Theorie der Wahrscheinlichkeit im Frequentismus Reproduzierbarkeitskrise Parameter Kausalität "],
+["datenjudo.html", "Kapitel 4 Datenjudo", " Kapitel 4 Datenjudo Daten umformen. dplyr Normalform "],
+["visualisierung.html", "Kapitel 5 Visualisierung", " Kapitel 5 Visualisierung Nutzen (Anscombe) Prinzipien nach Tufte Cleveland ggplot2 "],
+["statistisches-modellieren.html", "Kapitel 6 Statistisches Modellieren", " Kapitel 6 Statistisches Modellieren Was sind Modelle? Überanpassung Prädiktion vs. Explanation Numerische vs. klassifizierende Modelle Geleitete vs. ungeleitete Modelle Parametrische vs. nichtparametrische Modelle Fehler- vs. Varianzreduktion Modellgüte "],
+["numerische-modelle.html", "Kapitel 7 Numerische Modelle", " Kapitel 7 Numerische Modelle Lineare Regression Grundlagen Multiple Regression Interaktion Eisberge Logistische Regression Penalisierende Regression Baumbasierte Verfahre Ausblick "],
+["klassifizierende-modelle.html", "Kapitel 8 Klassifizierende Modelle", " Kapitel 8 Klassifizierende Modelle Clusteranalyse Nächste-Nachbarn-Analyse "]
 ]

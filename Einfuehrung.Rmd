@@ -1,0 +1,13 @@
+# Einführung
+
+## Rahmen
+
+![](./images/Rahmen.png)
+
+## Was ist Statistik? Wozu ist sie gut?
+
+- Diese zwei Fragen sollte man sich am Anfang der Beschäftigung mit jedem Thema stellen.
+
+- Um Ereignisse präzise vorherzusagen
+- Statistik soll sich um Dinge dieser Welt drehen, nicht um Parameter
+- Statt einer Frage "ist µ_1 größer als µ_2?" besser "Wie viel Umsatz erwarte ich von diesem Kunden?", "Wie viele Saitensprünge hatte er wohl?", "Wie groß ist die Wahrscheinlichkeit für sie zu überleben?" und dergleichen.
