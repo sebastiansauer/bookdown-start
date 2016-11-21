@@ -14,3 +14,4 @@ rmd_files: [
 "Klassifizierende_Modelle.Rmd"]
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
+before_chapter_script: "_common.R"

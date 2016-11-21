@@ -2,7 +2,15 @@
 
 ## Rahmen
 
-![](./images/Rahmen.png) 
+![](./images/Rahmen.png){ width=30% }
+
+
+```r
+knitr::include_graphics("./images/Rahmen.png")
+```
+
+<img src="./images/Rahmen.png" width="1194" />
+
 
 ## Was ist Statistik? Wozu ist sie gut?
 

@@ -11,14 +11,29 @@ github-repo: sebastiansauer/Statistik_21
 description: "Ein Kurs in angewandter Statistik des beginnenden 21. Jahrhunderts"
 ---
 
+
+```{r}
+source("./source/libs.R")
+```
+
+
 # Vorwort {-}
 
 - Worum geht es in diesem Buch
+    - Einführung in moderne Verfahren der Statistik
+    - Für Praktiker
+    - Betonung liegt auf "modern" und "Praktiker"
 - Ziel des Buches
+    - Intuitives, grundlegendes Verständnis zu zentralen Konzepten 
+    - Handwerkszeug zum selber Anwenden
 - Unterschied zu anderen Büchern
+    - Wenig Formeln
+    - Keine/weniger "typischen" klassischen Methoden wie ANOVA, Poweranalyse etc.
+    - Aufzeigen von Problemen mit klassischen Verfahren
+    - Kritik am Status-Quo
 - Didaktik
     - Hands-on
     - R
     - Lernfragen
     - Fallstudien
-    - Aktuelle Entwicklungen
+    - Aktuelle Entwicklungen ausgerichtet
