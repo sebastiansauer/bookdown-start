@@ -8,7 +8,7 @@ bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: sebastiansauer/Statistik_21
-description: "Ein Kurs in angewandter Statistik zu Beginn des 21. Jahrhunderts"
+description: "Ein Kurs in angewandter Statistik des beginnenden 21. Jahrhunderts"
 ---
 
 # Vorwort {-}
@@ -17,8 +17,8 @@ description: "Ein Kurs in angewandter Statistik zu Beginn des 21. Jahrhunderts"
 - Ziel des Buches
 - Unterschied zu anderen Büchern
 - Didaktik
-  - Hands-on
-  - R
-  - Lernfragen
-  - Fallstudien
-  - Aktuelle Entwicklungen
+    - Hands-on
+    - R
+    - Lernfragen
+    - Fallstudien
+    - Aktuelle Entwicklungen

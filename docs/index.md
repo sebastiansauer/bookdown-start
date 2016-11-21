@@ -13,4 +13,12 @@ description: "Ein Kurs in angewandter Statistik zu Beginn des 21. Jahrhunderts"
 
 # Vorwort {-}
 
-Das ist das Vorwort
+- Worum geht es in diesem Buch
+- Ziel des Buches
+- Unterschied zu anderen Büchern
+- Didaktik
+  - Hands-on
+  - R
+  - Lernfragen
+  - Fallstudien
+  - Aktuelle Entwicklungen

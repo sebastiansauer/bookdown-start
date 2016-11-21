@@ -1,12 +1,14 @@
 # Einführung
 
+## Rahmen
+
+![](./images/Rahmen.png) 
+
 ## Was ist Statistik? Wozu ist sie gut?
 
 - Diese zwei Fragen sollte man sich am Anfang der Beschäftigung mit jedem Thema stellen.
-- Prädiktion als zentraler Zweck
-  - Im Gegensatz zu Parameter-Zentriertheit
-    - Parameter sind abstrakt, existieren nicht:
-    - Zu welcher Population bezieht sich ein Inferenzschluss?
-  - Bei bekannten Daten braucht man keine Parameter
-- keine p-Werte
-- Observation Based
+
+- Statistik meint Methoden, die das Ziel haben, Ereignisse präzise vorherzusagen
+- Statistik soll sich um Dinge dieser Welt drehen, nicht um Parameter
+- Statt einer Frage "ist µ_1 größer als µ_2?" besser "Wie viel Umsatz erwarte ich von diesem Kunden?", "Wie viele Saitensprünge hatte er wohl?", "Wie groß ist die Wahrscheinlichkeit für sie zu überleben?" und dergleichen.
+- Der Nutzen von Vorhersagen liegt auf der Hand: Vorhersagen sind praktisch; eine nützliche Angelegenheit (wenn auch schwierig).
