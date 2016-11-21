@@ -11,7 +11,9 @@ rmd_files: [
 "Visualisieren.Rmd",
 "Modellieren.Rmd",
 "Numerische_Modelle.Rmd",
-"Klassifizierende_Modelle.Rmd"]
+"Klassifizierende_Modelle.Rmd",
+"Literaturverzeichnis.Rmd"]
+
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
 before_chapter_script: "_common.R"

@@ -117,6 +117,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6" data-path="statistisches-modellieren.html"><a href="statistisches-modellieren.html"><i class="fa fa-check"></i><b>6</b> Statistisches Modellieren</a></li>
 <li class="chapter" data-level="7" data-path="numerische-modelle.html"><a href="numerische-modelle.html"><i class="fa fa-check"></i><b>7</b> Numerische Modelle</a></li>
 <li class="chapter" data-level="8" data-path="klassifizierende-modelle.html"><a href="klassifizierende-modelle.html"><i class="fa fa-check"></i><b>8</b> Klassifizierende Modelle</a></li>
+<li class="chapter" data-level="9" data-path="literaturverzeichnis.html"><a href="literaturverzeichnis.html"><i class="fa fa-check"></i><b>9</b> Literaturverzeichnis</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -141,23 +143,55 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">Kapitel 1</span> Einführung</h1>
 <div id="rahmen" class="section level2">
 <h2><span class="header-section-number">1.1</span> Rahmen</h2>
-<div class="figure">
-<img src="images/Rahmen.png" style="width:30.0%" />
-
+<p>Der “Rahmen” dieses Buches ist der Überblick über wesentliche Schritte der Datenanalyse (aus meiner Sicht). Es gibt viele Ansätze, mit denen der Ablauf von Datenanalyse dargestellt wird. Der im Moment populärste oder bekannteste ist wohl der von Hadley Wickham und Garret Grolemund <span class="citation">(Wickham and Grolemund <a href="#ref-r4ds">2016</a>)</span>. Hadley und Garrett haben einen “technischeren” Fokus als der dieses Buches. Ihr Buch “R for Data Science” ist hervorragend (und frei online verfügbar); nur ist der Schwerpunkt ein anderer; es baut ein viel tieferes Verständnis von R auf. Hier spielen aber statistisch-praktisch und statistisch-philosophische<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Aspekte eine größere Rolle.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
+<img src="images/Rahmen.png" alt="Rahmen" width="70%" />
+<p class="caption">
+Figure 1.1: Rahmen
+</p>
 </div>
-<p><img src="images/Rahmen.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Das Diagramm <a href="#Rahmen"><strong>??</strong></a> stellt den Rahmen dieses Buch dar: Die drei Hauptaspekte sind <em>Umformen</em>, <em>Visualisieren</em> und <em>Modellieren</em>. Dies ist vor dem Hintergrund der <em>Reproduzierbarkeit</em> eingebettet.</p>
+<p>Mit <em>Umformen</em> ist gemeint, dass Daten in der Praxis häufig nicht so sind, wie man sie gerne hätte. Mal fehlt eine Variable, die den Mittelwert anderer ausdrückt, oder es gibt unschöne “Löcher”, wo starrsinnige Versuchspersonen standhaft keine Antwort geben wollten. Die Zahl an Problemen und (Arten von) Fehlern übersteigt sicherlich die Anzahl der Datensätze. Kurz: Wir sehen uns gezwungen, den Daten einige Einblick abzuringen, und dafür müssen wir sie erst in Form bringen, was man als eine Mischung zwischen Artistik und Judo verstehen kann.</p>
+<p>Ein Bild sagt mehr als 1000 Worte, weiß der Volksmund. Für die Datenanalyse gilt dies auch. Ein gutes Diagramm vermittelt eine Fülle an Informationen “auf einen Blick” und erzielt damit eine Syntheseleistung, die digitalen Darbietungsformen, sprich: Zahlen, verwehrt ist. Nebenbei sind Diagramme, mit Geschick erstellt, ein Genuss für das Auge, daher kommt der <em>Visualisierung</em> großen Wert zu.</p>
+<p>Als letzten, aber wesentlichen Punkt führen wir das <em>Modellieren</em> auf. Es gibt mehr Definitionen von “Modell” als ich glauben wollte, aber hier ist damit gemeint, dass wir uns eine Geschichte ausdenken, wie die Daten entstanden sind, oder präziser gesagt: welcher Mechanismus hinter den Daten steht. So könnten wir Klausurnoten und Lernzeit von einigen Studenten<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> anschauen, und verkünden, wer mehr lerne, habe auch bessere Noten (ein typischer Dozentenauspruch). Unser Modell postuliert damit einen linearen Anstieg des Klausurerfolgs bei steigender Vorbereitungszeit. Das schönste an solchen Modellen ist, dass wir Vohersagen treffen können. Zum Beispiel: “Joachim, du hast 928 Stunden auf die Klausur gelernt; damit solltest du 93% der Punkte erzielen”.</p>
+<p>Was ist dann mit dem <em>Reproduzierbarkeitshintergrund</em> gemeint? Ihre Arbeiten von Umformen, Visualisieren und Modellieren sollten sich nicht ausschließlich im Arbeitsspeicher Ihres Gehirns stattfinden, auch wenn das bei Ihnen, lieber Leser, vielleicht schneller ginge. Stattdessen soll der Mensch sich Mühe machen, seine Gedanken aufzuschreiben, hier insbesondere die Rechnungen bzw. alles, was den Daten angetan wurde, soll protokolliert werden (auch die Ergebnisse, aber wenn der Weg dorthin klar protokolliert ist, kann man die Ergebnisse ja einfach “nachkochen”). Ein Vorteil dieses Vorgehens ist, dass andere (inklusive Ihres zukünftigen Ich) die Ergebnisse bzw. das Vorgehen einfacher nachvollziehen können.</p>
 </div>
 <div id="was-ist-statistik-wozu-ist-sie-gut" class="section level2">
 <h2><span class="header-section-number">1.2</span> Was ist Statistik? Wozu ist sie gut?</h2>
+<p>Diese zwei Fragen sollte man sich am Anfang der Beschäftigung mit jedem Thema stellen. Was ist Stististik? <em>Eine</em> Antwort dazu ist, dass Statistik die Wissenschaft von Sammlung, Analyse, Interpretation und Kommunikation mithilfe mathematischer Verfahren ist und zur Entscheidungshilfe beitragen solle <span class="citation">(<em>The Oxford Dictionary of Statistical Terms</em> <a href="#ref-oxford">2006</a>; Romeijn <a href="#ref-sep-statistics">2016</a>)</span>. Damit hätten wir auch den Unterschied zur schnöden Datenanalyse (ein Teil der Statistik) herausgemeiselt. Statistik wird häufig in die zwei Gebiete <em>deskriptive</em> und <em>inferierende</em> Statistik eingeteilt. Erstere fasst viele Zahlen zusammen, so dass wir den Wald statt vieler Bäume sehen. Letztere verallgemeinert von den vorliegenden (sog. “Stichproben-”)Daten auf eine zugrunde liegende Grundmenge (Population). Dabei spielt die Wahrscheinlichkeitsrechnung und Zufallsvariablen eine große Rolle.</p>
+<p>Auch wenn die gerade genannte Diskussion die häufigste oder eine typische ist, mehren sich doch Stimmen, die Statstik anders akzentuieren. So schreibt Briggs in einem aktuellen Buch <span class="citation">(Briggs <a href="#ref-uncertainty">2016</a>)</span>, dass es in der Statistik darum ginge, die Wahrscheinlichkeit zukünftiger Ereignisse vorherzusagen: “Wie wahrscheinlichi ist es, dass - gegeben einem statistischen Modell, allerlei Annahmen und einem Haufen Daten - Kandidat X der neue Präsident wird”<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>? Das schöne an dieser Idee ist, dass das “Endprodukt” etwas sehr Weltliches und damit praktisches ist: Die Wahrscheinlichkeit einer interessanten (und unbekannten) Aussage. Nebenbei ruht diese Idee auf dem sicheren Fundament der Wahrscheinlichkeitstheorie.</p>
+<p>Abgesehen von philosophischen Überlegungen zum Wesen der Statistik kann man sagen, dass Vorhersagen etwas sehr praktisches sind. Sie nehmen daher aus praktischen Überlegungen einen zentralen Platz in diesem Buch an. Die philosophische Relevanz des prädiktiven Ansatzes ist gut bei Briggs <span class="citation">(Briggs <a href="#ref-uncertainty">2016</a>; <span class="citeproc-not-found" data-reference-id="average"><strong>???</strong></span>)</span> nachzulesen.</p>
 <ul>
-<li><p>Diese zwei Fragen sollte man sich am Anfang der Beschäftigung mit jedem Thema stellen.</p></li>
 <li>Statistik meint Methoden, die das Ziel haben, Ereignisse präzise vorherzusagen</li>
 <li>Statistik soll sich um Dinge dieser Welt drehen, nicht um Parameter</li>
 <li>Statt einer Frage “ist µ_1 größer als µ_2?” besser “Wie viel Umsatz erwarte ich von diesem Kunden?”, “Wie viele Saitensprünge hatte er wohl?”, “Wie groß ist die Wahrscheinlichkeit für sie zu überleben?” und dergleichen.</li>
-<li><p>Der Nutzen von Vorhersagen liegt auf der Hand: Vorhersagen sind praktisch; eine nützliche Angelegenheit (wenn auch schwierig).</p></li>
+<li>Der Nutzen von Vorhersagen liegt auf der Hand: Vorhersagen sind praktisch; eine nützliche Angelegenheit (wenn auch schwierig).</li>
 </ul>
 
 </div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-r4ds">
+<p>Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Visualize, Model, Transform, Tidy, and Import Data</em>. O’Reilly Media. <a href="https://www.amazon.com/Data-Science-Visualize-Model-Transform/dp/1491910399%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491910399">https://www.amazon.com/Data-Science-Visualize-Model-Transform/dp/1491910399%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491910399</a>.</p>
+</div>
+<div id="ref-oxford">
+<p><em>The Oxford Dictionary of Statistical Terms</em>. 2006. Oxford University Press. <a href="https://www.amazon.com/Oxford-Dictionary-Statistical-Terms/dp/0199206139%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0199206139">https://www.amazon.com/Oxford-Dictionary-Statistical-Terms/dp/0199206139%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0199206139</a>.</p>
+</div>
+<div id="ref-sep-statistics">
+<p>Romeijn, Jan-Willem. 2016. “Philosophy of Statistics.” In <em>The Stanford Encyclopedia of Philosophy</em>, edited by Edward N. Zalta, Winter 2016. <a href="http://plato.stanford.edu/archives/win2016/entries/statistics/" class="uri">http://plato.stanford.edu/archives/win2016/entries/statistics/</a>.</p>
+</div>
+<div id="ref-uncertainty">
+<p>Briggs, William. 2016. <em>Uncertainty: The Soul of Modeling, Probability &amp; Statistics</em>. Springer. <a href="https://www.amazon.com/Uncertainty-Soul-Modeling-Probability-Statistics-ebook/dp/B01JEJNUJK%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB01JEJNUJK">https://www.amazon.com/Uncertainty-Soul-Modeling-Probability-Statistics-ebook/dp/B01JEJNUJK%3FSubscriptionId%3D0JYN1NVW651KCA56C102%26tag%3Dtechkie-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB01JEJNUJK</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Ich hörte mal, jede Formel halbiert die Leserzahl eines Buches. Wahrsheinlich gilt das gleiche für jede Erwähnung von “philosophisch” und zugehörigen Begriffen. Zumindest zwei Leser hat dieses Buch (den Autor mitgezählt) …<a href="einfuhrung.html#fnref1">↩</a></p></li>
+<li id="fn2"><p>hier und überall sind Frauen und Männer gleichermaßen angesprochen; aus Gründen der Lesbarkeit das generische Maskulinum bevorzugt.<a href="einfuhrung.html#fnref2">↩</a></p></li>
+<li id="fn3"><p>Eine Vorhersage, die bei vielen Vorhersagemodellen komplett in die Grütze ging, wenn man sich die US-Präsidentenwahl 2016 anschaut.<a href="einfuhrung.html#fnref3">↩</a></p></li>
+</ol>
 </div>
             </section>
 

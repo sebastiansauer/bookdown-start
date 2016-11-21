@@ -5,7 +5,7 @@ author: "Sebastian Sauer"
 date: "2016-11-21"
 site: bookdown::bookdown_site
 documentclass: book
-bibliography: [book.bib]
+bibliography: [Statistik_21.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: sebastiansauer/Statistik_21
