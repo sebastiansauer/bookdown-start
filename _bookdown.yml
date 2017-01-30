@@ -3,10 +3,12 @@ chapter_name: "Kapitel "
 repo: https://github.com/sebastiansauer/Statistik_21
 output_dir: "docs"
 rmd_files: [
-"index.Rmd", 
+"index.Rmd",
 "Einfuehrung.Rmd",
+"Grundlagen.Rmd",
 "Trends.Rmd",
 "Unbehagen.Rmd",
+"Software.Rmd",
 "Datenjudo.Rmd",
 "Visualisieren.Rmd",
 "Modellieren.Rmd",
@@ -16,4 +18,3 @@ rmd_files: [
 
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
-before_chapter_script: "_common.R"
