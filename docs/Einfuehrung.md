@@ -2,9 +2,6 @@
 
 
 
-
-
-
 ```r
 library(knitr)
 ```
@@ -21,7 +18,7 @@ Der "Rahmen" dieses Buches ist der Überblick über wesentliche Schritte der Dat
 
 <div class="figure" style="text-align: center">
 <img src="./images/Prozess.pdf" alt="Rahmen" width="70%" />
-<p class="caption">(\#fig:unnamed-chunk-6)Rahmen</p>
+<p class="caption">(\#fig:unnamed-chunk-2)Rahmen</p>
 </div>
 
 
@@ -65,3 +62,8 @@ sdkljf
 ## Datensätze
 Name des Datensatzes    | Quelle   | Beschreibung
 `profiles` | {okcupiddata} | Daten von einer Online-Singlebörse
+`Wage` | {ISLR} | Gehaltsdaten von US-amerikanischen Männern
+`inf_test_short` | <https://sebastiansauer.github.io/data/test_inf_short.csv> | Ergebnisse einer Statistikklausur
+
+
+

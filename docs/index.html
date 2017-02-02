@@ -26,7 +26,7 @@
 <meta name="author" content="Sebastian Sauer">
 
 
-<meta name="date" content="2017-01-26">
+<meta name="date" content="2017-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -133,6 +133,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2.1" data-path="daten-explorieren.html"><a href="daten-explorieren.html#uberblick"><i class="fa fa-check"></i><b>6.2.1</b> Überblick</a></li>
 <li class="chapter" data-level="6.2.2" data-path="daten-explorieren.html"><a href="daten-explorieren.html#normalform-einer-tabelle"><i class="fa fa-check"></i><b>6.2.2</b> Normalform einer Tabelle</a></li>
 <li class="chapter" data-level="6.2.3" data-path="daten-explorieren.html"><a href="daten-explorieren.html#daten-aufbereiten-mit-dplyr"><i class="fa fa-check"></i><b>6.2.3</b> Daten aufbereiten mit <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.2.4" data-path="daten-explorieren.html"><a href="daten-explorieren.html#fallstudie-nycflights13"><i class="fa fa-check"></i><b>6.2.4</b> Fallstudie <code>nycflights13</code></a></li>
+<li class="chapter" data-level="6.2.5" data-path="daten-explorieren.html"><a href="daten-explorieren.html#weiterfuhrende-hinweise"><i class="fa fa-check"></i><b>6.2.5</b> Weiterführende Hinweise</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="visualisierung.html"><a href="visualisierung.html"><i class="fa fa-check"></i><b>7</b> Visualisierung</a></li>
@@ -164,12 +166,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Statistik_21</h1>
 <h4 class="author"><em>Sebastian Sauer</em></h4>
-<h4 class="date"><em>2017-01-26</em></h4>
+<h4 class="date"><em>2017-02-02</em></h4>
 </div>
 <div id="vorwort" class="section level1 unnumbered">
 <h1>Vorwort</h1>
 <p>Es gibt noch kein gutes Buch in deutscher Sprache zu den Grundlagen moderner Statistik, auch “Data Science” genannt. Dieses Buch soll helfen, einen Teil dieser Lücke zu füllen. Die Zielgruppe sind Analysatoren mit praktischem, wirtschaftsnahem Hintergrund. Auf mathematische Hintergründe wird großteils verzichtet; Matheliebhaber werden kaum auf ihre Kosten kommen. Im Blick habe ich (hier spricht der Autor) Anwender, die einen Freischwimmer in der modernen Datenanalyse erlernen möchten (oder müssen, liebe Studierende).</p>
-<p>Dieses Buch wurde mit dem Paket <code>bookdown</code> [bookdown] erstellt, welches wiederum stark auf den Paketen <code>knitr</code> <span class="citation">(Xie <a href="#ref-xie2015">2015</a>)</span> und <code>rmarkdown</code> <span class="citation">(<span class="citeproc-not-found" data-reference-id="rmarkdown"><strong>???</strong></span>)</span> beruht. Diese Pakete stellen verblüffende Funktionalität zur Verfügung als freie Software (frei wie in Bier und frei wie in Freiheit).</p>
+<p>Dieses Buch wurde mit dem Paket <code>bookdown</code> [bookdown] erstellt, welches wiederum stark auf den Paketen <code>knitr</code> <span class="citation">(Xie <a href="#ref-xie2015">2015</a>)</span> und <code>rmarkdown</code> <span class="citation">(Allaire et al. <a href="#ref-rmarkdown">2016</a>)</span> beruht. Diese Pakete stellen verblüffende Funktionalität zur Verfügung als freie Software (frei wie in Bier und frei wie in Freiheit).</p>
 <ul>
 <li>Worum geht es in diesem Buch
 <ul>
@@ -205,6 +207,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="refs" class="references">
 <div id="ref-xie2015">
 <p>Xie, Yihui. 2015. <em>Dynamic Documents with R and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.name/knitr/" class="uri">http://yihui.name/knitr/</a>.</p>
+</div>
+<div id="ref-rmarkdown">
+<p>Allaire, JJ, Joe Cheng, Yihui Xie, Jonathan McPherson, Winston Chang, Jeff Allen, Hadley Wickham, Aron Atkins, and Rob Hyndman. 2016. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown" class="uri">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
 </div>
 </div>
             </section>

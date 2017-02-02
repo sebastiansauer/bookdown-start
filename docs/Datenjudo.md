@@ -1,9 +1,6 @@
 
 
 
-
-
-
 # Daten explorieren
 
 Den Ablauf des Datenexplorierens kann man so darstellen:
@@ -20,7 +17,15 @@ Ist das Explorieren von Daten auch nicht statistisch anspruchsvoll, so ist es tr
 
 ## Daten einlesen
 
-In R kann man ohne Weiteres verschiedene, gebräuchliche (Excel) oder weniger gebräuchliche (Feather) Datenformate einlesen. In RStudio lässt sich dies z.B. durch einen schnellen Klick auf `Import Dataset` im Reiter `Environment` erledigen. Dabei wird im Hintergrund das Paket `readr` verwendet [@readr] (die entsprechende Syntax wird in der Konsole ausgegeben, so dass man sie sich anschauen und weiterverwenden kann).
+In R kann man ohne Weiteres verschiedene, gebräuchliche (Excel) oder weniger gebräuchliche (Feather[^2]) Datenformate einlesen. In RStudio lässt sich dies z.B. durch einen schnellen Klick auf `Import Dataset` im Reiter `Environment` erledigen. Dabei wird im Hintergrund das Paket `readr` verwendet [@readr] (die entsprechende Syntax wird in der Konsole ausgegeben, so dass man sie sich anschauen und weiterverwenden kann).
+
+[^2]:<https://cran.r-project.org/web/packages/feather/index.html> 
+
+Am einfachsten ist es, eine Excel-Datei über die RStudio-Oberfläche zu importieren; das ist mit ein paar Klicks geschehen:
+
+<img src="images/import_RStudio.png" width="50%" style="display: block; margin: auto;" />
+
+
 
 Es ist für bestimmte Zwecke sinnvoll, nicht zu klicken, sondern die Syntax einzutippen. Zum Beispiel: Wenn Sie die komplette Analyse als Syntax in einer Datei haben (eine sog. "Skriptdatei"), dann brauchen Sie (in RStudio) nur alles auszuwählen und auf `Run` zu klicken, und die komplette Analyse läuft durch! Die Erfahrung zeigt, dass das ein praktisches Vorgehen ist.
 
@@ -42,18 +47,25 @@ An einer Stelle steht `NA`. Das ist Errisch für "fehlender Wert". Häufig wird 
 Lesen wir diese Daten jetzt ein:
 
 ```r
-daten <- read.csv("https://sebastiansauer.github.io/data/wo_men.csv")
+if (!file.exists("./data/wo_men.csv")){
+  daten <- read.csv("https://sebastiansauer.github.io/data/wo_men.csv")
+} else {
+  daten <- read.csv("./data/wo_men.csv")
+}
 head(daten)
-#>                  time   sex height shoe_size
-#> 1 04.10.2016 17:58:51 woman    160        40
-#> 2 04.10.2016 17:58:59 woman    171        39
-#> 3 04.10.2016 18:00:15 woman    174        39
-#> 4 04.10.2016 18:01:17 woman    176        40
-#> 5 04.10.2016 18:01:22   man    195        46
-#> 6 04.10.2016 18:01:53 woman    157        37
+#>   X                time   sex height shoe_size
+#> 1 1 04.10.2016 17:58:51 woman    160        40
+#> 2 2 04.10.2016 17:58:59 woman    171        39
+#> 3 3 04.10.2016 18:00:15 woman    174        39
+#> 4 4 04.10.2016 18:01:17 woman    176        40
+#> 5 5 04.10.2016 18:01:22   man    195        46
+#> 6 6 04.10.2016 18:01:53 woman    157        37
 ```
 
-Der Befehl `read.csv` liest eine CSV-Datei, was uns jetzt nicht übermäßig überrascht. Aber Achtung: Wenn Sie aus einem Excel mit deutscher Einstellung eine CSV-Datei exportieren, wird diese CSV-Datei als Trennzeichen `;` (Strichpunkt) und als Dezimaltrennzeichen `,` verwenden. Da der Befehl `read.csv` als Standard mit Komma und Punkt arbeitet, müssen wir die deutschen Sonderlocken explizit angeben, z.B. so:
+Wir haben zuerst geprüft, ob die Datei (`wo_men.csv`) im entsprechenden Ordner existiert oder nicht (das `!`-Zeichen heißt auf Errisch "nicht"). Falls die Datei nicht im Ordner existiert, laden wir sie mit `read.csv` herunter und direkt ins R hinein. Andernfalls (`else`) lesen wir sie direkt ins R hinein.
+
+
+Der Befehl `read.csv` liest also eine CSV-Datei, was uns jetzt nicht übermäßig überrascht. Aber Achtung: Wenn Sie aus einem Excel mit deutscher Einstellung eine CSV-Datei exportieren, wird diese CSV-Datei als Trennzeichen `;` (Strichpunkt) und als Dezimaltrennzeichen `,` verwenden. Da der Befehl `read.csv` als Standard mit Komma und Punkt arbeitet, müssen wir die deutschen Sonderlocken explizit angeben, z.B. so:
 
 
 ```r
@@ -82,7 +94,7 @@ Typische Probleme, die immer wieder auftreten sind:
 
 
 ### Normalform einer Tabelle
-Tabellen in R werden als `data frames` (oder moderner: als `tibble`, kurz für "Table-df") bezeichnet. Tabellen sollten in "Normalform" vorliegen, bevor wir weitere Analysen starten. Unter Normalform verstehen sich folgende Punkte:
+Tabellen in R werden als `data frames` ("Dataframe" auf Denglisch; moderner: als `tibble`, kurz für "Table-df") bezeichnet. Tabellen sollten in "Normalform" vorliegen, bevor wir weitere Analysen starten. Unter Normalform verstehen sich folgende Punkte:
 
 - Es handelt sich um einen data frame, also Spalten mit Namen und gleicher Länge; eine Datentabelle in rechteckiger Form
 - In jeder Zeile steht eine Beobachtung, in jeder Spalte eine Variable
@@ -122,17 +134,19 @@ df_lang <- separate(df_lang, year, into = c("U5MR", "year"), sep = ".")
 - Die zweite Zeile formt die Daten von breit nach lang um. Die neuen Spalten, nach der Umformung heißen dann `year` und `u5mr` (Sterblichkeit bei Kindern unter fünf Jahren). In die Umformung werden die Spalten `U5MR 1950` bis `U5MR 2015` einbezogen.
 - Die dritte Zeile "entzerrt" die Werte der Spalte `year`; hier stehen die ehemaligen Spaltenköpfe. Man nennt sie auch `key` Spalte daher. Steht in einer Zelle von `year` bspw. `U5MR 1950`, so wird `U5MR` in eine Spalte mit Namen `U5MR` und `1950` in eine Spalte mit Namen `year` geschrieben.
 
-Im Cheatsheet von RStudio zum Thema Datenimport finden sich nützliche Hinweise [^3].
-[^3]: https://www.rstudio.com/resources/cheatsheets/
+Im Cheatsheet von RStudio zum Thema Datenimport finden sich nützliche Hinweise [^4].
+[^4]: https://www.rstudio.com/resources/cheatsheets/
 
 
 
 
 ### Daten aufbereiten mit `dplyr`
 
-Es gibt viele Möglichkeiten, Daten mit R aufzubereiten; `dplyr` ist ein populäres Paket dafür. Die Philosophie dabei ist, dass es ein paar wenige Grundbausteine geben sollte, die sich gut kombinieren lassen. Sprich: Wenige grundlegende Funktionen mit eng umgrenzter Funktionalität. Der Autor, Hadley Wickham, sprach einmal in einem Forum (citation needed), dass diese Befehle wenig können, das Wenige aber gut. Ein Nachteil dieser Konzeption kann sein, dass man recht viele dieser Bausteine kombinieren muss, um zum gewünschten Ergebnis zu kommen. Außerdem muss man die Logik des Baukastens gut verstanden habe - die Lernkurve ist also erstmal steiler. Dafür ist man dann nicht darauf angewiesen, dass es irgendwo "Mrs Right" gibt, die genau das kann, so wie ich das will. Außerdem braucht man sich auch nicht viele Funktionen merken. Es reicht einen kleinen Satz an Funktionen zu kennen (die praktischerweise konsistent in Syntax und Methodik sind). 
+Es gibt viele Möglichkeiten, Daten mit R aufzubereiten; `dplyr` ist ein populäres Paket dafür. Eine zentrale Idee von `dplyr` ist, dass es nur ein paar wenige Grundbausteine geben sollte, die sich gut kombinieren lassen. Sprich: Wenige grundlegende Funktionen mit eng umgrenzter Funktionalität. Der Autor, Hadley Wickham, sprach einmal in einem Forum (citation needed), dass diese Befehle wenig können, das Wenige aber gut. Ein Nachteil dieser Konzeption kann sein, dass man recht viele dieser Bausteine kombinieren muss, um zum gewünschten Ergebnis zu kommen. Außerdem muss man die Logik des Baukastens gut verstanden habe - die Lernkurve ist also erstmal steiler. Dafür ist man dann nicht darauf angewiesen, dass es irgendwo "Mrs Right" gibt, die genau das kann, so wie ich das will. Außerdem braucht man sich auch nicht viele Funktionen merken. Es reicht einen kleinen Satz an Funktionen zu kennen (die praktischerweise konsistent in Syntax und Methodik sind). 
 
-`dplyr` hat seinen Namen, weil es sich ausschließlich um *D*ataframes bemüht; es erwartet einen Dataframe als Eingabe und gibt einen Dataframe zurück[^1].
+
+Willkommen in der Welt von `dyplr`! `dplyr` hat seinen Namen, weil es sich ausschließlich um *D*ataframes bemüht; es erwartet einen Dataframe als Eingabe und gibt einen Dataframe zurück[^1].
+
 
 [^1]: zumindest bei den meisten Befehlen.
 
@@ -258,930 +272,31 @@ Ein R-Befehl hierzu ist `arrange`; einige Beispiele zeigen die Funktionsweise am
 
 
 ```r
-arrange(stats_test, score)  # liefert die *schlechtesten* Noten zurück
-#>       X                 V_1 study_time self_eval interest score
-#> 1   234 23.01.2017 18:13:15          3         1        1    17
-#> 2     4 06.01.2017 09:58:05          2         3        2    18
-#> 3   131 19.01.2017 18:03:45          2         3        4    18
-#> 4   142 19.01.2017 19:02:12          3         4        1    18
-#> 5    35 12.01.2017 19:04:43          1         2        3    19
-#> 6    71 15.01.2017 15:03:29          3         3        3    20
-#> 7    97 17.01.2017 21:51:05          3         3        5    20
-#> 8   206 22.01.2017 18:42:49         NA        NA       NA    20
-#> 9   235 23.01.2017 18:26:20         NA        NA       NA    20
-#> 10  300 27.01.2017 02:14:27          2         3        2    20
-#> 11   33 12.01.2017 18:53:43          1         3        2    21
-#> 12  102 18.01.2017 12:48:04          3         3        3    21
-#> 13  129 19.01.2017 17:58:02          2         4        3    21
-#> 14  186 21.01.2017 16:24:44          2         5        3    21
-#> 15  216 23.01.2017 07:54:17          4         2        5    21
-#> 16  223 23.01.2017 12:53:02          3         1        3    21
-#> 17   13 09.01.2017 09:51:37          1         2        2    22
-#> 18   19 10.01.2017 17:16:48         NA        NA       NA    22
-#> 19   36 12.01.2017 19:09:14          1         7        3    22
-#> 20   55 14.01.2017 15:15:38          3         4        5    22
-#> 21   65 15.01.2017 12:41:27          3         6        6    22
-#> 22  220 23.01.2017 11:27:11          3         5        3    22
-#> 23  266 25.01.2017 15:39:13          2         4        4    22
-#> 24  269 25.01.2017 16:31:46          3         3        3    22
-#> 25   31 12.01.2017 14:09:10          4         8        5    23
-#> 26   45 13.01.2017 16:57:26          1         2        3    23
-#> 27   72 15.01.2017 15:30:15          4         4        4    23
-#> 28   86 16.01.2017 15:31:38          2         4        2    23
-#> 29  167 20.01.2017 19:17:44          4         5        4    23
-#> 30  195 22.01.2017 13:24:51         NA        NA       NA    23
-#> 31  221 23.01.2017 11:40:30          1         1        1    23
-#> 32  230 23.01.2017 16:27:49          1         1        1    23
-#> 33  283 26.01.2017 10:39:44         NA        NA       NA    23
-#> 34    8 06.01.2017 17:24:53          2         5        3    24
-#> 35   16 09.01.2017 15:52:12          2         5        3    24
-#> 36   28 11.01.2017 22:44:23          2         6        2    24
-#> 37   30 12.01.2017 13:36:07          3         5        2    24
-#> 38   37 12.01.2017 19:20:25          3         3        4    24
-#> 39   67 15.01.2017 13:30:48         NA        NA       NA    24
-#> 40   92 17.01.2017 17:18:55          1         1        1    24
-#> 41  107 18.01.2017 16:01:36          3         2        1    24
-#> 42  130 19.01.2017 17:58:35          3         1        4    24
-#> 43  217 23.01.2017 11:18:51          2         6        3    24
-#> 44  232 23.01.2017 16:50:14          3         2        4    24
-#> 45  246 24.01.2017 15:09:44         NA        NA       NA    24
-#> 46    9 07.01.2017 10:11:17          2         3        5    25
-#> 47   25 11.01.2017 20:30:43          2         1        1    25
-#> 48   32 12.01.2017 18:47:45          1         5        3    25
-#> 49   51 14.01.2017 13:55:30          2         5        2    25
-#> 50   69 15.01.2017 14:10:13          3         6        5    25
-#> 51  123 19.01.2017 12:36:03          1         3        4    25
-#> 52  161 20.01.2017 18:00:00          2         1        1    25
-#> 53  164 20.01.2017 18:17:03          3         4        2    25
-#> 54  209 22.01.2017 19:39:51          4         4        4    25
-#> 55  295 26.01.2017 16:18:27          1         3        1    25
-#> 56  302 27.01.2017 08:44:41          1         5        1    25
-#> 57   20 10.01.2017 18:33:15          3         5        2    26
-#> 58   26 11.01.2017 20:38:16          1         3        1    26
-#> 59   50 14.01.2017 10:53:38          1         3        2    26
-#> 60   53 14.01.2017 15:04:05          1         2        3    26
-#> 61   54 14.01.2017 15:14:50          3         5        2    26
-#> 62  105 18.01.2017 15:46:15          3         6        4    26
-#> 63  112 18.01.2017 19:41:09          3         5        5    26
-#> 64  120 19.01.2017 10:17:15          3         7        4    26
-#> 65  140 19.01.2017 18:37:53          3         7        4    26
-#> 66  151 20.01.2017 11:27:08          2         4        1    26
-#> 67  187 21.01.2017 16:27:32         NA        NA       NA    26
-#> 68  205 22.01.2017 18:29:17          2         2        1    26
-#> 69  228 23.01.2017 14:53:46          3         5        4    26
-#> 70  256 25.01.2017 10:39:53          2         2        3    26
-#> 71  273 25.01.2017 17:11:34          3         4        3    26
-#> 72   66 15.01.2017 13:28:29          1         3        1    27
-#> 73   81 15.01.2017 20:59:54          3         3        4    27
-#> 74   95 17.01.2017 20:52:29          2         4        5    27
-#> 75  109 18.01.2017 17:47:57          2         4        5    27
-#> 76  154 20.01.2017 13:38:19          4         5        1    27
-#> 77  200 22.01.2017 16:21:18          2         5        4    27
-#> 78  203 22.01.2017 17:22:06          3         4        5    27
-#> 79  208 22.01.2017 18:58:58          1         2        2    27
-#> 80  222 23.01.2017 12:06:58          3         6        5    27
-#> 81  227 23.01.2017 14:30:40          3         8        3    27
-#> 82  236 23.01.2017 18:48:02          3         2        3    27
-#> 83  237 23.01.2017 19:07:33          3         2        3    27
-#> 84  238 23.01.2017 19:53:10         NA        NA       NA    27
-#> 85  243 24.01.2017 14:15:59          4         4        2    27
-#> 86  251 24.01.2017 20:02:38          1         1        2    27
-#> 87   24 11.01.2017 19:38:20          3         2        3    28
-#> 88   59 14.01.2017 16:26:40          2         6        3    28
-#> 89   61 14.01.2017 17:27:31          3         6        3    28
-#> 90   70 15.01.2017 15:01:12          3         4        2    28
-#> 91   80 15.01.2017 20:39:10          3         6        3    28
-#> 92   82 15.01.2017 21:05:53          3         2        5    28
-#> 93   98 17.01.2017 21:59:36          2         2        2    28
-#> 94  145 19.01.2017 19:29:43          4         5        3    28
-#> 95  147 19.01.2017 20:36:23          4         4        2    28
-#> 96  173 20.01.2017 21:13:25          2         3        3    28
-#> 97  190 22.01.2017 11:19:10          3         6        2    28
-#> 98  207 22.01.2017 18:56:56         NA        NA       NA    28
-#> 99  210 22.01.2017 19:45:33          3         5        3    28
-#> 100 215 22.01.2017 22:00:29          1         2        2    28
-#> 101 224 23.01.2017 12:57:00          2         4        1    28
-#> 102 239 23.01.2017 20:00:46          3         4        1    28
-#> 103 242 24.01.2017 14:09:33         NA        NA       NA    28
-#> 104 245 24.01.2017 14:56:24         NA        NA       NA    28
-#> 105 247 24.01.2017 15:37:27         NA        NA       NA    28
-#> 106 270 25.01.2017 16:35:41         NA        NA       NA    28
-#> 107 288 26.01.2017 13:36:14         NA        NA       NA    28
-#> 108   1 05.01.2017 13:57:01          5         8        5    29
-#> 109   2 05.01.2017 21:07:56          3         7        3    29
-#> 110  47 13.01.2017 20:52:32          1         4        4    29
-#> 111  73 15.01.2017 15:49:52          4         3        4    29
-#> 112  87 16.01.2017 16:51:20          3         7        2    29
-#> 113  91 17.01.2017 15:19:36         NA        NA       NA    29
-#> 114 127 19.01.2017 14:20:15          2         1        2    29
-#> 115 152 20.01.2017 13:02:50          2         4        2    29
-#> 116 176 20.01.2017 23:18:18          3         5        3    29
-#> 117 213 22.01.2017 21:47:06         NA        NA       NA    29
-#> 118 255 25.01.2017 10:05:00         NA        NA       NA    29
-#> 119 261 25.01.2017 12:13:25          2         5        1    29
-#> 120 262 25.01.2017 12:49:57          1         2        1    29
-#> 121 276 25.01.2017 18:54:30          3         6        1    29
-#> 122 277 25.01.2017 20:06:34          3         4        1    29
-#> 123 282 26.01.2017 10:19:49          5         8        5    29
-#> 124 287 26.01.2017 11:56:19          4         8        3    29
-#> 125  15 09.01.2017 15:23:15         NA        NA       NA    30
-#> 126  23 11.01.2017 14:17:26          3         4        3    30
-#> 127  27 11.01.2017 20:49:19          2         4        5    30
-#> 128  44 13.01.2017 14:39:57          1         6        2    30
-#> 129  48 13.01.2017 21:50:03          2         4        5    30
-#> 130  57 14.01.2017 15:39:12          2         6        2    30
-#> 131  74 15.01.2017 16:12:54         NA        NA       NA    30
-#> 132 101 18.01.2017 12:32:04          4         7        2    30
-#> 133 114 18.01.2017 22:20:33          1         4        3    30
-#> 134 125 19.01.2017 13:03:26         NA        NA       NA    30
-#> 135 149 20.01.2017 09:02:45          3         5        4    30
-#> 136 182 21.01.2017 11:29:16          3         2        2    30
-#> 137 192 22.01.2017 11:52:16          2         5        2    30
-#> 138 198 22.01.2017 15:07:48          3         7        3    30
-#> 139 219 23.01.2017 11:24:30          2         7        5    30
-#> 140 265 25.01.2017 13:14:00         NA        NA       NA    30
-#> 141  12 08.01.2017 19:17:20          4         7        4    31
-#> 142  60 14.01.2017 17:14:18          2         7        2    31
-#> 143  78 15.01.2017 18:31:00          3         6        4    31
-#> 144 121 19.01.2017 11:29:43          1         1        1    31
-#> 145 139 19.01.2017 18:35:56         NA        NA       NA    31
-#> 146 157 20.01.2017 17:34:48         NA        NA       NA    31
-#> 147 183 21.01.2017 12:20:37         NA        NA       NA    31
-#> 148 193 22.01.2017 12:17:32          4         5        4    31
-#> 149 194 22.01.2017 12:27:59          4         6        3    31
-#> 150 201 22.01.2017 17:03:55          3         6        4    31
-#> 151 204 22.01.2017 17:45:23          1         3        2    31
-#> 152 214 22.01.2017 21:57:36          2         6        6    31
-#> 153 229 23.01.2017 15:20:08          5         7        4    31
-#> 154 241 24.01.2017 10:28:57          3         4        4    31
-#> 155 260 25.01.2017 11:59:11          3         6        4    31
-#> 156 263 25.01.2017 13:04:33          3         8        5    31
-#> 157 280 26.01.2017 03:01:08          4         7        4    31
-#> 158 289 26.01.2017 14:19:14         NA        NA       NA    31
-#> 159  11 08.01.2017 12:56:43          1         2        4    32
-#> 160  18 09.01.2017 22:57:38          3         3        5    32
-#> 161  46 13.01.2017 18:34:25          3         7        2    32
-#> 162  52 14.01.2017 14:46:16          1         9        2    32
-#> 163  76 15.01.2017 18:00:15          3         7        4    32
-#> 164  77 15.01.2017 18:21:19          4         5        5    32
-#> 165  90 17.01.2017 14:34:13          3         7        2    32
-#> 166 100 18.01.2017 11:29:13          4         7        4    32
-#> 167 124 19.01.2017 12:51:10         NA        NA       NA    32
-#> 168 150 20.01.2017 09:53:47         NA        NA       NA    32
-#> 169 168 20.01.2017 20:04:38          1         1        1    32
-#> 170 178 20.01.2017 23:54:46          3         6        4    32
-#> 171 184 21.01.2017 14:20:14          2         4        4    32
-#> 172 212 22.01.2017 21:34:56          4         5        4    32
-#> 173 250 24.01.2017 18:56:35          3         6        3    32
-#> 174 304 27.01.2017 09:18:26          3         8        2    32
-#> 175  10 07.01.2017 18:10:05          4         5        5    33
-#> 176  17 09.01.2017 20:49:48          2         5        3    33
-#> 177  21 10.01.2017 21:17:52          4         7        2    33
-#> 178  63 15.01.2017 11:41:07          2         5        3    33
-#> 179  68 15.01.2017 13:46:04          2         5        2    33
-#> 180 118 19.01.2017 08:54:43         NA        NA       NA    33
-#> 181 156 20.01.2017 17:28:23          4         7        5    33
-#> 182 199 22.01.2017 15:26:55          3         5        3    33
-#> 183 233 23.01.2017 17:03:10          2         9        2    33
-#> 184 254 25.01.2017 09:33:37          3         7        3    33
-#> 185 267 25.01.2017 16:08:48          3         6        3    33
-#> 186 297 26.01.2017 19:07:14          3         6        1    33
-#> 187 301 27.01.2017 08:17:59          4         8        6    33
-#> 188   5 06.01.2017 14:13:08          4         8        6    34
-#> 189  85 16.01.2017 13:56:29          3         6        5    34
-#> 190  88 16.01.2017 19:03:39          2         7        4    34
-#> 191  89 16.01.2017 21:18:05         NA        NA       NA    34
-#> 192  94 17.01.2017 19:47:11          3         7        3    34
-#> 193 115 18.01.2017 23:00:36          4         5        5    34
-#> 194 122 19.01.2017 11:30:57          2         2        1    34
-#> 195 141 19.01.2017 18:44:32         NA        NA       NA    34
-#> 196 143 19.01.2017 19:15:36          3         6        2    34
-#> 197 159 20.01.2017 17:57:26         NA        NA       NA    34
-#> 198 160 20.01.2017 17:59:19         NA        NA       NA    34
-#> 199 166 20.01.2017 19:03:10          4         6        3    34
-#> 200 170 20.01.2017 20:09:15          2         1        3    34
-#> 201 172 20.01.2017 20:42:46          5        10        6    34
-#> 202 177 20.01.2017 23:37:45          4         7        5    34
-#> 203 218 23.01.2017 11:21:21          3         5        3    34
-#> 204 240 24.01.2017 10:19:25          3         6        3    34
-#> 205 259 25.01.2017 11:37:19          5         7        5    34
-#> 206 271 25.01.2017 16:53:17         NA        NA       NA    34
-#> 207 275 25.01.2017 18:06:36         NA        NA       NA    34
-#> 208 285 26.01.2017 10:54:41         NA        NA       NA    34
-#> 209 294 26.01.2017 15:51:56         NA        NA       NA    34
-#> 210  14 09.01.2017 12:15:48          4         9        3    35
-#> 211  38 13.01.2017 07:55:14          3         8        3    35
-#> 212  62 14.01.2017 17:52:29          2         8        2    35
-#> 213  75 15.01.2017 17:31:06          1         2        1    35
-#> 214  79 15.01.2017 19:54:00          3         4        3    35
-#> 215  84 16.01.2017 13:51:51          4         8        5    35
-#> 216  93 17.01.2017 19:28:51          3         7        2    35
-#> 217 103 18.01.2017 13:32:09          4         7        5    35
-#> 218 148 19.01.2017 21:19:10          4         2        3    35
-#> 219 162 20.01.2017 18:00:53         NA        NA       NA    35
-#> 220 174 20.01.2017 22:58:35          5         8        5    35
-#> 221 231 23.01.2017 16:32:32          1         1        1    35
-#> 222 244 24.01.2017 14:38:56          3         5        3    35
-#> 223 305 27.01.2017 09:52:59          3         8        2    35
-#> 224  43 13.01.2017 14:14:16          4         8        6    36
-#> 225 128 19.01.2017 14:29:41          3         6        3    36
-#> 226 158 20.01.2017 17:53:16         NA        NA       NA    36
-#> 227 163 20.01.2017 18:04:21         NA        NA       NA    36
-#> 228 165 20.01.2017 18:57:33          2         8        5    36
-#> 229 188 21.01.2017 19:01:18          4         8        4    36
-#> 230 191 22.01.2017 11:31:27         NA        NA       NA    36
-#> 231 202 22.01.2017 17:13:02         NA        NA       NA    36
-#> 232 226 23.01.2017 14:17:10         NA        NA       NA    36
-#> 233 272 25.01.2017 17:03:21         NA        NA       NA    36
-#> 234 278 25.01.2017 21:08:40          5         6        5    36
-#> 235 279 25.01.2017 23:19:16          4         8        4    36
-#> 236 284 26.01.2017 10:46:10          4         5        4    36
-#> 237 290 26.01.2017 14:34:23         NA        NA       NA    36
-#> 238 293 26.01.2017 15:17:47         NA        NA       NA    36
-#> 239  96 17.01.2017 20:55:48          4         7        5    37
-#> 240  99 18.01.2017 09:04:30         NA        NA       NA    37
-#> 241 110 18.01.2017 18:53:02          5         8        6    37
-#> 242 111 18.01.2017 19:24:49         NA        NA       NA    37
-#> 243 117 19.01.2017 08:06:05         NA        NA       NA    37
-#> 244 126 19.01.2017 13:42:49          2         8        4    37
-#> 245 146 19.01.2017 20:08:34          4         7        2    37
-#> 246 153 20.01.2017 13:03:25          3         7        3    37
-#> 247 169 20.01.2017 20:05:13          3         5        1    37
-#> 248 171 20.01.2017 20:29:52          4         9        5    37
-#> 249 189 21.01.2017 20:05:54          4         6        2    37
-#> 250 274 25.01.2017 17:38:36         NA        NA       NA    37
-#> 251 299 26.01.2017 23:10:18          5         4        2    37
-#> 252  22 11.01.2017 13:32:30          4         9        5    38
-#> 253  34 12.01.2017 18:57:47          4         7        1    38
-#> 254  42 13.01.2017 14:08:08         NA        NA       NA    38
-#> 255 106 18.01.2017 15:52:04         NA        NA       NA    38
-#> 256 113 18.01.2017 21:44:02          5         8        5    38
-#> 257 133 19.01.2017 18:22:38         NA        NA       NA    38
-#> 258 181 21.01.2017 08:26:17          4         9        5    38
-#> 259 211 22.01.2017 20:28:43         NA        NA       NA    38
-#> 260 252 25.01.2017 08:56:16          5         7        3    38
-#> 261 258 25.01.2017 11:25:38          5         9        5    38
-#> 262 268 25.01.2017 16:15:57          4         7        4    38
-#> 263 281 26.01.2017 10:13:05          4         7        4    38
-#> 264 286 26.01.2017 11:19:10         NA        NA       NA    38
-#> 265 296 26.01.2017 17:12:37          3         6        3    38
-#> 266 298 26.01.2017 20:41:21          2         5        3    38
-#> 267 303 27.01.2017 08:50:31          5         8        3    38
-#> 268   6 06.01.2017 14:21:18         NA        NA       NA    39
-#> 269  39 13.01.2017 08:54:17          3        10        3    39
-#> 270  40 13.01.2017 09:31:06          4         9        3    39
-#> 271  49 14.01.2017 07:02:39         NA        NA       NA    39
-#> 272  56 14.01.2017 15:27:10          3         8        2    39
-#> 273  64 15.01.2017 11:49:03          3         8        3    39
-#> 274 104 18.01.2017 13:42:20         NA        NA       NA    39
-#> 275 108 18.01.2017 16:38:36          5         8        5    39
-#> 276 134 19.01.2017 18:22:43          1         4        4    39
-#> 277 135 19.01.2017 18:22:55          3         3        4    39
-#> 278 136 19.01.2017 18:22:57          3         1        6    39
-#> 279 137 19.01.2017 18:22:58          4        10        5    39
-#> 280 138 19.01.2017 18:23:23          3         9        3    39
-#> 281 144 19.01.2017 19:23:57          4         8        3    39
-#> 282 155 20.01.2017 15:33:55         NA        NA       NA    39
-#> 283 180 21.01.2017 08:04:17         NA        NA       NA    39
-#> 284 225 23.01.2017 13:24:22         NA        NA       NA    39
-#> 285 253 25.01.2017 09:32:55         NA        NA       NA    39
-#> 286 264 25.01.2017 13:11:14          4        10        5    39
-#> 287 291 26.01.2017 14:55:17         NA        NA       NA    39
-#> 288 292 26.01.2017 15:00:29          4         8        3    39
-#> 289   3 05.01.2017 23:33:47          5        10        6    40
-#> 290   7 06.01.2017 14:25:49         NA        NA       NA    40
-#> 291  29 12.01.2017 09:48:16          4        10        3    40
-#> 292  41 13.01.2017 12:07:29          4        10        3    40
-#> 293  58 14.01.2017 15:43:01          3         8        2    40
-#> 294  83 16.01.2017 10:16:52         NA        NA       NA    40
-#> 295 116 18.01.2017 23:07:32          4         8        5    40
-#> 296 119 19.01.2017 09:05:01         NA        NA       NA    40
-#> 297 132 19.01.2017 18:22:32         NA        NA       NA    40
-#> 298 175 20.01.2017 23:03:36          5        10        5    40
-#> 299 179 21.01.2017 07:40:05          5         9        1    40
-#> 300 185 21.01.2017 15:01:26          4        10        5    40
-#> 301 196 22.01.2017 13:38:56          4        10        5    40
-#> 302 197 22.01.2017 14:55:17          4        10        5    40
-#> 303 248 24.01.2017 16:29:45          2        10        2    40
-#> 304 249 24.01.2017 17:19:54         NA        NA       NA    40
-#> 305 257 25.01.2017 10:44:34          2         9        3    40
-#> 306 306 27.01.2017 11:29:48          4         9        3    40
-arrange(stats_test, -score) # liefert die *besten* Noten zurück
-#>       X                 V_1 study_time self_eval interest score
-#> 1     3 05.01.2017 23:33:47          5        10        6    40
-#> 2     7 06.01.2017 14:25:49         NA        NA       NA    40
-#> 3    29 12.01.2017 09:48:16          4        10        3    40
-#> 4    41 13.01.2017 12:07:29          4        10        3    40
-#> 5    58 14.01.2017 15:43:01          3         8        2    40
-#> 6    83 16.01.2017 10:16:52         NA        NA       NA    40
-#> 7   116 18.01.2017 23:07:32          4         8        5    40
-#> 8   119 19.01.2017 09:05:01         NA        NA       NA    40
-#> 9   132 19.01.2017 18:22:32         NA        NA       NA    40
-#> 10  175 20.01.2017 23:03:36          5        10        5    40
-#> 11  179 21.01.2017 07:40:05          5         9        1    40
-#> 12  185 21.01.2017 15:01:26          4        10        5    40
-#> 13  196 22.01.2017 13:38:56          4        10        5    40
-#> 14  197 22.01.2017 14:55:17          4        10        5    40
-#> 15  248 24.01.2017 16:29:45          2        10        2    40
-#> 16  249 24.01.2017 17:19:54         NA        NA       NA    40
-#> 17  257 25.01.2017 10:44:34          2         9        3    40
-#> 18  306 27.01.2017 11:29:48          4         9        3    40
-#> 19    6 06.01.2017 14:21:18         NA        NA       NA    39
-#> 20   39 13.01.2017 08:54:17          3        10        3    39
-#> 21   40 13.01.2017 09:31:06          4         9        3    39
-#> 22   49 14.01.2017 07:02:39         NA        NA       NA    39
-#> 23   56 14.01.2017 15:27:10          3         8        2    39
-#> 24   64 15.01.2017 11:49:03          3         8        3    39
-#> 25  104 18.01.2017 13:42:20         NA        NA       NA    39
-#> 26  108 18.01.2017 16:38:36          5         8        5    39
-#> 27  134 19.01.2017 18:22:43          1         4        4    39
-#> 28  135 19.01.2017 18:22:55          3         3        4    39
-#> 29  136 19.01.2017 18:22:57          3         1        6    39
-#> 30  137 19.01.2017 18:22:58          4        10        5    39
-#> 31  138 19.01.2017 18:23:23          3         9        3    39
-#> 32  144 19.01.2017 19:23:57          4         8        3    39
-#> 33  155 20.01.2017 15:33:55         NA        NA       NA    39
-#> 34  180 21.01.2017 08:04:17         NA        NA       NA    39
-#> 35  225 23.01.2017 13:24:22         NA        NA       NA    39
-#> 36  253 25.01.2017 09:32:55         NA        NA       NA    39
-#> 37  264 25.01.2017 13:11:14          4        10        5    39
-#> 38  291 26.01.2017 14:55:17         NA        NA       NA    39
-#> 39  292 26.01.2017 15:00:29          4         8        3    39
-#> 40   22 11.01.2017 13:32:30          4         9        5    38
-#> 41   34 12.01.2017 18:57:47          4         7        1    38
-#> 42   42 13.01.2017 14:08:08         NA        NA       NA    38
-#> 43  106 18.01.2017 15:52:04         NA        NA       NA    38
-#> 44  113 18.01.2017 21:44:02          5         8        5    38
-#> 45  133 19.01.2017 18:22:38         NA        NA       NA    38
-#> 46  181 21.01.2017 08:26:17          4         9        5    38
-#> 47  211 22.01.2017 20:28:43         NA        NA       NA    38
-#> 48  252 25.01.2017 08:56:16          5         7        3    38
-#> 49  258 25.01.2017 11:25:38          5         9        5    38
-#> 50  268 25.01.2017 16:15:57          4         7        4    38
-#> 51  281 26.01.2017 10:13:05          4         7        4    38
-#> 52  286 26.01.2017 11:19:10         NA        NA       NA    38
-#> 53  296 26.01.2017 17:12:37          3         6        3    38
-#> 54  298 26.01.2017 20:41:21          2         5        3    38
-#> 55  303 27.01.2017 08:50:31          5         8        3    38
-#> 56   96 17.01.2017 20:55:48          4         7        5    37
-#> 57   99 18.01.2017 09:04:30         NA        NA       NA    37
-#> 58  110 18.01.2017 18:53:02          5         8        6    37
-#> 59  111 18.01.2017 19:24:49         NA        NA       NA    37
-#> 60  117 19.01.2017 08:06:05         NA        NA       NA    37
-#> 61  126 19.01.2017 13:42:49          2         8        4    37
-#> 62  146 19.01.2017 20:08:34          4         7        2    37
-#> 63  153 20.01.2017 13:03:25          3         7        3    37
-#> 64  169 20.01.2017 20:05:13          3         5        1    37
-#> 65  171 20.01.2017 20:29:52          4         9        5    37
-#> 66  189 21.01.2017 20:05:54          4         6        2    37
-#> 67  274 25.01.2017 17:38:36         NA        NA       NA    37
-#> 68  299 26.01.2017 23:10:18          5         4        2    37
-#> 69   43 13.01.2017 14:14:16          4         8        6    36
-#> 70  128 19.01.2017 14:29:41          3         6        3    36
-#> 71  158 20.01.2017 17:53:16         NA        NA       NA    36
-#> 72  163 20.01.2017 18:04:21         NA        NA       NA    36
-#> 73  165 20.01.2017 18:57:33          2         8        5    36
-#> 74  188 21.01.2017 19:01:18          4         8        4    36
-#> 75  191 22.01.2017 11:31:27         NA        NA       NA    36
-#> 76  202 22.01.2017 17:13:02         NA        NA       NA    36
-#> 77  226 23.01.2017 14:17:10         NA        NA       NA    36
-#> 78  272 25.01.2017 17:03:21         NA        NA       NA    36
-#> 79  278 25.01.2017 21:08:40          5         6        5    36
-#> 80  279 25.01.2017 23:19:16          4         8        4    36
-#> 81  284 26.01.2017 10:46:10          4         5        4    36
-#> 82  290 26.01.2017 14:34:23         NA        NA       NA    36
-#> 83  293 26.01.2017 15:17:47         NA        NA       NA    36
-#> 84   14 09.01.2017 12:15:48          4         9        3    35
-#> 85   38 13.01.2017 07:55:14          3         8        3    35
-#> 86   62 14.01.2017 17:52:29          2         8        2    35
-#> 87   75 15.01.2017 17:31:06          1         2        1    35
-#> 88   79 15.01.2017 19:54:00          3         4        3    35
-#> 89   84 16.01.2017 13:51:51          4         8        5    35
-#> 90   93 17.01.2017 19:28:51          3         7        2    35
-#> 91  103 18.01.2017 13:32:09          4         7        5    35
-#> 92  148 19.01.2017 21:19:10          4         2        3    35
-#> 93  162 20.01.2017 18:00:53         NA        NA       NA    35
-#> 94  174 20.01.2017 22:58:35          5         8        5    35
-#> 95  231 23.01.2017 16:32:32          1         1        1    35
-#> 96  244 24.01.2017 14:38:56          3         5        3    35
-#> 97  305 27.01.2017 09:52:59          3         8        2    35
-#> 98    5 06.01.2017 14:13:08          4         8        6    34
-#> 99   85 16.01.2017 13:56:29          3         6        5    34
-#> 100  88 16.01.2017 19:03:39          2         7        4    34
-#> 101  89 16.01.2017 21:18:05         NA        NA       NA    34
-#> 102  94 17.01.2017 19:47:11          3         7        3    34
-#> 103 115 18.01.2017 23:00:36          4         5        5    34
-#> 104 122 19.01.2017 11:30:57          2         2        1    34
-#> 105 141 19.01.2017 18:44:32         NA        NA       NA    34
-#> 106 143 19.01.2017 19:15:36          3         6        2    34
-#> 107 159 20.01.2017 17:57:26         NA        NA       NA    34
-#> 108 160 20.01.2017 17:59:19         NA        NA       NA    34
-#> 109 166 20.01.2017 19:03:10          4         6        3    34
-#> 110 170 20.01.2017 20:09:15          2         1        3    34
-#> 111 172 20.01.2017 20:42:46          5        10        6    34
-#> 112 177 20.01.2017 23:37:45          4         7        5    34
-#> 113 218 23.01.2017 11:21:21          3         5        3    34
-#> 114 240 24.01.2017 10:19:25          3         6        3    34
-#> 115 259 25.01.2017 11:37:19          5         7        5    34
-#> 116 271 25.01.2017 16:53:17         NA        NA       NA    34
-#> 117 275 25.01.2017 18:06:36         NA        NA       NA    34
-#> 118 285 26.01.2017 10:54:41         NA        NA       NA    34
-#> 119 294 26.01.2017 15:51:56         NA        NA       NA    34
-#> 120  10 07.01.2017 18:10:05          4         5        5    33
-#> 121  17 09.01.2017 20:49:48          2         5        3    33
-#> 122  21 10.01.2017 21:17:52          4         7        2    33
-#> 123  63 15.01.2017 11:41:07          2         5        3    33
-#> 124  68 15.01.2017 13:46:04          2         5        2    33
-#> 125 118 19.01.2017 08:54:43         NA        NA       NA    33
-#> 126 156 20.01.2017 17:28:23          4         7        5    33
-#> 127 199 22.01.2017 15:26:55          3         5        3    33
-#> 128 233 23.01.2017 17:03:10          2         9        2    33
-#> 129 254 25.01.2017 09:33:37          3         7        3    33
-#> 130 267 25.01.2017 16:08:48          3         6        3    33
-#> 131 297 26.01.2017 19:07:14          3         6        1    33
-#> 132 301 27.01.2017 08:17:59          4         8        6    33
-#> 133  11 08.01.2017 12:56:43          1         2        4    32
-#> 134  18 09.01.2017 22:57:38          3         3        5    32
-#> 135  46 13.01.2017 18:34:25          3         7        2    32
-#> 136  52 14.01.2017 14:46:16          1         9        2    32
-#> 137  76 15.01.2017 18:00:15          3         7        4    32
-#> 138  77 15.01.2017 18:21:19          4         5        5    32
-#> 139  90 17.01.2017 14:34:13          3         7        2    32
-#> 140 100 18.01.2017 11:29:13          4         7        4    32
-#> 141 124 19.01.2017 12:51:10         NA        NA       NA    32
-#> 142 150 20.01.2017 09:53:47         NA        NA       NA    32
-#> 143 168 20.01.2017 20:04:38          1         1        1    32
-#> 144 178 20.01.2017 23:54:46          3         6        4    32
-#> 145 184 21.01.2017 14:20:14          2         4        4    32
-#> 146 212 22.01.2017 21:34:56          4         5        4    32
-#> 147 250 24.01.2017 18:56:35          3         6        3    32
-#> 148 304 27.01.2017 09:18:26          3         8        2    32
-#> 149  12 08.01.2017 19:17:20          4         7        4    31
-#> 150  60 14.01.2017 17:14:18          2         7        2    31
-#> 151  78 15.01.2017 18:31:00          3         6        4    31
-#> 152 121 19.01.2017 11:29:43          1         1        1    31
-#> 153 139 19.01.2017 18:35:56         NA        NA       NA    31
-#> 154 157 20.01.2017 17:34:48         NA        NA       NA    31
-#> 155 183 21.01.2017 12:20:37         NA        NA       NA    31
-#> 156 193 22.01.2017 12:17:32          4         5        4    31
-#> 157 194 22.01.2017 12:27:59          4         6        3    31
-#> 158 201 22.01.2017 17:03:55          3         6        4    31
-#> 159 204 22.01.2017 17:45:23          1         3        2    31
-#> 160 214 22.01.2017 21:57:36          2         6        6    31
-#> 161 229 23.01.2017 15:20:08          5         7        4    31
-#> 162 241 24.01.2017 10:28:57          3         4        4    31
-#> 163 260 25.01.2017 11:59:11          3         6        4    31
-#> 164 263 25.01.2017 13:04:33          3         8        5    31
-#> 165 280 26.01.2017 03:01:08          4         7        4    31
-#> 166 289 26.01.2017 14:19:14         NA        NA       NA    31
-#> 167  15 09.01.2017 15:23:15         NA        NA       NA    30
-#> 168  23 11.01.2017 14:17:26          3         4        3    30
-#> 169  27 11.01.2017 20:49:19          2         4        5    30
-#> 170  44 13.01.2017 14:39:57          1         6        2    30
-#> 171  48 13.01.2017 21:50:03          2         4        5    30
-#> 172  57 14.01.2017 15:39:12          2         6        2    30
-#> 173  74 15.01.2017 16:12:54         NA        NA       NA    30
-#> 174 101 18.01.2017 12:32:04          4         7        2    30
-#> 175 114 18.01.2017 22:20:33          1         4        3    30
-#> 176 125 19.01.2017 13:03:26         NA        NA       NA    30
-#> 177 149 20.01.2017 09:02:45          3         5        4    30
-#> 178 182 21.01.2017 11:29:16          3         2        2    30
-#> 179 192 22.01.2017 11:52:16          2         5        2    30
-#> 180 198 22.01.2017 15:07:48          3         7        3    30
-#> 181 219 23.01.2017 11:24:30          2         7        5    30
-#> 182 265 25.01.2017 13:14:00         NA        NA       NA    30
-#> 183   1 05.01.2017 13:57:01          5         8        5    29
-#> 184   2 05.01.2017 21:07:56          3         7        3    29
-#> 185  47 13.01.2017 20:52:32          1         4        4    29
-#> 186  73 15.01.2017 15:49:52          4         3        4    29
-#> 187  87 16.01.2017 16:51:20          3         7        2    29
-#> 188  91 17.01.2017 15:19:36         NA        NA       NA    29
-#> 189 127 19.01.2017 14:20:15          2         1        2    29
-#> 190 152 20.01.2017 13:02:50          2         4        2    29
-#> 191 176 20.01.2017 23:18:18          3         5        3    29
-#> 192 213 22.01.2017 21:47:06         NA        NA       NA    29
-#> 193 255 25.01.2017 10:05:00         NA        NA       NA    29
-#> 194 261 25.01.2017 12:13:25          2         5        1    29
-#> 195 262 25.01.2017 12:49:57          1         2        1    29
-#> 196 276 25.01.2017 18:54:30          3         6        1    29
-#> 197 277 25.01.2017 20:06:34          3         4        1    29
-#> 198 282 26.01.2017 10:19:49          5         8        5    29
-#> 199 287 26.01.2017 11:56:19          4         8        3    29
-#> 200  24 11.01.2017 19:38:20          3         2        3    28
-#> 201  59 14.01.2017 16:26:40          2         6        3    28
-#> 202  61 14.01.2017 17:27:31          3         6        3    28
-#> 203  70 15.01.2017 15:01:12          3         4        2    28
-#> 204  80 15.01.2017 20:39:10          3         6        3    28
-#> 205  82 15.01.2017 21:05:53          3         2        5    28
-#> 206  98 17.01.2017 21:59:36          2         2        2    28
-#> 207 145 19.01.2017 19:29:43          4         5        3    28
-#> 208 147 19.01.2017 20:36:23          4         4        2    28
-#> 209 173 20.01.2017 21:13:25          2         3        3    28
-#> 210 190 22.01.2017 11:19:10          3         6        2    28
-#> 211 207 22.01.2017 18:56:56         NA        NA       NA    28
-#> 212 210 22.01.2017 19:45:33          3         5        3    28
-#> 213 215 22.01.2017 22:00:29          1         2        2    28
-#> 214 224 23.01.2017 12:57:00          2         4        1    28
-#> 215 239 23.01.2017 20:00:46          3         4        1    28
-#> 216 242 24.01.2017 14:09:33         NA        NA       NA    28
-#> 217 245 24.01.2017 14:56:24         NA        NA       NA    28
-#> 218 247 24.01.2017 15:37:27         NA        NA       NA    28
-#> 219 270 25.01.2017 16:35:41         NA        NA       NA    28
-#> 220 288 26.01.2017 13:36:14         NA        NA       NA    28
-#> 221  66 15.01.2017 13:28:29          1         3        1    27
-#> 222  81 15.01.2017 20:59:54          3         3        4    27
-#> 223  95 17.01.2017 20:52:29          2         4        5    27
-#> 224 109 18.01.2017 17:47:57          2         4        5    27
-#> 225 154 20.01.2017 13:38:19          4         5        1    27
-#> 226 200 22.01.2017 16:21:18          2         5        4    27
-#> 227 203 22.01.2017 17:22:06          3         4        5    27
-#> 228 208 22.01.2017 18:58:58          1         2        2    27
-#> 229 222 23.01.2017 12:06:58          3         6        5    27
-#> 230 227 23.01.2017 14:30:40          3         8        3    27
-#> 231 236 23.01.2017 18:48:02          3         2        3    27
-#> 232 237 23.01.2017 19:07:33          3         2        3    27
-#> 233 238 23.01.2017 19:53:10         NA        NA       NA    27
-#> 234 243 24.01.2017 14:15:59          4         4        2    27
-#> 235 251 24.01.2017 20:02:38          1         1        2    27
-#> 236  20 10.01.2017 18:33:15          3         5        2    26
-#> 237  26 11.01.2017 20:38:16          1         3        1    26
-#> 238  50 14.01.2017 10:53:38          1         3        2    26
-#> 239  53 14.01.2017 15:04:05          1         2        3    26
-#> 240  54 14.01.2017 15:14:50          3         5        2    26
-#> 241 105 18.01.2017 15:46:15          3         6        4    26
-#> 242 112 18.01.2017 19:41:09          3         5        5    26
-#> 243 120 19.01.2017 10:17:15          3         7        4    26
-#> 244 140 19.01.2017 18:37:53          3         7        4    26
-#> 245 151 20.01.2017 11:27:08          2         4        1    26
-#> 246 187 21.01.2017 16:27:32         NA        NA       NA    26
-#> 247 205 22.01.2017 18:29:17          2         2        1    26
-#> 248 228 23.01.2017 14:53:46          3         5        4    26
-#> 249 256 25.01.2017 10:39:53          2         2        3    26
-#> 250 273 25.01.2017 17:11:34          3         4        3    26
-#> 251   9 07.01.2017 10:11:17          2         3        5    25
-#> 252  25 11.01.2017 20:30:43          2         1        1    25
-#> 253  32 12.01.2017 18:47:45          1         5        3    25
-#> 254  51 14.01.2017 13:55:30          2         5        2    25
-#> 255  69 15.01.2017 14:10:13          3         6        5    25
-#> 256 123 19.01.2017 12:36:03          1         3        4    25
-#> 257 161 20.01.2017 18:00:00          2         1        1    25
-#> 258 164 20.01.2017 18:17:03          3         4        2    25
-#> 259 209 22.01.2017 19:39:51          4         4        4    25
-#> 260 295 26.01.2017 16:18:27          1         3        1    25
-#> 261 302 27.01.2017 08:44:41          1         5        1    25
-#> 262   8 06.01.2017 17:24:53          2         5        3    24
-#> 263  16 09.01.2017 15:52:12          2         5        3    24
-#> 264  28 11.01.2017 22:44:23          2         6        2    24
-#> 265  30 12.01.2017 13:36:07          3         5        2    24
-#> 266  37 12.01.2017 19:20:25          3         3        4    24
-#> 267  67 15.01.2017 13:30:48         NA        NA       NA    24
-#> 268  92 17.01.2017 17:18:55          1         1        1    24
-#> 269 107 18.01.2017 16:01:36          3         2        1    24
-#> 270 130 19.01.2017 17:58:35          3         1        4    24
-#> 271 217 23.01.2017 11:18:51          2         6        3    24
-#> 272 232 23.01.2017 16:50:14          3         2        4    24
-#> 273 246 24.01.2017 15:09:44         NA        NA       NA    24
-#> 274  31 12.01.2017 14:09:10          4         8        5    23
-#> 275  45 13.01.2017 16:57:26          1         2        3    23
-#> 276  72 15.01.2017 15:30:15          4         4        4    23
-#> 277  86 16.01.2017 15:31:38          2         4        2    23
-#> 278 167 20.01.2017 19:17:44          4         5        4    23
-#> 279 195 22.01.2017 13:24:51         NA        NA       NA    23
-#> 280 221 23.01.2017 11:40:30          1         1        1    23
-#> 281 230 23.01.2017 16:27:49          1         1        1    23
-#> 282 283 26.01.2017 10:39:44         NA        NA       NA    23
-#> 283  13 09.01.2017 09:51:37          1         2        2    22
-#> 284  19 10.01.2017 17:16:48         NA        NA       NA    22
-#> 285  36 12.01.2017 19:09:14          1         7        3    22
-#> 286  55 14.01.2017 15:15:38          3         4        5    22
-#> 287  65 15.01.2017 12:41:27          3         6        6    22
-#> 288 220 23.01.2017 11:27:11          3         5        3    22
-#> 289 266 25.01.2017 15:39:13          2         4        4    22
-#> 290 269 25.01.2017 16:31:46          3         3        3    22
-#> 291  33 12.01.2017 18:53:43          1         3        2    21
-#> 292 102 18.01.2017 12:48:04          3         3        3    21
-#> 293 129 19.01.2017 17:58:02          2         4        3    21
-#> 294 186 21.01.2017 16:24:44          2         5        3    21
-#> 295 216 23.01.2017 07:54:17          4         2        5    21
-#> 296 223 23.01.2017 12:53:02          3         1        3    21
-#> 297  71 15.01.2017 15:03:29          3         3        3    20
-#> 298  97 17.01.2017 21:51:05          3         3        5    20
-#> 299 206 22.01.2017 18:42:49         NA        NA       NA    20
-#> 300 235 23.01.2017 18:26:20         NA        NA       NA    20
-#> 301 300 27.01.2017 02:14:27          2         3        2    20
-#> 302  35 12.01.2017 19:04:43          1         2        3    19
-#> 303   4 06.01.2017 09:58:05          2         3        2    18
-#> 304 131 19.01.2017 18:03:45          2         3        4    18
-#> 305 142 19.01.2017 19:02:12          3         4        1    18
-#> 306 234 23.01.2017 18:13:15          3         1        1    17
-arrange(stats_test, interest, score)
-#>       X                 V_1 study_time self_eval interest score
-#> 1   234 23.01.2017 18:13:15          3         1        1    17
-#> 2   142 19.01.2017 19:02:12          3         4        1    18
-#> 3   221 23.01.2017 11:40:30          1         1        1    23
-#> 4   230 23.01.2017 16:27:49          1         1        1    23
-#> 5    92 17.01.2017 17:18:55          1         1        1    24
-#> 6   107 18.01.2017 16:01:36          3         2        1    24
-#> 7    25 11.01.2017 20:30:43          2         1        1    25
-#> 8   161 20.01.2017 18:00:00          2         1        1    25
-#> 9   295 26.01.2017 16:18:27          1         3        1    25
-#> 10  302 27.01.2017 08:44:41          1         5        1    25
-#> 11   26 11.01.2017 20:38:16          1         3        1    26
-#> 12  151 20.01.2017 11:27:08          2         4        1    26
-#> 13  205 22.01.2017 18:29:17          2         2        1    26
-#> 14   66 15.01.2017 13:28:29          1         3        1    27
-#> 15  154 20.01.2017 13:38:19          4         5        1    27
-#> 16  224 23.01.2017 12:57:00          2         4        1    28
-#> 17  239 23.01.2017 20:00:46          3         4        1    28
-#> 18  261 25.01.2017 12:13:25          2         5        1    29
-#> 19  262 25.01.2017 12:49:57          1         2        1    29
-#> 20  276 25.01.2017 18:54:30          3         6        1    29
-#> 21  277 25.01.2017 20:06:34          3         4        1    29
-#> 22  121 19.01.2017 11:29:43          1         1        1    31
-#> 23  168 20.01.2017 20:04:38          1         1        1    32
-#> 24  297 26.01.2017 19:07:14          3         6        1    33
-#> 25  122 19.01.2017 11:30:57          2         2        1    34
-#> 26   75 15.01.2017 17:31:06          1         2        1    35
-#> 27  231 23.01.2017 16:32:32          1         1        1    35
-#> 28  169 20.01.2017 20:05:13          3         5        1    37
-#> 29   34 12.01.2017 18:57:47          4         7        1    38
-#> 30  179 21.01.2017 07:40:05          5         9        1    40
-#> 31    4 06.01.2017 09:58:05          2         3        2    18
-#> 32  300 27.01.2017 02:14:27          2         3        2    20
-#> 33   33 12.01.2017 18:53:43          1         3        2    21
-#> 34   13 09.01.2017 09:51:37          1         2        2    22
-#> 35   86 16.01.2017 15:31:38          2         4        2    23
-#> 36   28 11.01.2017 22:44:23          2         6        2    24
-#> 37   30 12.01.2017 13:36:07          3         5        2    24
-#> 38   51 14.01.2017 13:55:30          2         5        2    25
-#> 39  164 20.01.2017 18:17:03          3         4        2    25
-#> 40   20 10.01.2017 18:33:15          3         5        2    26
-#> 41   50 14.01.2017 10:53:38          1         3        2    26
-#> 42   54 14.01.2017 15:14:50          3         5        2    26
-#> 43  208 22.01.2017 18:58:58          1         2        2    27
-#> 44  243 24.01.2017 14:15:59          4         4        2    27
-#> 45  251 24.01.2017 20:02:38          1         1        2    27
-#> 46   70 15.01.2017 15:01:12          3         4        2    28
-#> 47   98 17.01.2017 21:59:36          2         2        2    28
-#> 48  147 19.01.2017 20:36:23          4         4        2    28
-#> 49  190 22.01.2017 11:19:10          3         6        2    28
-#> 50  215 22.01.2017 22:00:29          1         2        2    28
-#> 51   87 16.01.2017 16:51:20          3         7        2    29
-#> 52  127 19.01.2017 14:20:15          2         1        2    29
-#> 53  152 20.01.2017 13:02:50          2         4        2    29
-#> 54   44 13.01.2017 14:39:57          1         6        2    30
-#> 55   57 14.01.2017 15:39:12          2         6        2    30
-#> 56  101 18.01.2017 12:32:04          4         7        2    30
-#> 57  182 21.01.2017 11:29:16          3         2        2    30
-#> 58  192 22.01.2017 11:52:16          2         5        2    30
-#> 59   60 14.01.2017 17:14:18          2         7        2    31
-#> 60  204 22.01.2017 17:45:23          1         3        2    31
-#> 61   46 13.01.2017 18:34:25          3         7        2    32
-#> 62   52 14.01.2017 14:46:16          1         9        2    32
-#> 63   90 17.01.2017 14:34:13          3         7        2    32
-#> 64  304 27.01.2017 09:18:26          3         8        2    32
-#> 65   21 10.01.2017 21:17:52          4         7        2    33
-#> 66   68 15.01.2017 13:46:04          2         5        2    33
-#> 67  233 23.01.2017 17:03:10          2         9        2    33
-#> 68  143 19.01.2017 19:15:36          3         6        2    34
-#> 69   62 14.01.2017 17:52:29          2         8        2    35
-#> 70   93 17.01.2017 19:28:51          3         7        2    35
-#> 71  305 27.01.2017 09:52:59          3         8        2    35
-#> 72  146 19.01.2017 20:08:34          4         7        2    37
-#> 73  189 21.01.2017 20:05:54          4         6        2    37
-#> 74  299 26.01.2017 23:10:18          5         4        2    37
-#> 75   56 14.01.2017 15:27:10          3         8        2    39
-#> 76   58 14.01.2017 15:43:01          3         8        2    40
-#> 77  248 24.01.2017 16:29:45          2        10        2    40
-#> 78   35 12.01.2017 19:04:43          1         2        3    19
-#> 79   71 15.01.2017 15:03:29          3         3        3    20
-#> 80  102 18.01.2017 12:48:04          3         3        3    21
-#> 81  129 19.01.2017 17:58:02          2         4        3    21
-#> 82  186 21.01.2017 16:24:44          2         5        3    21
-#> 83  223 23.01.2017 12:53:02          3         1        3    21
-#> 84   36 12.01.2017 19:09:14          1         7        3    22
-#> 85  220 23.01.2017 11:27:11          3         5        3    22
-#> 86  269 25.01.2017 16:31:46          3         3        3    22
-#> 87   45 13.01.2017 16:57:26          1         2        3    23
-#> 88    8 06.01.2017 17:24:53          2         5        3    24
-#> 89   16 09.01.2017 15:52:12          2         5        3    24
-#> 90  217 23.01.2017 11:18:51          2         6        3    24
-#> 91   32 12.01.2017 18:47:45          1         5        3    25
-#> 92   53 14.01.2017 15:04:05          1         2        3    26
-#> 93  256 25.01.2017 10:39:53          2         2        3    26
-#> 94  273 25.01.2017 17:11:34          3         4        3    26
-#> 95  227 23.01.2017 14:30:40          3         8        3    27
-#> 96  236 23.01.2017 18:48:02          3         2        3    27
-#> 97  237 23.01.2017 19:07:33          3         2        3    27
-#> 98   24 11.01.2017 19:38:20          3         2        3    28
-#> 99   59 14.01.2017 16:26:40          2         6        3    28
-#> 100  61 14.01.2017 17:27:31          3         6        3    28
-#> 101  80 15.01.2017 20:39:10          3         6        3    28
-#> 102 145 19.01.2017 19:29:43          4         5        3    28
-#> 103 173 20.01.2017 21:13:25          2         3        3    28
-#> 104 210 22.01.2017 19:45:33          3         5        3    28
-#> 105   2 05.01.2017 21:07:56          3         7        3    29
-#> 106 176 20.01.2017 23:18:18          3         5        3    29
-#> 107 287 26.01.2017 11:56:19          4         8        3    29
-#> 108  23 11.01.2017 14:17:26          3         4        3    30
-#> 109 114 18.01.2017 22:20:33          1         4        3    30
-#> 110 198 22.01.2017 15:07:48          3         7        3    30
-#> 111 194 22.01.2017 12:27:59          4         6        3    31
-#> 112 250 24.01.2017 18:56:35          3         6        3    32
-#> 113  17 09.01.2017 20:49:48          2         5        3    33
-#> 114  63 15.01.2017 11:41:07          2         5        3    33
-#> 115 199 22.01.2017 15:26:55          3         5        3    33
-#> 116 254 25.01.2017 09:33:37          3         7        3    33
-#> 117 267 25.01.2017 16:08:48          3         6        3    33
-#> 118  94 17.01.2017 19:47:11          3         7        3    34
-#> 119 166 20.01.2017 19:03:10          4         6        3    34
-#> 120 170 20.01.2017 20:09:15          2         1        3    34
-#> 121 218 23.01.2017 11:21:21          3         5        3    34
-#> 122 240 24.01.2017 10:19:25          3         6        3    34
-#> 123  14 09.01.2017 12:15:48          4         9        3    35
-#> 124  38 13.01.2017 07:55:14          3         8        3    35
-#> 125  79 15.01.2017 19:54:00          3         4        3    35
-#> 126 148 19.01.2017 21:19:10          4         2        3    35
-#> 127 244 24.01.2017 14:38:56          3         5        3    35
-#> 128 128 19.01.2017 14:29:41          3         6        3    36
-#> 129 153 20.01.2017 13:03:25          3         7        3    37
-#> 130 252 25.01.2017 08:56:16          5         7        3    38
-#> 131 296 26.01.2017 17:12:37          3         6        3    38
-#> 132 298 26.01.2017 20:41:21          2         5        3    38
-#> 133 303 27.01.2017 08:50:31          5         8        3    38
-#> 134  39 13.01.2017 08:54:17          3        10        3    39
-#> 135  40 13.01.2017 09:31:06          4         9        3    39
-#> 136  64 15.01.2017 11:49:03          3         8        3    39
-#> 137 138 19.01.2017 18:23:23          3         9        3    39
-#> 138 144 19.01.2017 19:23:57          4         8        3    39
-#> 139 292 26.01.2017 15:00:29          4         8        3    39
-#> 140  29 12.01.2017 09:48:16          4        10        3    40
-#> 141  41 13.01.2017 12:07:29          4        10        3    40
-#> 142 257 25.01.2017 10:44:34          2         9        3    40
-#> 143 306 27.01.2017 11:29:48          4         9        3    40
-#> 144 131 19.01.2017 18:03:45          2         3        4    18
-#> 145 266 25.01.2017 15:39:13          2         4        4    22
-#> 146  72 15.01.2017 15:30:15          4         4        4    23
-#> 147 167 20.01.2017 19:17:44          4         5        4    23
-#> 148  37 12.01.2017 19:20:25          3         3        4    24
-#> 149 130 19.01.2017 17:58:35          3         1        4    24
-#> 150 232 23.01.2017 16:50:14          3         2        4    24
-#> 151 123 19.01.2017 12:36:03          1         3        4    25
-#> 152 209 22.01.2017 19:39:51          4         4        4    25
-#> 153 105 18.01.2017 15:46:15          3         6        4    26
-#> 154 120 19.01.2017 10:17:15          3         7        4    26
-#> 155 140 19.01.2017 18:37:53          3         7        4    26
-#> 156 228 23.01.2017 14:53:46          3         5        4    26
-#> 157  81 15.01.2017 20:59:54          3         3        4    27
-#> 158 200 22.01.2017 16:21:18          2         5        4    27
-#> 159  47 13.01.2017 20:52:32          1         4        4    29
-#> 160  73 15.01.2017 15:49:52          4         3        4    29
-#> 161 149 20.01.2017 09:02:45          3         5        4    30
-#> 162  12 08.01.2017 19:17:20          4         7        4    31
-#> 163  78 15.01.2017 18:31:00          3         6        4    31
-#> 164 193 22.01.2017 12:17:32          4         5        4    31
-#> 165 201 22.01.2017 17:03:55          3         6        4    31
-#> 166 229 23.01.2017 15:20:08          5         7        4    31
-#> 167 241 24.01.2017 10:28:57          3         4        4    31
-#> 168 260 25.01.2017 11:59:11          3         6        4    31
-#> 169 280 26.01.2017 03:01:08          4         7        4    31
-#> 170  11 08.01.2017 12:56:43          1         2        4    32
-#> 171  76 15.01.2017 18:00:15          3         7        4    32
-#> 172 100 18.01.2017 11:29:13          4         7        4    32
-#> 173 178 20.01.2017 23:54:46          3         6        4    32
-#> 174 184 21.01.2017 14:20:14          2         4        4    32
-#> 175 212 22.01.2017 21:34:56          4         5        4    32
-#> 176  88 16.01.2017 19:03:39          2         7        4    34
-#> 177 188 21.01.2017 19:01:18          4         8        4    36
-#> 178 279 25.01.2017 23:19:16          4         8        4    36
-#> 179 284 26.01.2017 10:46:10          4         5        4    36
-#> 180 126 19.01.2017 13:42:49          2         8        4    37
-#> 181 268 25.01.2017 16:15:57          4         7        4    38
-#> 182 281 26.01.2017 10:13:05          4         7        4    38
-#> 183 134 19.01.2017 18:22:43          1         4        4    39
-#> 184 135 19.01.2017 18:22:55          3         3        4    39
-#> 185  97 17.01.2017 21:51:05          3         3        5    20
-#> 186 216 23.01.2017 07:54:17          4         2        5    21
-#> 187  55 14.01.2017 15:15:38          3         4        5    22
-#> 188  31 12.01.2017 14:09:10          4         8        5    23
-#> 189   9 07.01.2017 10:11:17          2         3        5    25
-#> 190  69 15.01.2017 14:10:13          3         6        5    25
-#> 191 112 18.01.2017 19:41:09          3         5        5    26
-#> 192  95 17.01.2017 20:52:29          2         4        5    27
-#> 193 109 18.01.2017 17:47:57          2         4        5    27
-#> 194 203 22.01.2017 17:22:06          3         4        5    27
-#> 195 222 23.01.2017 12:06:58          3         6        5    27
-#> 196  82 15.01.2017 21:05:53          3         2        5    28
-#> 197   1 05.01.2017 13:57:01          5         8        5    29
-#> 198 282 26.01.2017 10:19:49          5         8        5    29
-#> 199  27 11.01.2017 20:49:19          2         4        5    30
-#> 200  48 13.01.2017 21:50:03          2         4        5    30
-#> 201 219 23.01.2017 11:24:30          2         7        5    30
-#> 202 263 25.01.2017 13:04:33          3         8        5    31
-#> 203  18 09.01.2017 22:57:38          3         3        5    32
-#> 204  77 15.01.2017 18:21:19          4         5        5    32
-#> 205  10 07.01.2017 18:10:05          4         5        5    33
-#> 206 156 20.01.2017 17:28:23          4         7        5    33
-#> 207  85 16.01.2017 13:56:29          3         6        5    34
-#> 208 115 18.01.2017 23:00:36          4         5        5    34
-#> 209 177 20.01.2017 23:37:45          4         7        5    34
-#> 210 259 25.01.2017 11:37:19          5         7        5    34
-#> 211  84 16.01.2017 13:51:51          4         8        5    35
-#> 212 103 18.01.2017 13:32:09          4         7        5    35
-#> 213 174 20.01.2017 22:58:35          5         8        5    35
-#> 214 165 20.01.2017 18:57:33          2         8        5    36
-#> 215 278 25.01.2017 21:08:40          5         6        5    36
-#> 216  96 17.01.2017 20:55:48          4         7        5    37
-#> 217 171 20.01.2017 20:29:52          4         9        5    37
-#> 218  22 11.01.2017 13:32:30          4         9        5    38
-#> 219 113 18.01.2017 21:44:02          5         8        5    38
-#> 220 181 21.01.2017 08:26:17          4         9        5    38
-#> 221 258 25.01.2017 11:25:38          5         9        5    38
-#> 222 108 18.01.2017 16:38:36          5         8        5    39
-#> 223 137 19.01.2017 18:22:58          4        10        5    39
-#> 224 264 25.01.2017 13:11:14          4        10        5    39
-#> 225 116 18.01.2017 23:07:32          4         8        5    40
-#> 226 175 20.01.2017 23:03:36          5        10        5    40
-#> 227 185 21.01.2017 15:01:26          4        10        5    40
-#> 228 196 22.01.2017 13:38:56          4        10        5    40
-#> 229 197 22.01.2017 14:55:17          4        10        5    40
-#> 230  65 15.01.2017 12:41:27          3         6        6    22
-#> 231 214 22.01.2017 21:57:36          2         6        6    31
-#> 232 301 27.01.2017 08:17:59          4         8        6    33
-#> 233   5 06.01.2017 14:13:08          4         8        6    34
-#> 234 172 20.01.2017 20:42:46          5        10        6    34
-#> 235  43 13.01.2017 14:14:16          4         8        6    36
-#> 236 110 18.01.2017 18:53:02          5         8        6    37
-#> 237 136 19.01.2017 18:22:57          3         1        6    39
-#> 238   3 05.01.2017 23:33:47          5        10        6    40
-#> 239 206 22.01.2017 18:42:49         NA        NA       NA    20
-#> 240 235 23.01.2017 18:26:20         NA        NA       NA    20
-#> 241  19 10.01.2017 17:16:48         NA        NA       NA    22
-#> 242 195 22.01.2017 13:24:51         NA        NA       NA    23
-#> 243 283 26.01.2017 10:39:44         NA        NA       NA    23
-#> 244  67 15.01.2017 13:30:48         NA        NA       NA    24
-#> 245 246 24.01.2017 15:09:44         NA        NA       NA    24
-#> 246 187 21.01.2017 16:27:32         NA        NA       NA    26
-#> 247 238 23.01.2017 19:53:10         NA        NA       NA    27
-#> 248 207 22.01.2017 18:56:56         NA        NA       NA    28
-#> 249 242 24.01.2017 14:09:33         NA        NA       NA    28
-#> 250 245 24.01.2017 14:56:24         NA        NA       NA    28
-#> 251 247 24.01.2017 15:37:27         NA        NA       NA    28
-#> 252 270 25.01.2017 16:35:41         NA        NA       NA    28
-#> 253 288 26.01.2017 13:36:14         NA        NA       NA    28
-#> 254  91 17.01.2017 15:19:36         NA        NA       NA    29
-#> 255 213 22.01.2017 21:47:06         NA        NA       NA    29
-#> 256 255 25.01.2017 10:05:00         NA        NA       NA    29
-#> 257  15 09.01.2017 15:23:15         NA        NA       NA    30
-#> 258  74 15.01.2017 16:12:54         NA        NA       NA    30
-#> 259 125 19.01.2017 13:03:26         NA        NA       NA    30
-#> 260 265 25.01.2017 13:14:00         NA        NA       NA    30
-#> 261 139 19.01.2017 18:35:56         NA        NA       NA    31
-#> 262 157 20.01.2017 17:34:48         NA        NA       NA    31
-#> 263 183 21.01.2017 12:20:37         NA        NA       NA    31
-#> 264 289 26.01.2017 14:19:14         NA        NA       NA    31
-#> 265 124 19.01.2017 12:51:10         NA        NA       NA    32
-#> 266 150 20.01.2017 09:53:47         NA        NA       NA    32
-#> 267 118 19.01.2017 08:54:43         NA        NA       NA    33
-#> 268  89 16.01.2017 21:18:05         NA        NA       NA    34
-#> 269 141 19.01.2017 18:44:32         NA        NA       NA    34
-#> 270 159 20.01.2017 17:57:26         NA        NA       NA    34
-#> 271 160 20.01.2017 17:59:19         NA        NA       NA    34
-#> 272 271 25.01.2017 16:53:17         NA        NA       NA    34
-#> 273 275 25.01.2017 18:06:36         NA        NA       NA    34
-#> 274 285 26.01.2017 10:54:41         NA        NA       NA    34
-#> 275 294 26.01.2017 15:51:56         NA        NA       NA    34
-#> 276 162 20.01.2017 18:00:53         NA        NA       NA    35
-#> 277 158 20.01.2017 17:53:16         NA        NA       NA    36
-#> 278 163 20.01.2017 18:04:21         NA        NA       NA    36
-#> 279 191 22.01.2017 11:31:27         NA        NA       NA    36
-#> 280 202 22.01.2017 17:13:02         NA        NA       NA    36
-#> 281 226 23.01.2017 14:17:10         NA        NA       NA    36
-#> 282 272 25.01.2017 17:03:21         NA        NA       NA    36
-#> 283 290 26.01.2017 14:34:23         NA        NA       NA    36
-#> 284 293 26.01.2017 15:17:47         NA        NA       NA    36
-#> 285  99 18.01.2017 09:04:30         NA        NA       NA    37
-#> 286 111 18.01.2017 19:24:49         NA        NA       NA    37
-#> 287 117 19.01.2017 08:06:05         NA        NA       NA    37
-#> 288 274 25.01.2017 17:38:36         NA        NA       NA    37
-#> 289  42 13.01.2017 14:08:08         NA        NA       NA    38
-#> 290 106 18.01.2017 15:52:04         NA        NA       NA    38
-#> 291 133 19.01.2017 18:22:38         NA        NA       NA    38
-#> 292 211 22.01.2017 20:28:43         NA        NA       NA    38
-#> 293 286 26.01.2017 11:19:10         NA        NA       NA    38
-#> 294   6 06.01.2017 14:21:18         NA        NA       NA    39
-#> 295  49 14.01.2017 07:02:39         NA        NA       NA    39
-#> 296 104 18.01.2017 13:42:20         NA        NA       NA    39
-#> 297 155 20.01.2017 15:33:55         NA        NA       NA    39
-#> 298 180 21.01.2017 08:04:17         NA        NA       NA    39
-#> 299 225 23.01.2017 13:24:22         NA        NA       NA    39
-#> 300 253 25.01.2017 09:32:55         NA        NA       NA    39
-#> 301 291 26.01.2017 14:55:17         NA        NA       NA    39
-#> 302   7 06.01.2017 14:25:49         NA        NA       NA    40
-#> 303  83 16.01.2017 10:16:52         NA        NA       NA    40
-#> 304 119 19.01.2017 09:05:01         NA        NA       NA    40
-#> 305 132 19.01.2017 18:22:32         NA        NA       NA    40
-#> 306 249 24.01.2017 17:19:54         NA        NA       NA    40
+
+arrange(stats_test, score)  %>% head() # liefert die *schlechtesten* Noten zurück
+#>     X                 V_1 study_time self_eval interest score
+#> 1 234 23.01.2017 18:13:15          3         1        1    17
+#> 2   4 06.01.2017 09:58:05          2         3        2    18
+#> 3 131 19.01.2017 18:03:45          2         3        4    18
+#> 4 142 19.01.2017 19:02:12          3         4        1    18
+#> 5  35 12.01.2017 19:04:43          1         2        3    19
+#> 6  71 15.01.2017 15:03:29          3         3        3    20
+arrange(stats_test, -score) %>% head() # liefert die *besten* Noten zurück
+#>    X                 V_1 study_time self_eval interest score
+#> 1  3 05.01.2017 23:33:47          5        10        6    40
+#> 2  7 06.01.2017 14:25:49         NA        NA       NA    40
+#> 3 29 12.01.2017 09:48:16          4        10        3    40
+#> 4 41 13.01.2017 12:07:29          4        10        3    40
+#> 5 58 14.01.2017 15:43:01          3         8        2    40
+#> 6 83 16.01.2017 10:16:52         NA        NA       NA    40
+arrange(stats_test, interest, score) %>% head()
+#>     X                 V_1 study_time self_eval interest score
+#> 1 234 23.01.2017 18:13:15          3         1        1    17
+#> 2 142 19.01.2017 19:02:12          3         4        1    18
+#> 3 221 23.01.2017 11:40:30          1         1        1    23
+#> 4 230 23.01.2017 16:27:49          1         1        1    23
+#> 5  92 17.01.2017 17:18:55          1         1        1    24
+#> 6 107 18.01.2017 16:01:36          3         2        1    24
 ```
 
 
@@ -1190,6 +305,16 @@ Einige Anmerkungen. Die generelle Syntax lautet `arrange(df, Spalte1, ...)`, wob
 Standardmäßig sortiert `arrange` *aufsteigend*  (weil kleine Zahlen im Zahlenstrahl vor den großen Zahlen kommen). Möchte man diese Reihenfolge umdrehen (große Werte zuert), so kann man ein Minuszeichen vor den Namen der Spalte setzen.
 
 Gibt man *zwei oder mehr* Spalten an, so werden pro Wert von `Spalte1` die Werte von `Spalte2` sortiert etc; man betrachte den Output des Beispiels oben dazu.
+
+Aber was heißt dieses komisch Symbol:  `%>%`? Diese sogenannte "Pfeife" lässt sich mit "und dann" ins Deutshce übersetzen. Also:
+
+```
+sortiere(diese_Tabelle, nach_dieser_Spalte) UND DANN zeig_die_ersten_Zeilen
+```
+
+Der Befehl `head` zeigt dier ersten paar Zeilen eines Dataframes [^3].
+
+[^3]: In der Regel 10 Zeilen, wobei ich irgendwo versteckt gesagt habe, es sollen nur 6 Zeilen am Bildschirm gedruckt werden.
 
 Merke:
 
@@ -1206,10 +331,11 @@ knitr::include_graphics("./images/arrange.pdf")
 
 
 
-Ein ähnliches Ergebnis erhält mit man `top_n()`, welches die `n` kleinsten *Ränge* widergibt:
+Ein ähnliches Ergebnis erhält mit man `top_n()`, welches die `n` *größten* *Ränge* widergibt:
 
 
 ```r
+
 top_n(stats_test, 3)
 #> Selecting by score
 #>      X                 V_1 study_time self_eval interest score
@@ -1246,6 +372,8 @@ top_n(stats_test, 3, interest)
 
 Gibt man *keine* Spalte an, so bezieht sich `top_n` auf die letzte Spalte im Datensatz.
 
+Da sich hier mehrere Personen den größten Rang (Wert 40) teilen, bekommen wir *nicht* 3 Zeilen zurückgeliefert, sondern entsprechend mehr.
+
 
 
 #### Datensatz gruppieren mit `group_by`
@@ -1273,10 +401,7 @@ test_gruppiert
 #> 1     1 05.01.2017 13:57:01          5         8        5    29
 #> 2     2 05.01.2017 21:07:56          3         7        3    29
 #> 3     3 05.01.2017 23:33:47          5        10        6    40
-#> 4     4 06.01.2017 09:58:05          2         3        2    18
-#> 5     5 06.01.2017 14:13:08          4         8        6    34
-#> 6     6 06.01.2017 14:21:18         NA        NA       NA    39
-#> # ... with 300 more rows
+#> # ... with 303 more rows
 ```
 
 Schaut man sich nun den Datensatz an, sieht man erstmal wenig Effekt der Gruppierung. R teilt uns lediglich mit `Groups: interest [7]`, dass es die Gruppen gibt, aber es gibt keine extra Spalte oder sonstige Anzeichen der Gruppierung. Aber keine Sorge, wenn wir gleich einen Mittelwert ausrechnen, bekommen wir den Mittelwert pro Gruppe!
@@ -1284,6 +409,449 @@ Schaut man sich nun den Datensatz an, sieht man erstmal wenig Effekt der Gruppie
 
 
 Merke:
->    Mit *group_by*  teilt man einen Datensatz in Gruppen ein, entsprechend der Werte einer mehrerer Spalten.
+
+>    Mit group_by teilt man einen Datensatz in Gruppen ein, entsprechend der Werte einer mehrerer Spalten.
 
 
+
+#### Eine Spalte zusammenfassen mit `summarise`
+
+Vielleicht die wichtigste oder häufigte Tätigkeit in der Analyse von Daten ist es, eine Spalte zu *einem* Wert zusammenzufassen. Anders gesagt: Einen Mittelwert berechnen, den größten (kleinsten) Wert heraussuchen, die Korrelation berechnen oder eine beliebige andere Statistik ausgeben lassen. Die Gemeinsamkeit dieser Operaitonen ist, dass sie eine Spalte zu einem Wert zusammenfassen, "aus Spalte mach Zahl", sozusagen. Daher ist der Name des Befehls `summarise` ganz passend. Genauer gesagt fasst dieser Befehl eine Spalte zu einer Zahl zusammen *anhand* einer Funktion wie `mean` oder `max`. Hierbei ist jede Funktion erlaubt, die eine Spalte als Input verlangt und eine Zahl zurückgibt; andere Funktionen sind bei `summarise` nicht erlaubt. 
+
+
+```r
+knitr::include_graphics("images/summarise.pdf")
+```
+
+<img src="images/summarise.pdf" width="70%" style="display: block; margin: auto;" />
+
+
+
+```r
+summarise(stats_test, mean(score))
+#>   mean(score)
+#> 1        31.1
+```
+
+Man könnte diesen Befehl so ins Deutsche übersetzen: `Fasse aus Tabelle stats_test die Spalte score anhand des Mittelwerts zusammen`. Nicht vergessen, wenn die Spalte `score` fehlende Werte hat, wird der Befehl `mean` standardmäßig dies mit `NA` quittieren.
+
+Jetzt können wir auch die Gruppierung nutzen:
+
+```r
+test_gruppiert <- group_by(stats_test, interest)
+summarise(test_gruppiert, mean(score))
+#> # A tibble: 7 × 2
+#>   interest `mean(score)`
+#>      <int>         <dbl>
+#> 1        1          28.3
+#> 2        2          29.7
+#> 3        3          30.8
+#> # ... with 4 more rows
+```
+
+Der Befehl `summarise` erkennt also, wenn eine (mit `group_by`) gruppierte Tabelle vorliegt. Jegliche Zusammenfassung, die wir anfordern, wird anhand der Gruppierungsinformation aufgeteilt werden. In dem Beispiel bekommen wir einen Mittelwert für jeden Wert von `interest`. Interessanterweise sehen wir, dass der Mittelwert tendenziell größer wird, je größer `interest` wird.
+
+Alle diese `dplyr`-Befehle geben einen Dataframe zurück, was praktisch ist für weitere Verarbeitung. In diesem Fall heißen die Spalten `interst` und `mean(score)`. Zweiter Name ist nicht so schön, daher ändern wir den wie folgt:
+
+Jetzt können wir auch die Gruppierung nutzen:
+
+```r
+test_gruppiert <- group_by(stats_test, interest)
+summarise(test_gruppiert, mw_pro_gruppe = mean(score, na.rm = TRUE))
+#> # A tibble: 7 × 2
+#>   interest mw_pro_gruppe
+#>      <int>         <dbl>
+#> 1        1          28.3
+#> 2        2          29.7
+#> 3        3          30.8
+#> # ... with 4 more rows
+```
+
+Nun heißt die zweite Spalte `mw_pro_Gruppe`. `na.rm = TRUE` veranlasst, bei fehlenden Werten trotzdem einen Mittelwert zurückzuliefern (die Zeilen mit fehlenden Werten werden in dem Fall ignoriert).
+
+Grundsätzlich ist die Philosophie der `dplyr`-Befehle: "Mach nur eine Sache, aber die dafür gut". Entsprechend kann `summarise` nur *Spalten* zusammenfassen, aber keine *Zeilen*.
+
+Merke:
+
+>    Mit summarise kann man eine Spalte eines Dataframes zu einem Wert zusammenfassen.
+
+
+
+
+#### Zeilen zählen mit `n` und `count`
+Ebenfalls nützlich ist es, Zeilen zu zählen. Im Gegensatz zum Standardbefehle `nrow` versteht der `dyplr`-Befehl `n`auch Gruppierungen. `n` darf nur innerhalb von `summarise` oder ähnlichen `dplyr`-Befehlen verwendet werden.
+
+
+```r
+summarise(stats_test, n())
+#>   n()
+#> 1 306
+summarise(test_gruppiert, n())
+#> # A tibble: 7 × 2
+#>   interest `n()`
+#>      <int> <int>
+#> 1        1    30
+#> 2        2    47
+#> 3        3    66
+#> # ... with 4 more rows
+nrow(stats_test)
+#> [1] 306
+```
+
+Außerhalb von gruppierten Datensätzen ist `nrow` meist praktischer.
+
+
+Praktischer ist der Befehl `count`, der nichts anderes ist als die Hintereinanderschaltung von `group_by` und `n`. Mit `count` zählen wir die Häufigkeiten nach Gruppen; Gruppen sind hier zumeist die Werte einer auszuzählenden Variablen (oder mehrerer auszuzählender Variablen). Das macht `count` zu einem wichtigen Helfer bei der Analyse von Häufigkeitsdaten.
+
+
+```r
+dplyr::count(stats_test, interest)
+#> # A tibble: 7 × 2
+#>   interest     n
+#>      <int> <int>
+#> 1        1    30
+#> 2        2    47
+#> 3        3    66
+#> # ... with 4 more rows
+dplyr::count(stats_test, study_time)
+#> # A tibble: 6 × 2
+#>   study_time     n
+#>        <int> <int>
+#> 1          1    31
+#> 2          2    49
+#> 3          3    85
+#> 4          4    56
+#> 5          5    17
+#> 6         NA    68
+dplyr::count(stats_test, interest, study_time)
+#> Source: local data frame [29 x 3]
+#> Groups: interest [?]
+#> 
+#>   interest study_time     n
+#>      <int>      <int> <int>
+#> 1        1          1    12
+#> 2        1          2     7
+#> 3        1          3     8
+#> # ... with 26 more rows
+```
+
+Allgemeiner formuliert lautet die Syntax: `count(df, Spalte1, ...)`, wobei `df` der Dataframe ist und `Spalte1` die erste (es können mehrere sein) auszuzählende Spalte. Gibt man z.B. zwei Spalten an, so wird pro Wert der 1. Spalte die Häufigkeiten der 2. Spalte ausgegeben.
+
+Merke:
+
+>    n und count zählen die Anzahl der Zeilen, d.h. die Anzahl der Fälle. 
+
+
+#### Die Pfeife
+Die zweite Idee kann man salopp als "Durchpfeifen" bezeichnen; ikonographisch mit diesem Symbol dargestellt ` %>% `[^4]. Der Begriff "Durchpfeifen" ist frei vom Englischen "to pipe" übernommen. Hierbei ist gemeint, einen Datensatz sozusagen auf ein Fließband zu legen und an jedem Arbeitsplatz einen Arbeitsschritt auszuführen. Der springende Punkt ist, dass ein Dataframe als "Rohstoff" eingegeben wird und jeder Arbeitsschritt seinerseits wieder einen Datafram ausgiebt. Damit kann man sehr schön, einen "Flow" an Verarbeitung erreichen, außerdem spart man sich Tipparbeit und die Syntax wird lesbarer. Damit das Durchpfeifen funktioniert, benötigt man Befehle, die als Eingabe einen Dataframe erwarten und wieder einen Dataframe zurückliefern. Das Schaubild verdeutlich beispielhaft eine Abfolge des Durchpfeifens.
+
+[^4]: Eine Art Smiley für Nerds.
+
+<img src="images/durchpfeifen.pdf" width="80%" style="display: block; margin: auto;" />
+
+Die sog. "Pfeife" (pipe: ` %>% `) in Anspielung an das berühmte Bild von René Magritte, verkettet Befehle hintereinander. Das ist praktisch, da es die Syntax vereinfacht. Vergleichen Sie mal diese Syntax
+
+
+```r
+filter(summarise(group_by(filter(stats_test, !is.na(score)), interest), mw = mean(score)), mw > 30)
+```
+
+mit dieser
+
+```r
+stats_test %>% 
+  filter(!is.na(score)) %>% 
+  group_by(interest) %>% 
+  summarise(mw = mean(score)) %>% 
+  filter(mw > 30)
+#> # A tibble: 4 × 2
+#>   interest    mw
+#>      <int> <dbl>
+#> 1        3  30.8
+#> 2        5  32.5
+#> 3        6  34.0
+#> 4       NA  33.1
+```
+
+Es ist hilfreich, diese "Pfeifen-Syntax" in deutschen Pseudo-Code zu übersetzen:
+
+```
+Nimm die Tabelle "stats_test" UND DANN  
+filtere alle nicht-fehlenden Werte UND DANN  
+gruppiere die verbleibenden Werte nach "interest" UND DANN  
+bilde den Mittelwert (pro Gruppe) für "score" UND DANN  
+liefere nur die Werte größer als 30 zurück.  
+```
+
+Die Pfeife zerlegt die "russische Puppe", also ineinander verschachelteten Code, in sequenzielle Schritte und zwar in der richtigen Reihenfolge (entsprechend der Abarbeitung). Wir müssen den Code nicht mehr von innen nach außen lesen (wie das bei einer mathematischen Formel der Fall ist), sondern können wie bei einem Kochrezept "erstens ..., zweitens .., drittens ..." lesen. Die Pfeife macht die Syntax einfacher. Natürlich hätten wir die verschachtelte Syntax in viele einzelne Befehle zerlegen können und jeweils eine Zwischenergebnis speichern mit dem Zuweisungspfeil `<-` und das Zwischenergebnis dann explizit an den nächsten Befehl weitergeben. Eigentlich macht die Pfeife genau das - nur mit weniger Tipparbeit. Und auch einfacher zu lesen. Flow!
+
+
+
+#### Werte umkodieren und "binnen" mit `car::recode`
+
+Manchmal möchte man z.B. negativ gepolte Items umdrehen oder bei kategoriellen Variablen kryptische Bezeichnungen in sprechendere umwandeln (ein Klassiker ist `1` in `maennlich` bzw. `2` in `weiblich` oder umgekehrt, kann sich niemand merken). Hier gibt es eine Reihe praktischer Befehle, z.B. `recode` aus dem Paket `car`. Übrigens: Wenn man explizit angeben möchte, aus welchem Paket ein Befehl stammt (z.B. um Verwechslungen zu vermeiden), gibt man `Paketnamen::Befehlnamen` an. Schauen wir uns ein paar Beispiele zum Umkodieren an.
+
+
+
+```r
+library(car)
+
+stats_test$score_fac <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 2:4 = 'mittel'; 1 = 'wenig'", as.factor.result = TRUE)
+stats_test$score_fac <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 2:4 = 'mittel'; 1 = 'wenig'", as.factor.result = FALSE)
+
+stats_test$study_time <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 4 = 'wenig'; else = 'Hilfe'", as.factor.result = TRUE)
+
+head(stats_test$study_time)
+#> [1] sehr viel Hilfe     sehr viel Hilfe     wenig     Hilfe    
+#> Levels: Hilfe sehr viel wenig
+```
+
+Der Befehle `recode` ist wirklich sehr prkatisch; mit `:` kann man "von bis" ansprechen (das ginge mit `c()` übrigens auch); `else` für "ansonsten" ist möglich und mit `as.factor.result` kann man entweder einen Faktor oder eine Text-Variable zurückgeliefert bekommen. Der ganze "Wechselterm" steht in Anführungsstrichen (`"`). Einzelne Teile des Wechselterms sind mit einem Strichpunkt (`;`) voneinander getrennt.
+
+
+Das klassiche Umkodieren von Items aus Fragebögen kann man so anstellen; sagen wir `interest` soll umkodiert werden:
+
+
+```r
+stats_test$no_interest <- car::recode(stats_test$interest, "1 = 6; 2 = 5; 3 = 4; 4 = 3; 5 = 2; 6 = 1; else = NA")
+glimpse(stats_test$no_interest)
+#>  num [1:306] 2 4 1 5 1 NA NA 4 2 2 ...
+```
+
+Bei dem Wechselterm muss man aufpassen, nichts zu verwechseln; die Zahlen sehen alle ähnlich aus...
+
+Testen kann man den Erfolg des Umpolens mit
+
+
+```r
+dplyr::count(stats_test, interest)
+#> # A tibble: 7 × 2
+#>   interest     n
+#>      <int> <int>
+#> 1        1    30
+#> 2        2    47
+#> 3        3    66
+#> # ... with 4 more rows
+dplyr::count(stats_test, no_interest)
+#> # A tibble: 7 × 2
+#>   no_interest     n
+#>         <dbl> <int>
+#> 1           1     9
+#> 2           2    45
+#> 3           3    41
+#> # ... with 4 more rows
+```
+
+Scheint zu passen. Noch praktischer ist, dass man so auch numerische Variablen in Bereiche aufteilen kann ("binnen"):
+
+
+
+```r
+stats_test$Ergebnis <- car::recode(stats_test$score, "1:38 = 'durchgefallen'; else = 'bestanden'")
+```
+
+
+Natürlich gibt es auch eine Pfeifen komptatible Version, um Variablen umzukodieren bzw. zu binnen: `dplyr::recode`[^6]. Die Syntax ist allerdings etwas weniger komfortabel (da strenger), so dass wir an dieser Stelle bei `car::recode` bleiben.
+
+[^6]: https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/. 
+
+
+### Fallstudie `nycflights13`
+Schauen wir uns einige Beispiele der Datenaufbereitung mittels `dplyr` an. Wir verwenden hier den Datensatz `flights`aus dem Package `nycflights13`. Der Datensatz ist recht groß (~300.000 Zeilen und 19 Spalten); wenn man ihn als Excel importiert, kann eine alte Möhre von Computer schon in die Knie gehen. Beim Import als CSV habe ich noch nie von Problemen gehört; beim Import via Package ebenfalls nicht. Werfen wir einen ersten Blick in die Daten:
+
+
+
+```r
+#install.packages("nyclights13")
+library(nycflights13)
+data(flights)
+glimpse(flights)
+#> Observations: 336,776
+#> Variables: 19
+#> $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
+#> $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+#> $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+#> $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...
+#> $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...
+#> $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...
+#> $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...
+#> $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...
+#> $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...
+#> $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV",...
+#> $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...
+#> $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN...
+#> $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR"...
+#> $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL"...
+#> $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...
+#> $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...
+#> $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...
+#> $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...
+#> $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...
+```
+
+Der Befehl `data` lädt Daten aus einem zuvor gestarteten Paket. 
+
+Achtung, Fallstudie. Sie sind der/die Assistent_in des Chefs der New Yorker Flughäfen. Ihr Chef kommt gut gelaunt ins Büro und sagt, dass er diesen Schnarchnasen einheizen wolle und sagt, sie sollen ihm mal schnell die Flüge mit der größten Verspätung raussuchen. Nix schickes, aber zacki-zacki...
+
+
+```r
+flights %>% 
+  arrange(arr_delay)
+#> # A tibble: 336,776 × 19
+#>    year month   day dep_time sched_dep_time dep_delay arr_time
+#>   <int> <int> <int>    <int>          <int>     <dbl>    <int>
+#> 1  2013     5     7     1715           1729       -14     1944
+#> 2  2013     5    20      719            735       -16      951
+#> 3  2013     5     2     1947           1949        -2     2209
+#> # ... with 3.368e+05 more rows, and 12 more variables:
+#> #   sched_arr_time <int>, arr_delay <dbl>, carrier <chr>, flight <int>,
+#> #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
+#> #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+
+Hm, übersichtlicher wäre es wahrscheinllich, wenn wir weniger Spalten anschauen müssten. Am besten neben der Verspätung nur die Information, die wir zur Identifizierung der Schuldigen... will sagen der gesuchten Flüge benötigen
+
+
+```r
+flights %>% 
+  arrange(arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
+#> # A tibble: 336,776 × 8
+#>   arr_delay carrier month   day dep_time tailnum flight  dest
+#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+#> 1       -86      VX     5     7     1715  N843VA    193   SFO
+#> 2       -79      VX     5    20      719  N840VA     11   SFO
+#> 3       -75      UA     5     2     1947  N851UA    612   LAX
+#> # ... with 3.368e+05 more rows
+```
+
+Da Zahlen in ihrer natürlichen Form von klein nach groß sortiert sind, sortiert `arrange` in ebendieser Richtung. Wir können das umdrehen mit einem Minuszeichen vor der zu sortierenden Spalte:
+
+
+```r
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
+#> # A tibble: 336,776 × 8
+#>   arr_delay carrier month   day dep_time tailnum flight  dest
+#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+#> 1      1272      HA     1     9      641  N384HA     51   HNL
+#> 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+#> 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+#> # ... with 3.368e+05 more rows
+```
+
+Eine kleine Zugabe: Mit dem Befehl `knitr::kable` kann man einen Dateframe automatisch in eine (einigermaßen) schöne Tabelle ausgeben lassen. Oh halt, wir wollen keine Tabelle mit 300.000 Zeilen (der Chef ist kein Freund von Details). Also begrenzen wir die Ausgabe auf die ersten 10 Plätze.
+
+
+```r
+library(knitr)  # muss installiert sein
+
+
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  filter(row_number() < 11) %>% 
+  kable()
+```
+
+
+
+ arr_delay  carrier    month   day   dep_time  tailnum    flight  dest 
+----------  --------  ------  ----  ---------  --------  -------  -----
+      1272  HA             1     9        641  N384HA         51  HNL  
+      1127  MQ             6    15       1432  N504MQ       3535  CMH  
+      1109  MQ             1    10       1121  N517MQ       3695  ORD  
+      1007  AA             9    20       1139  N338AA        177  SFO  
+       989  MQ             7    22        845  N665MQ       3075  CVG  
+       931  DL             4    10       1100  N959DL       2391  TPA  
+       915  DL             3    17       2321  N927DA       2119  MSP  
+       895  DL             7    22       2257  N6716C       2047  ATL  
+       878  AA            12     5        756  N5DMAA        172  MIA  
+       875  MQ             5     3       1133  N523MQ       3744  ORD  
+
+"Geht doch", war die Antwort des Chefs, als sie die Tabelle rübergeben (er mag auch keine Emails). "Ach ja", raunt der Chef, als Sie das Zimmer verlassen wollen, "hatte ich erwähnt, dass ich die gleiche Auswertung für jeden Carrier brauche? Reicht bis in einer halben Stunde".
+
+Wir gruppieren also den Datensatz nach der Fluggesellschaft (`carrier`) und filtern dann  die ersten 3 Zeilen (damit die Tabelle für den Chef nicht zu groß wird). Wie jeder `dplyr`-Befehl wird die vorherige Gruppierung berücksichtigt und daher die Top-3-Zeilen *pro Gruppe*, d.h. pro Fluggesellschaft, ausgegeben.
+
+
+```r
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  filter(row_number() < 4) 
+#> Source: local data frame [48 x 8]
+#> Groups: carrier [16]
+#> 
+#>   arr_delay carrier month   day dep_time tailnum flight  dest
+#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+#> 1      1272      HA     1     9      641  N384HA     51   HNL
+#> 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+#> 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+#> # ... with 45 more rows
+```
+
+Vielleicht gefällt dem Chef diese Darstellung (sortiert nach `carrier`) besser:
+
+
+```r
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  filter(row_number() < 4) %>% 
+  arrange(carrier)
+#> Source: local data frame [48 x 8]
+#> Groups: carrier [16]
+#> 
+#>   arr_delay carrier month   day dep_time tailnum flight  dest
+#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+#> 1       744      9E     2    16      757  N8940E   3798   CLT
+#> 2       458      9E     7    24     1525  N927XJ   3538   MSP
+#> 3       421      9E     7    10     2054  N937XJ   3325   DFW
+#> # ... with 45 more rows
+```
+
+Da Sie den Chef gut kennen, berechnen Sie gleich noch die durchschnittliche Verspätung pro Fluggesellschaft.
+
+
+```r
+flights %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  summarise(delay_mean = mean(arr_delay, na.rm = TRUE)) %>% 
+  arrange(-delay_mean) %>% 
+  kable()
+```
+
+
+
+carrier    delay_mean
+--------  -----------
+F9             21.921
+FL             20.116
+EV             15.796
+YV             15.557
+OO             11.931
+MQ             10.775
+WN              9.649
+B6              9.458
+9E              7.380
+UA              3.558
+US              2.130
+VX              1.764
+DL              1.644
+AA              0.364
+HA             -6.915
+AS             -9.931
+
+Der Chef ist zufrieden. Sie können sich wieder wichtigeren Aufgaben zuwenden...
+
+
+
+
+### Weiterführende Hinweise
+Eine schöne Demonstration der Mächtigkeit von `dplyr` findet sich hier[^7].
+
+[^7]: <http://bit.ly/2kX9lvC>. 

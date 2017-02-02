@@ -1,5 +1,4 @@
 
-
 # Unbehagen
 
 In diesem Kapitel finden sich einige Probleme, die einigen Wissenschaftlern Bauchschmerzen oder Unbehagen verursacht.
@@ -9,7 +8,7 @@ In diesem Kapitel finden sich einige Probleme, die einigen Wissenschaftlern Bauc
 
 <div class="figure" style="text-align: center">
 <img src="./images/Ronald_Fisher.jpg" alt="Der größte Statistiker des 20. Jahrhunderts (p &lt; .05)" width="70%" />
-<p class="caption">(\#fig:unnamed-chunk-3)Der größte Statistiker des 20. Jahrhunderts (p < .05)</p>
+<p class="caption">(\#fig:unnamed-chunk-2)Der größte Statistiker des 20. Jahrhunderts (p < .05)</p>
 </div>
 
 
@@ -19,7 +18,7 @@ Der p-Wert ist die heilige Kuh der Forschung. Das ist nicht normativ, sondern de
 
 <div class="figure" style="text-align: center">
 <img src="./images/p_value_who_said.png" alt="Der p-Wert wird oft als wichtig erachtet" width="70%" />
-<p class="caption">(\#fig:unnamed-chunk-4)Der p-Wert wird oft als wichtig erachtet</p>
+<p class="caption">(\#fig:unnamed-chunk-3)Der p-Wert wird oft als wichtig erachtet</p>
 </div>
 
 

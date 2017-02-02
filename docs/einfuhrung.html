@@ -26,7 +26,7 @@
 <meta name="author" content="Sebastian Sauer">
 
 
-<meta name="date" content="2017-01-26">
+<meta name="date" content="2017-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -133,6 +133,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2.1" data-path="daten-explorieren.html"><a href="daten-explorieren.html#uberblick"><i class="fa fa-check"></i><b>6.2.1</b> Überblick</a></li>
 <li class="chapter" data-level="6.2.2" data-path="daten-explorieren.html"><a href="daten-explorieren.html#normalform-einer-tabelle"><i class="fa fa-check"></i><b>6.2.2</b> Normalform einer Tabelle</a></li>
 <li class="chapter" data-level="6.2.3" data-path="daten-explorieren.html"><a href="daten-explorieren.html#daten-aufbereiten-mit-dplyr"><i class="fa fa-check"></i><b>6.2.3</b> Daten aufbereiten mit <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.2.4" data-path="daten-explorieren.html"><a href="daten-explorieren.html#fallstudie-nycflights13"><i class="fa fa-check"></i><b>6.2.4</b> Fallstudie <code>nycflights13</code></a></li>
+<li class="chapter" data-level="6.2.5" data-path="daten-explorieren.html"><a href="daten-explorieren.html#weiterfuhrende-hinweise"><i class="fa fa-check"></i><b>6.2.5</b> Weiterführende Hinweise</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="visualisierung.html"><a href="visualisierung.html"><i class="fa fa-check"></i><b>7</b> Visualisierung</a></li>
@@ -166,7 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="rahmen" class="section level2">
 <h2><span class="header-section-number">1.1</span> Rahmen</h2>
 <p>Der “Rahmen” dieses Buches ist der Überblick über wesentliche Schritte der Datenanalyse (aus meiner Sicht). Es gibt viele Ansätze, mit denen der Ablauf von Datenanalyse dargestellt wird. Der im Moment populärste oder bekannteste ist wohl der von Hadley Wickham und Garret Grolemund <span class="citation">(Wickham and Grolemund <a href="#ref-r4ds">2016</a>)</span>. Hadley und Garrett haben einen “technischeren” Fokus als der dieses Buches. Ihr Buch “R for Data Science” ist hervorragend (und frei online verfügbar); nur ist der Schwerpunkt ein anderer; es baut ein viel tieferes Verständnis von R auf. Hier spielen aber statistisch-praktisch und statistisch-philosophische<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Aspekte eine größere Rolle.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-6"></span>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
 <img src="images/Prozess.pdf" alt="Rahmen" width="70%" />
 <p class="caption">
 Figure 1.1: Rahmen
@@ -198,7 +200,7 @@ Figure 1.1: Rahmen
 </div>
 <div id="datensatze" class="section level2">
 <h2><span class="header-section-number">1.4</span> Datensätze</h2>
-<p>Name des Datensatzes | Quelle | Beschreibung <code>profiles</code> | {okcupiddata} | Daten von einer Online-Singlebörse</p>
+<p>Name des Datensatzes | Quelle | Beschreibung <code>profiles</code> | {okcupiddata} | Daten von einer Online-Singlebörse <code>Wage</code> | {ISLR} | Gehaltsdaten von US-amerikanischen Männern <code>inf_test_short</code> | <a href="https://sebastiansauer.github.io/data/test_inf_short.csv" class="uri">https://sebastiansauer.github.io/data/test_inf_short.csv</a> | Ergebnisse einer Statistikklausur</p>
 
 </div>
 </div>
@@ -224,8 +226,8 @@ Figure 1.1: Rahmen
 <hr />
 <ol start="1">
 <li id="fn1"><p>zumindest bei den meisten Befehlen.<a href="einfuhrung.html#fnref1">↩</a></p></li>
-<li id="fn2"><p>hier und überall sind Frauen und Männer gleichermaßen angesprochen; aus Gründen der Lesbarkeit das generische Maskulinum bevorzugt.<a href="einfuhrung.html#fnref2">↩</a></p></li>
-<li id="fn3"><p>Eine Vorhersage, die bei vielen Vorhersagemodellen komplett in die Grütze ging, wenn man sich die US-Präsidentenwahl 2016 anschaut.<a href="einfuhrung.html#fnref3">↩</a></p></li>
+<li id="fn2"><p><a href="https://www.rstudio.com/resources/cheatsheets/" class="uri">https://www.rstudio.com/resources/cheatsheets/</a><a href="einfuhrung.html#fnref2">↩</a></p></li>
+<li id="fn3"><p>In der Regel 10 Zeilen, wobei ich irgendwo versteckt gesagt habe, es sollen nur 6 Zeilen am Bildschirm gedruckt werden.<a href="einfuhrung.html#fnref3">↩</a></p></li>
 </ol>
 </div>
             </section>

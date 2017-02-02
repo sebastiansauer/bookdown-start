@@ -26,7 +26,7 @@
 <meta name="author" content="Sebastian Sauer">
 
 
-<meta name="date" content="2017-01-26">
+<meta name="date" content="2017-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -133,6 +133,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2.1" data-path="daten-explorieren.html"><a href="daten-explorieren.html#uberblick"><i class="fa fa-check"></i><b>6.2.1</b> Überblick</a></li>
 <li class="chapter" data-level="6.2.2" data-path="daten-explorieren.html"><a href="daten-explorieren.html#normalform-einer-tabelle"><i class="fa fa-check"></i><b>6.2.2</b> Normalform einer Tabelle</a></li>
 <li class="chapter" data-level="6.2.3" data-path="daten-explorieren.html"><a href="daten-explorieren.html#daten-aufbereiten-mit-dplyr"><i class="fa fa-check"></i><b>6.2.3</b> Daten aufbereiten mit <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.2.4" data-path="daten-explorieren.html"><a href="daten-explorieren.html#fallstudie-nycflights13"><i class="fa fa-check"></i><b>6.2.4</b> Fallstudie <code>nycflights13</code></a></li>
+<li class="chapter" data-level="6.2.5" data-path="daten-explorieren.html"><a href="daten-explorieren.html#weiterfuhrende-hinweise"><i class="fa fa-check"></i><b>6.2.5</b> Weiterführende Hinweise</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="visualisierung.html"><a href="visualisierung.html"><i class="fa fa-check"></i><b>7</b> Visualisierung</a></li>
@@ -166,17 +168,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In diesem Kapitel finden sich einige Probleme, die einigen Wissenschaftlern Bauchschmerzen oder Unbehagen verursacht.</p>
 <div id="der-p-wert" class="section level2">
 <h2><span class="header-section-number">4.1</span> Der p-Wert</h2>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-3"></span>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
 <img src="images/Ronald_Fisher.jpg" alt="Der größte Statistiker des 20. Jahrhunderts (p &lt; .05)" width="70%" />
 <p class="caption">
-Figure 4.1: Der größte Statistiker des 20. Jahrhunderts (p &lt; .05)
+Figure 1.1: Der größte Statistiker des 20. Jahrhunderts (p &lt; .05)
 </p>
 </div>
 <p>Der p-Wert ist die heilige Kuh der Forschung. Das ist nicht normativ, sondern deskriptiv gemeint. Der p-Wert entscheidet (häufig) darüber, was publiziert wird, und damit, was als Wissenschaft sichtbar ist - und damit, was Wissenschaft ist (wiederum deskriptiv, nicht normativ gemeint). Kurz: Dem p-Wert wird viel Bedeutung zugemessen.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-3"></span>
 <img src="images/p_value_who_said.png" alt="Der p-Wert wird oft als wichtig erachtet" width="70%" />
 <p class="caption">
-Figure 4.2: Der p-Wert wird oft als wichtig erachtet
+Figure 4.1: Der p-Wert wird oft als wichtig erachtet
 </p>
 </div>
 <p>Allerdings hat der p-Wert seine Probleme. Vor allem: Er wird missverstanden. Jetzt kann man sagen, dass es dem p-Wert (dem armen) nicht anzulasten, dass andere/ einige ihm missverstehen. Auf der anderen Seite finde ich, dass sich Technologien dem Nutzer anpassen sollten (soweit als möglich) und nicht umgekehrt. Die Definition des p-Werts ist aber auch so kompliziert, man kann sie leicht missverstehen:</p>

@@ -4,7 +4,6 @@ options(digits = 3)
 
 knitr::opts_chunk$set(
   comment = "#>",
-  comment = FALSE,
   collapse = TRUE,
   cache = TRUE,
   out.width = "70%",
@@ -14,7 +13,7 @@ knitr::opts_chunk$set(
   fig.show = "hold"
 )
 
-options(dplyr.print_min = 6, dplyr.print_max = 6)
+options(dplyr.print_min = 3, dplyr.print_max = 6)
 ```
 
 
@@ -36,7 +35,17 @@ Ist das Explorieren von Daten auch nicht statistisch anspruchsvoll, so ist es tr
 
 ## Daten einlesen
 
-In R kann man ohne Weiteres verschiedene, gebräuchliche (Excel) oder weniger gebräuchliche (Feather) Datenformate einlesen. In RStudio lässt sich dies z.B. durch einen schnellen Klick auf `Import Dataset` im Reiter `Environment` erledigen. Dabei wird im Hintergrund das Paket `readr` verwendet [@readr] (die entsprechende Syntax wird in der Konsole ausgegeben, so dass man sie sich anschauen und weiterverwenden kann).
+In R kann man ohne Weiteres verschiedene, gebräuchliche (Excel) oder weniger gebräuchliche (Feather[^2]) Datenformate einlesen. In RStudio lässt sich dies z.B. durch einen schnellen Klick auf `Import Dataset` im Reiter `Environment` erledigen. Dabei wird im Hintergrund das Paket `readr` verwendet [@readr] (die entsprechende Syntax wird in der Konsole ausgegeben, so dass man sie sich anschauen und weiterverwenden kann).
+
+[^2]:<https://cran.r-project.org/web/packages/feather/index.html> 
+
+Am einfachsten ist es, eine Excel-Datei über die RStudio-Oberfläche zu importieren; das ist mit ein paar Klicks geschehen:
+
+```{r echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/import_RStudio.png")
+```
+
+
 
 Es ist für bestimmte Zwecke sinnvoll, nicht zu klicken, sondern die Syntax einzutippen. Zum Beispiel: Wenn Sie die komplette Analyse als Syntax in einer Datei haben (eine sog. "Skriptdatei"), dann brauchen Sie (in RStudio) nur alles auszuwählen und auf `Run` zu klicken, und die komplette Analyse läuft durch! Die Erfahrung zeigt, dass das ein praktisches Vorgehen ist.
 
@@ -57,11 +66,18 @@ An einer Stelle steht `NA`. Das ist Errisch für "fehlender Wert". Häufig wird 
 
 Lesen wir diese Daten jetzt ein:
 ```{r}
-daten <- read.csv("https://sebastiansauer.github.io/data/wo_men.csv")
+if (!file.exists("./data/wo_men.csv")){
+  daten <- read.csv("https://sebastiansauer.github.io/data/wo_men.csv")
+} else {
+  daten <- read.csv("./data/wo_men.csv")
+}
 head(daten)
 ```
 
-Der Befehl `read.csv` liest eine CSV-Datei, was uns jetzt nicht übermäßig überrascht. Aber Achtung: Wenn Sie aus einem Excel mit deutscher Einstellung eine CSV-Datei exportieren, wird diese CSV-Datei als Trennzeichen `;` (Strichpunkt) und als Dezimaltrennzeichen `,` verwenden. Da der Befehl `read.csv` als Standard mit Komma und Punkt arbeitet, müssen wir die deutschen Sonderlocken explizit angeben, z.B. so:
+Wir haben zuerst geprüft, ob die Datei (`wo_men.csv`) im entsprechenden Ordner existiert oder nicht (das `!`-Zeichen heißt auf Errisch "nicht"). Falls die Datei nicht im Ordner existiert, laden wir sie mit `read.csv` herunter und direkt ins R hinein. Andernfalls (`else`) lesen wir sie direkt ins R hinein.
+
+
+Der Befehl `read.csv` liest also eine CSV-Datei, was uns jetzt nicht übermäßig überrascht. Aber Achtung: Wenn Sie aus einem Excel mit deutscher Einstellung eine CSV-Datei exportieren, wird diese CSV-Datei als Trennzeichen `;` (Strichpunkt) und als Dezimaltrennzeichen `,` verwenden. Da der Befehl `read.csv` als Standard mit Komma und Punkt arbeitet, müssen wir die deutschen Sonderlocken explizit angeben, z.B. so:
 
 ```{r eval = FALSE}
 # daten_deutsch <- read.csv("daten_deutsch.csv", sep = ";", dec = ".")
@@ -89,7 +105,7 @@ Typische Probleme, die immer wieder auftreten sind:
 
 
 ### Normalform einer Tabelle
-Tabellen in R werden als `data frames` (oder moderner: als `tibble`, kurz für "Table-df") bezeichnet. Tabellen sollten in "Normalform" vorliegen, bevor wir weitere Analysen starten. Unter Normalform verstehen sich folgende Punkte:
+Tabellen in R werden als `data frames` ("Dataframe" auf Denglisch; moderner: als `tibble`, kurz für "Table-df") bezeichnet. Tabellen sollten in "Normalform" vorliegen, bevor wir weitere Analysen starten. Unter Normalform verstehen sich folgende Punkte:
 
 - Es handelt sich um einen data frame, also Spalten mit Namen und gleicher Länge; eine Datentabelle in rechteckiger Form
 - In jeder Zeile steht eine Beobachtung, in jeder Spalte eine Variable
@@ -125,17 +141,19 @@ df_lang <- separate(df_lang, year, into = c("U5MR", "year"), sep = ".")
 - Die zweite Zeile formt die Daten von breit nach lang um. Die neuen Spalten, nach der Umformung heißen dann `year` und `u5mr` (Sterblichkeit bei Kindern unter fünf Jahren). In die Umformung werden die Spalten `U5MR 1950` bis `U5MR 2015` einbezogen.
 - Die dritte Zeile "entzerrt" die Werte der Spalte `year`; hier stehen die ehemaligen Spaltenköpfe. Man nennt sie auch `key` Spalte daher. Steht in einer Zelle von `year` bspw. `U5MR 1950`, so wird `U5MR` in eine Spalte mit Namen `U5MR` und `1950` in eine Spalte mit Namen `year` geschrieben.
 
-Im Cheatsheet von RStudio zum Thema Datenimport finden sich nützliche Hinweise [^3].
-[^3]: https://www.rstudio.com/resources/cheatsheets/
+Im Cheatsheet von RStudio zum Thema Datenimport finden sich nützliche Hinweise [^4].
+[^4]: https://www.rstudio.com/resources/cheatsheets/
 
 
 
 
 ### Daten aufbereiten mit `dplyr`
 
-Es gibt viele Möglichkeiten, Daten mit R aufzubereiten; `dplyr` ist ein populäres Paket dafür. Die Philosophie dabei ist, dass es ein paar wenige Grundbausteine geben sollte, die sich gut kombinieren lassen. Sprich: Wenige grundlegende Funktionen mit eng umgrenzter Funktionalität. Der Autor, Hadley Wickham, sprach einmal in einem Forum (citation needed), dass diese Befehle wenig können, das Wenige aber gut. Ein Nachteil dieser Konzeption kann sein, dass man recht viele dieser Bausteine kombinieren muss, um zum gewünschten Ergebnis zu kommen. Außerdem muss man die Logik des Baukastens gut verstanden habe - die Lernkurve ist also erstmal steiler. Dafür ist man dann nicht darauf angewiesen, dass es irgendwo "Mrs Right" gibt, die genau das kann, so wie ich das will. Außerdem braucht man sich auch nicht viele Funktionen merken. Es reicht einen kleinen Satz an Funktionen zu kennen (die praktischerweise konsistent in Syntax und Methodik sind). 
+Es gibt viele Möglichkeiten, Daten mit R aufzubereiten; `dplyr` ist ein populäres Paket dafür. Eine zentrale Idee von `dplyr` ist, dass es nur ein paar wenige Grundbausteine geben sollte, die sich gut kombinieren lassen. Sprich: Wenige grundlegende Funktionen mit eng umgrenzter Funktionalität. Der Autor, Hadley Wickham, sprach einmal in einem Forum (citation needed), dass diese Befehle wenig können, das Wenige aber gut. Ein Nachteil dieser Konzeption kann sein, dass man recht viele dieser Bausteine kombinieren muss, um zum gewünschten Ergebnis zu kommen. Außerdem muss man die Logik des Baukastens gut verstanden habe - die Lernkurve ist also erstmal steiler. Dafür ist man dann nicht darauf angewiesen, dass es irgendwo "Mrs Right" gibt, die genau das kann, so wie ich das will. Außerdem braucht man sich auch nicht viele Funktionen merken. Es reicht einen kleinen Satz an Funktionen zu kennen (die praktischerweise konsistent in Syntax und Methodik sind). 
 
-`dplyr` hat seinen Namen, weil es sich ausschließlich um *D*ataframes bemüht; es erwartet einen Dataframe als Eingabe und gibt einen Dataframe zurück[^1].
+
+Willkommen in der Welt von `dyplr`! `dplyr` hat seinen Namen, weil es sich ausschließlich um *D*ataframes bemüht; es erwartet einen Dataframe als Eingabe und gibt einen Dataframe zurück[^1].
+
 
 [^1]: zumindest bei den meisten Befehlen.
 
@@ -257,9 +275,10 @@ Beim interaktiven Gebrauch von R (oder beliebigen Analyseprogrammen) ist das Sor
 Ein R-Befehl hierzu ist `arrange`; einige Beispiele zeigen die Funktionsweise am besten:
 
 ```{r}
-arrange(stats_test, score)  # liefert die *schlechtesten* Noten zurück
-arrange(stats_test, -score) # liefert die *besten* Noten zurück
-arrange(stats_test, interest, score)
+
+arrange(stats_test, score)  %>% head() # liefert die *schlechtesten* Noten zurück
+arrange(stats_test, -score) %>% head() # liefert die *besten* Noten zurück
+arrange(stats_test, interest, score) %>% head()
 ```
 
 
@@ -268,6 +287,16 @@ Einige Anmerkungen. Die generelle Syntax lautet `arrange(df, Spalte1, ...)`, wob
 Standardmäßig sortiert `arrange` *aufsteigend*  (weil kleine Zahlen im Zahlenstrahl vor den großen Zahlen kommen). Möchte man diese Reihenfolge umdrehen (große Werte zuert), so kann man ein Minuszeichen vor den Namen der Spalte setzen.
 
 Gibt man *zwei oder mehr* Spalten an, so werden pro Wert von `Spalte1` die Werte von `Spalte2` sortiert etc; man betrachte den Output des Beispiels oben dazu.
+
+Aber was heißt dieses komisch Symbol:  `%>%`? Diese sogenannte "Pfeife" lässt sich mit "und dann" ins Deutshce übersetzen. Also:
+
+```
+sortiere(diese_Tabelle, nach_dieser_Spalte) UND DANN zeig_die_ersten_Zeilen
+```
+
+Der Befehl `head` zeigt dier ersten paar Zeilen eines Dataframes [^3].
+
+[^3]: In der Regel 10 Zeilen, wobei ich irgendwo versteckt gesagt habe, es sollen nur 6 Zeilen am Bildschirm gedruckt werden.
 
 Merke:
 
@@ -281,14 +310,17 @@ knitr::include_graphics("./images/arrange.pdf")
 
 
 
-Ein ähnliches Ergebnis erhält mit man `top_n()`, welches die `n` kleinsten *Ränge* widergibt:
+Ein ähnliches Ergebnis erhält mit man `top_n()`, welches die `n` *größten* *Ränge* widergibt:
 
 ```{r}
+
 top_n(stats_test, 3)
 top_n(stats_test, 3, interest)
 ```
 
 Gibt man *keine* Spalte an, so bezieht sich `top_n` auf die letzte Spalte im Datensatz.
+
+Da sich hier mehrere Personen den größten Rang (Wert 40) teilen, bekommen wir *nicht* 3 Zeilen zurückgeliefert, sondern entsprechend mehr.
 
 
 
@@ -312,6 +344,256 @@ Schaut man sich nun den Datensatz an, sieht man erstmal wenig Effekt der Gruppie
 
 
 Merke:
->    Mit *group_by*  teilt man einen Datensatz in Gruppen ein, entsprechend der Werte einer mehrerer Spalten.
+
+>    Mit group_by teilt man einen Datensatz in Gruppen ein, entsprechend der Werte einer mehrerer Spalten.
 
 
+
+#### Eine Spalte zusammenfassen mit `summarise`
+
+Vielleicht die wichtigste oder häufigte Tätigkeit in der Analyse von Daten ist es, eine Spalte zu *einem* Wert zusammenzufassen. Anders gesagt: Einen Mittelwert berechnen, den größten (kleinsten) Wert heraussuchen, die Korrelation berechnen oder eine beliebige andere Statistik ausgeben lassen. Die Gemeinsamkeit dieser Operaitonen ist, dass sie eine Spalte zu einem Wert zusammenfassen, "aus Spalte mach Zahl", sozusagen. Daher ist der Name des Befehls `summarise` ganz passend. Genauer gesagt fasst dieser Befehl eine Spalte zu einer Zahl zusammen *anhand* einer Funktion wie `mean` oder `max`. Hierbei ist jede Funktion erlaubt, die eine Spalte als Input verlangt und eine Zahl zurückgibt; andere Funktionen sind bei `summarise` nicht erlaubt. 
+
+```{r}
+knitr::include_graphics("images/summarise.pdf")
+```
+
+
+```{r}
+summarise(stats_test, mean(score))
+```
+
+Man könnte diesen Befehl so ins Deutsche übersetzen: `Fasse aus Tabelle stats_test die Spalte score anhand des Mittelwerts zusammen`. Nicht vergessen, wenn die Spalte `score` fehlende Werte hat, wird der Befehl `mean` standardmäßig dies mit `NA` quittieren.
+
+Jetzt können wir auch die Gruppierung nutzen:
+```{r}
+test_gruppiert <- group_by(stats_test, interest)
+summarise(test_gruppiert, mean(score))
+```
+
+Der Befehl `summarise` erkennt also, wenn eine (mit `group_by`) gruppierte Tabelle vorliegt. Jegliche Zusammenfassung, die wir anfordern, wird anhand der Gruppierungsinformation aufgeteilt werden. In dem Beispiel bekommen wir einen Mittelwert für jeden Wert von `interest`. Interessanterweise sehen wir, dass der Mittelwert tendenziell größer wird, je größer `interest` wird.
+
+Alle diese `dplyr`-Befehle geben einen Dataframe zurück, was praktisch ist für weitere Verarbeitung. In diesem Fall heißen die Spalten `interst` und `mean(score)`. Zweiter Name ist nicht so schön, daher ändern wir den wie folgt:
+
+Jetzt können wir auch die Gruppierung nutzen:
+```{r}
+test_gruppiert <- group_by(stats_test, interest)
+summarise(test_gruppiert, mw_pro_gruppe = mean(score, na.rm = TRUE))
+```
+
+Nun heißt die zweite Spalte `mw_pro_Gruppe`. `na.rm = TRUE` veranlasst, bei fehlenden Werten trotzdem einen Mittelwert zurückzuliefern (die Zeilen mit fehlenden Werten werden in dem Fall ignoriert).
+
+Grundsätzlich ist die Philosophie der `dplyr`-Befehle: "Mach nur eine Sache, aber die dafür gut". Entsprechend kann `summarise` nur *Spalten* zusammenfassen, aber keine *Zeilen*.
+
+Merke:
+
+>    Mit summarise kann man eine Spalte eines Dataframes zu einem Wert zusammenfassen.
+
+
+
+
+#### Zeilen zählen mit `n` und `count`
+Ebenfalls nützlich ist es, Zeilen zu zählen. Im Gegensatz zum Standardbefehle `nrow` versteht der `dyplr`-Befehl `n`auch Gruppierungen. `n` darf nur innerhalb von `summarise` oder ähnlichen `dplyr`-Befehlen verwendet werden.
+
+```{r}
+summarise(stats_test, n())
+summarise(test_gruppiert, n())
+nrow(stats_test)
+```
+
+Außerhalb von gruppierten Datensätzen ist `nrow` meist praktischer.
+
+
+Praktischer ist der Befehl `count`, der nichts anderes ist als die Hintereinanderschaltung von `group_by` und `n`. Mit `count` zählen wir die Häufigkeiten nach Gruppen; Gruppen sind hier zumeist die Werte einer auszuzählenden Variablen (oder mehrerer auszuzählender Variablen). Das macht `count` zu einem wichtigen Helfer bei der Analyse von Häufigkeitsdaten.
+
+```{r}
+dplyr::count(stats_test, interest)
+dplyr::count(stats_test, study_time)
+dplyr::count(stats_test, interest, study_time)
+```
+
+Allgemeiner formuliert lautet die Syntax: `count(df, Spalte1, ...)`, wobei `df` der Dataframe ist und `Spalte1` die erste (es können mehrere sein) auszuzählende Spalte. Gibt man z.B. zwei Spalten an, so wird pro Wert der 1. Spalte die Häufigkeiten der 2. Spalte ausgegeben.
+
+Merke:
+
+>    n und count zählen die Anzahl der Zeilen, d.h. die Anzahl der Fälle. 
+
+
+#### Die Pfeife
+Die zweite Idee kann man salopp als "Durchpfeifen" bezeichnen; ikonographisch mit diesem Symbol dargestellt ` %>% `[^4]. Der Begriff "Durchpfeifen" ist frei vom Englischen "to pipe" übernommen. Hierbei ist gemeint, einen Datensatz sozusagen auf ein Fließband zu legen und an jedem Arbeitsplatz einen Arbeitsschritt auszuführen. Der springende Punkt ist, dass ein Dataframe als "Rohstoff" eingegeben wird und jeder Arbeitsschritt seinerseits wieder einen Datafram ausgiebt. Damit kann man sehr schön, einen "Flow" an Verarbeitung erreichen, außerdem spart man sich Tipparbeit und die Syntax wird lesbarer. Damit das Durchpfeifen funktioniert, benötigt man Befehle, die als Eingabe einen Dataframe erwarten und wieder einen Dataframe zurückliefern. Das Schaubild verdeutlich beispielhaft eine Abfolge des Durchpfeifens.
+
+[^4]: Eine Art Smiley für Nerds.
+
+```{r echo = FALSE, out.width  = "80%"}
+knitr::include_graphics("images/durchpfeifen.pdf")
+```
+
+Die sog. "Pfeife" (pipe: ` %>% `) in Anspielung an das berühmte Bild von René Magritte, verkettet Befehle hintereinander. Das ist praktisch, da es die Syntax vereinfacht. Vergleichen Sie mal diese Syntax
+
+```{r eval = FALSE}
+filter(summarise(group_by(filter(stats_test, !is.na(score)), interest), mw = mean(score)), mw > 30)
+```
+
+mit dieser
+```{r}
+stats_test %>% 
+  filter(!is.na(score)) %>% 
+  group_by(interest) %>% 
+  summarise(mw = mean(score)) %>% 
+  filter(mw > 30)
+```
+
+Es ist hilfreich, diese "Pfeifen-Syntax" in deutschen Pseudo-Code zu übersetzen:
+
+```
+Nimm die Tabelle "stats_test" UND DANN  
+filtere alle nicht-fehlenden Werte UND DANN  
+gruppiere die verbleibenden Werte nach "interest" UND DANN  
+bilde den Mittelwert (pro Gruppe) für "score" UND DANN  
+liefere nur die Werte größer als 30 zurück.  
+```
+
+Die Pfeife zerlegt die "russische Puppe", also ineinander verschachelteten Code, in sequenzielle Schritte und zwar in der richtigen Reihenfolge (entsprechend der Abarbeitung). Wir müssen den Code nicht mehr von innen nach außen lesen (wie das bei einer mathematischen Formel der Fall ist), sondern können wie bei einem Kochrezept "erstens ..., zweitens .., drittens ..." lesen. Die Pfeife macht die Syntax einfacher. Natürlich hätten wir die verschachtelte Syntax in viele einzelne Befehle zerlegen können und jeweils eine Zwischenergebnis speichern mit dem Zuweisungspfeil `<-` und das Zwischenergebnis dann explizit an den nächsten Befehl weitergeben. Eigentlich macht die Pfeife genau das - nur mit weniger Tipparbeit. Und auch einfacher zu lesen. Flow!
+
+
+
+#### Werte umkodieren und "binnen" mit `car::recode`
+
+Manchmal möchte man z.B. negativ gepolte Items umdrehen oder bei kategoriellen Variablen kryptische Bezeichnungen in sprechendere umwandeln (ein Klassiker ist `1` in `maennlich` bzw. `2` in `weiblich` oder umgekehrt, kann sich niemand merken). Hier gibt es eine Reihe praktischer Befehle, z.B. `recode` aus dem Paket `car`. Übrigens: Wenn man explizit angeben möchte, aus welchem Paket ein Befehl stammt (z.B. um Verwechslungen zu vermeiden), gibt man `Paketnamen::Befehlnamen` an. Schauen wir uns ein paar Beispiele zum Umkodieren an.
+
+
+```{r}
+library(car)
+
+stats_test$score_fac <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 2:4 = 'mittel'; 1 = 'wenig'", as.factor.result = TRUE)
+stats_test$score_fac <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 2:4 = 'mittel'; 1 = 'wenig'", as.factor.result = FALSE)
+
+stats_test$study_time <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 4 = 'wenig'; else = 'Hilfe'", as.factor.result = TRUE)
+
+head(stats_test$study_time)
+```
+
+Der Befehle `recode` ist wirklich sehr prkatisch; mit `:` kann man "von bis" ansprechen (das ginge mit `c()` übrigens auch); `else` für "ansonsten" ist möglich und mit `as.factor.result` kann man entweder einen Faktor oder eine Text-Variable zurückgeliefert bekommen. Der ganze "Wechselterm" steht in Anführungsstrichen (`"`). Einzelne Teile des Wechselterms sind mit einem Strichpunkt (`;`) voneinander getrennt.
+
+
+Das klassiche Umkodieren von Items aus Fragebögen kann man so anstellen; sagen wir `interest` soll umkodiert werden:
+
+```{r}
+stats_test$no_interest <- car::recode(stats_test$interest, "1 = 6; 2 = 5; 3 = 4; 4 = 3; 5 = 2; 6 = 1; else = NA")
+glimpse(stats_test$no_interest)
+
+```
+
+Bei dem Wechselterm muss man aufpassen, nichts zu verwechseln; die Zahlen sehen alle ähnlich aus...
+
+Testen kann man den Erfolg des Umpolens mit
+
+```{r}
+dplyr::count(stats_test, interest)
+dplyr::count(stats_test, no_interest)
+```
+
+Scheint zu passen. Noch praktischer ist, dass man so auch numerische Variablen in Bereiche aufteilen kann ("binnen"):
+
+
+```{r}
+stats_test$Ergebnis <- car::recode(stats_test$score, "1:38 = 'durchgefallen'; else = 'bestanden'")
+```
+
+
+Natürlich gibt es auch eine Pfeifen komptatible Version, um Variablen umzukodieren bzw. zu binnen: `dplyr::recode`[^6]. Die Syntax ist allerdings etwas weniger komfortabel (da strenger), so dass wir an dieser Stelle bei `car::recode` bleiben.
+
+[^6]: https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/. 
+
+
+### Fallstudie `nycflights13`
+Schauen wir uns einige Beispiele der Datenaufbereitung mittels `dplyr` an. Wir verwenden hier den Datensatz `flights`aus dem Package `nycflights13`. Der Datensatz ist recht groß (~300.000 Zeilen und 19 Spalten); wenn man ihn als Excel importiert, kann eine alte Möhre von Computer schon in die Knie gehen. Beim Import als CSV habe ich noch nie von Problemen gehört; beim Import via Package ebenfalls nicht. Werfen wir einen ersten Blick in die Daten:
+
+
+```{r}
+#install.packages("nyclights13")
+library(nycflights13)
+data(flights)
+glimpse(flights)
+```
+
+Der Befehl `data` lädt Daten aus einem zuvor gestarteten Paket. 
+
+Achtung, Fallstudie. Sie sind der/die Assistent_in des Chefs der New Yorker Flughäfen. Ihr Chef kommt gut gelaunt ins Büro und sagt, dass er diesen Schnarchnasen einheizen wolle und sagt, sie sollen ihm mal schnell die Flüge mit der größten Verspätung raussuchen. Nix schickes, aber zacki-zacki...
+
+```{r}
+flights %>% 
+  arrange(arr_delay)
+```
+
+Hm, übersichtlicher wäre es wahrscheinllich, wenn wir weniger Spalten anschauen müssten. Am besten neben der Verspätung nur die Information, die wir zur Identifizierung der Schuldigen... will sagen der gesuchten Flüge benötigen
+
+```{r}
+flights %>% 
+  arrange(arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
+```
+
+Da Zahlen in ihrer natürlichen Form von klein nach groß sortiert sind, sortiert `arrange` in ebendieser Richtung. Wir können das umdrehen mit einem Minuszeichen vor der zu sortierenden Spalte:
+
+```{r}
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
+```
+
+Eine kleine Zugabe: Mit dem Befehl `knitr::kable` kann man einen Dateframe automatisch in eine (einigermaßen) schöne Tabelle ausgeben lassen. Oh halt, wir wollen keine Tabelle mit 300.000 Zeilen (der Chef ist kein Freund von Details). Also begrenzen wir die Ausgabe auf die ersten 10 Plätze.
+
+```{r}
+library(knitr)  # muss installiert sein
+
+
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  filter(row_number() < 11) %>% 
+  kable()
+```
+
+"Geht doch", war die Antwort des Chefs, als sie die Tabelle rübergeben (er mag auch keine Emails). "Ach ja", raunt der Chef, als Sie das Zimmer verlassen wollen, "hatte ich erwähnt, dass ich die gleiche Auswertung für jeden Carrier brauche? Reicht bis in einer halben Stunde".
+
+Wir gruppieren also den Datensatz nach der Fluggesellschaft (`carrier`) und filtern dann  die ersten 3 Zeilen (damit die Tabelle für den Chef nicht zu groß wird). Wie jeder `dplyr`-Befehl wird die vorherige Gruppierung berücksichtigt und daher die Top-3-Zeilen *pro Gruppe*, d.h. pro Fluggesellschaft, ausgegeben.
+
+```{r}
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  filter(row_number() < 4) 
+```
+
+Vielleicht gefällt dem Chef diese Darstellung (sortiert nach `carrier`) besser:
+
+```{r}
+flights %>% 
+  arrange(-arr_delay) %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  filter(row_number() < 4) %>% 
+  arrange(carrier)
+```
+
+Da Sie den Chef gut kennen, berechnen Sie gleich noch die durchschnittliche Verspätung pro Fluggesellschaft.
+
+```{r}
+flights %>% 
+  select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
+  group_by(carrier) %>% 
+  summarise(delay_mean = mean(arr_delay, na.rm = TRUE)) %>% 
+  arrange(-delay_mean) %>% 
+  kable()
+```
+
+Der Chef ist zufrieden. Sie können sich wieder wichtigeren Aufgaben zuwenden...
+
+
+
+
+### Weiterführende Hinweise
+Eine schöne Demonstration der Mächtigkeit von `dplyr` findet sich hier[^7].
+
+[^7]: <http://bit.ly/2kX9lvC>. 

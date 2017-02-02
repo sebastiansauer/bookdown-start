@@ -1,4 +1,8 @@
 
+
+
+
+
 # Grundlagen
 In diesem Kapitel diskutieren wir einige zentrale Begriffe der Wissenschaft bzw. der quantitativen Methodik der Wissenschaft.
 
