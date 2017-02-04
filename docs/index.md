@@ -1,7 +1,7 @@
 --- 
 title: "Statistik_21"
 author: "Sebastian Sauer"
-date: "2017-02-02"
+date: "2017-02-04"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [Statistik_21.bib]

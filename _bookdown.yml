@@ -14,6 +14,7 @@ rmd_files: [
 "Modellieren.Rmd",
 "Numerische_Modelle.Rmd",
 "Klassifizierende_Modelle.Rmd",
+"Textmining.Rmd",
 "Literaturverzeichnis.Rmd"]
 
 clean: [packages.bib, bookdown.bbl]

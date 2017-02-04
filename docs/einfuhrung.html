@@ -26,7 +26,7 @@
 <meta name="author" content="Sebastian Sauer">
 
 
-<meta name="date" content="2017-02-02">
+<meta name="date" content="2017-02-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -136,12 +136,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2.4" data-path="daten-explorieren.html"><a href="daten-explorieren.html#fallstudie-nycflights13"><i class="fa fa-check"></i><b>6.2.4</b> Fallstudie <code>nycflights13</code></a></li>
 <li class="chapter" data-level="6.2.5" data-path="daten-explorieren.html"><a href="daten-explorieren.html#weiterfuhrende-hinweise"><i class="fa fa-check"></i><b>6.2.5</b> Weiterführende Hinweise</a></li>
 </ul></li>
+<li class="chapter" data-level="6.3" data-path="daten-explorieren.html"><a href="daten-explorieren.html#visualisieren"><i class="fa fa-check"></i><b>6.3</b> Visualisieren</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="daten-explorieren.html"><a href="daten-explorieren.html#zwei-kontinuierliche-variablen"><i class="fa fa-check"></i><b>6.3.1</b> Zwei kontinuierliche Variablen</a></li>
+<li class="chapter" data-level="6.3.2" data-path="daten-explorieren.html"><a href="daten-explorieren.html#eine-diskrete-variable"><i class="fa fa-check"></i><b>6.3.2</b> Eine diskrete Variable</a></li>
+<li class="chapter" data-level="6.3.3" data-path="daten-explorieren.html"><a href="daten-explorieren.html#zusammenfassungen-zeigen"><i class="fa fa-check"></i><b>6.3.3</b> Zusammenfassungen zeigen</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="visualisierung.html"><a href="visualisierung.html"><i class="fa fa-check"></i><b>7</b> Visualisierung</a></li>
 <li class="chapter" data-level="8" data-path="statistisches-modellieren.html"><a href="statistisches-modellieren.html"><i class="fa fa-check"></i><b>8</b> Statistisches Modellieren</a></li>
 <li class="chapter" data-level="9" data-path="numerische-modelle.html"><a href="numerische-modelle.html"><i class="fa fa-check"></i><b>9</b> Numerische Modelle</a></li>
 <li class="chapter" data-level="10" data-path="klassifizierende-modelle.html"><a href="klassifizierende-modelle.html"><i class="fa fa-check"></i><b>10</b> Klassifizierende Modelle</a></li>
-<li class="chapter" data-level="11" data-path="literaturverzeichnis.html"><a href="literaturverzeichnis.html"><i class="fa fa-check"></i><b>11</b> Literaturverzeichnis</a></li>
+<li class="chapter" data-level="11" data-path="textmining.html"><a href="textmining.html"><i class="fa fa-check"></i><b>11</b> Textmining</a><ul>
+<li class="chapter" data-level="11.1" data-path="textmining.html"><a href="textmining.html#einfuhrung-1"><i class="fa fa-check"></i><b>11.1</b> Einführung</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="textmining.html"><a href="textmining.html#grundbegriffe"><i class="fa fa-check"></i><b>11.1.1</b> Grundbegriffe</a></li>
+<li class="chapter" data-level="11.1.2" data-path="textmining.html"><a href="textmining.html#software-1"><i class="fa fa-check"></i><b>11.1.2</b> Software</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="textmining.html"><a href="textmining.html#grundlegende-analyse"><i class="fa fa-check"></i><b>11.2</b> Grundlegende Analyse</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="textmining.html"><a href="textmining.html#tidy-text-dataframes"><i class="fa fa-check"></i><b>11.2.1</b> Tidy Text Dataframes</a></li>
+<li class="chapter" data-level="11.2.2" data-path="textmining.html"><a href="textmining.html#text-daten-einlesen"><i class="fa fa-check"></i><b>11.2.2</b> Text-Daten einlesen</a></li>
+<li class="chapter" data-level="11.2.3" data-path="textmining.html"><a href="textmining.html#worthaufigkeiten-auszahlen"><i class="fa fa-check"></i><b>11.2.3</b> Worthäufigkeiten auszählen</a></li>
+<li class="chapter" data-level="11.2.4" data-path="textmining.html"><a href="textmining.html#visualisierung-1"><i class="fa fa-check"></i><b>11.2.4</b> Visualisierung</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="literaturverzeichnis.html"><a href="literaturverzeichnis.html"><i class="fa fa-check"></i><b>12</b> Literaturverzeichnis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -225,9 +242,9 @@ Figure 1.1: Rahmen
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>zumindest bei den meisten Befehlen.<a href="einfuhrung.html#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="https://www.rstudio.com/resources/cheatsheets/" class="uri">https://www.rstudio.com/resources/cheatsheets/</a><a href="einfuhrung.html#fnref2">↩</a></p></li>
-<li id="fn3"><p>In der Regel 10 Zeilen, wobei ich irgendwo versteckt gesagt habe, es sollen nur 6 Zeilen am Bildschirm gedruckt werden.<a href="einfuhrung.html#fnref3">↩</a></p></li>
+<li id="fn1"><p>Nach dem Gedicht “Jahrgang 1899” von Erich Kästner<a href="einfuhrung.html#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="https://www.alternativefuer.de/wp-content/uploads/sites/7/2016/05/2016-06-27_afd-grundsatzprogramm_web-version.pdf" class="uri">https://www.alternativefuer.de/wp-content/uploads/sites/7/2016/05/2016-06-27_afd-grundsatzprogramm_web-version.pdf</a><a href="einfuhrung.html#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://www.omegahat.net/Rstem/stemming.pdf" class="uri">http://www.omegahat.net/Rstem/stemming.pdf</a><a href="einfuhrung.html#fnref3">↩</a></p></li>
 </ol>
 </div>
             </section>
