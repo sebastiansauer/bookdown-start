@@ -26,7 +26,7 @@
 <meta name="author" content="Sebastian Sauer">
 
 
-<meta name="date" content="2017-02-04">
+<meta name="date" content="2017-02-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -157,6 +157,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.2.3" data-path="textmining.html"><a href="textmining.html#worthaufigkeiten-auszahlen"><i class="fa fa-check"></i><b>11.2.3</b> Worthäufigkeiten auszählen</a></li>
 <li class="chapter" data-level="11.2.4" data-path="textmining.html"><a href="textmining.html#visualisierung-1"><i class="fa fa-check"></i><b>11.2.4</b> Visualisierung</a></li>
 </ul></li>
+<li class="chapter" data-level="11.3" data-path="textmining.html"><a href="textmining.html#sentiment-analyse"><i class="fa fa-check"></i><b>11.3</b> Sentiment-Analyse</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="textmining.html"><a href="textmining.html#ungewichtete-sentiment-analyse"><i class="fa fa-check"></i><b>11.3.1</b> Ungewichtete Sentiment-Analyse</a></li>
+<li class="chapter" data-level="11.3.2" data-path="textmining.html"><a href="textmining.html#anzahl-der-unterschiedlichen-negativen-bzw.-positiven-worter"><i class="fa fa-check"></i><b>11.3.2</b> Anzahl der unterschiedlichen negativen bzw. positiven Wörter</a></li>
+<li class="chapter" data-level="11.3.3" data-path="textmining.html"><a href="textmining.html#gewichtete-sentiment-analyse"><i class="fa fa-check"></i><b>11.3.3</b> Gewichtete Sentiment-Analyse</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="textmining.html"><a href="textmining.html#verknupfung-mit-anderen-variablen"><i class="fa fa-check"></i><b>11.4</b> Verknüpfung mit anderen Variablen</a></li>
+<li class="chapter" data-level="11.5" data-path="textmining.html"><a href="textmining.html#vertiefung"><i class="fa fa-check"></i><b>11.5</b> Vertiefung</a><ul>
+<li class="chapter" data-level="11.5.1" data-path="textmining.html"><a href="textmining.html#erstellung-des-sentiment-lexikons"><i class="fa fa-check"></i><b>11.5.1</b> Erstellung des Sentiment-Lexikons</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="literaturverzeichnis.html"><a href="literaturverzeichnis.html"><i class="fa fa-check"></i><b>12</b> Literaturverzeichnis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -209,13 +218,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   daten &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;./data/wo_men.csv&quot;</span>)
 }
 <span class="kw">head</span>(daten)
-<span class="co">#&gt;   X                time   sex height shoe_size</span>
-<span class="co">#&gt; 1 1 04.10.2016 17:58:51 woman    160        40</span>
-<span class="co">#&gt; 2 2 04.10.2016 17:58:59 woman    171        39</span>
-<span class="co">#&gt; 3 3 04.10.2016 18:00:15 woman    174        39</span>
-<span class="co">#&gt; 4 4 04.10.2016 18:01:17 woman    176        40</span>
-<span class="co">#&gt; 5 5 04.10.2016 18:01:22   man    195        46</span>
-<span class="co">#&gt; 6 6 04.10.2016 18:01:53 woman    157        37</span></code></pre></div>
+##   X                time   sex height shoe_size
+## 1 1 04.10.2016 17:58:51 woman    160        40
+## 2 2 04.10.2016 17:58:59 woman    171        39
+## 3 3 04.10.2016 18:00:15 woman    174        39
+## 4 4 04.10.2016 18:01:17 woman    176        40
+## 5 5 04.10.2016 18:01:22   man    195        46
+## 6 6 04.10.2016 18:01:53 woman    157        37</code></pre></div>
 <p>Wir haben zuerst geprüft, ob die Datei (<code>wo_men.csv</code>) im entsprechenden Ordner existiert oder nicht (das <code>!</code>-Zeichen heißt auf Errisch “nicht”). Falls die Datei nicht im Ordner existiert, laden wir sie mit <code>read.csv</code> herunter und direkt ins R hinein. Andernfalls (<code>else</code>) lesen wir sie direkt ins R hinein.</p>
 <p>Der Befehl <code>read.csv</code> liest also eine CSV-Datei, was uns jetzt nicht übermäßig überrascht. Aber Achtung: Wenn Sie aus einem Excel mit deutscher Einstellung eine CSV-Datei exportieren, wird diese CSV-Datei als Trennzeichen <code>;</code> (Strichpunkt) und als Dezimaltrennzeichen <code>,</code> verwenden. Da der Befehl <code>read.csv</code> als Standard mit Komma und Punkt arbeitet, müssen wir die deutschen Sonderlocken explizit angeben, z.B. so:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># daten_deutsch &lt;- read.csv(&quot;daten_deutsch.csv&quot;, sep = &quot;;&quot;, dec = &quot;.&quot;)</span></code></pre></div>
@@ -330,29 +339,29 @@ df_nosmoke_nodrinks &lt;-<span class="st"> </span><span class="kw">filter</span>
 <p>Ein R-Befehl hierzu ist <code>arrange</code>; einige Beispiele zeigen die Funktionsweise am besten:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="kw">arrange</span>(stats_test, score)  %&gt;%<span class="st"> </span><span class="kw">head</span>() <span class="co"># liefert die *schlechtesten* Noten zurück</span>
-<span class="co">#&gt;     X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt; 1 234 23.01.2017 18:13:15          3         1        1    17</span>
-<span class="co">#&gt; 2   4 06.01.2017 09:58:05          2         3        2    18</span>
-<span class="co">#&gt; 3 131 19.01.2017 18:03:45          2         3        4    18</span>
-<span class="co">#&gt; 4 142 19.01.2017 19:02:12          3         4        1    18</span>
-<span class="co">#&gt; 5  35 12.01.2017 19:04:43          1         2        3    19</span>
-<span class="co">#&gt; 6  71 15.01.2017 15:03:29          3         3        3    20</span>
+##     X                 V_1 study_time self_eval interest score
+## 1 234 23.01.2017 18:13:15          3         1        1    17
+## 2   4 06.01.2017 09:58:05          2         3        2    18
+## 3 131 19.01.2017 18:03:45          2         3        4    18
+## 4 142 19.01.2017 19:02:12          3         4        1    18
+## 5  35 12.01.2017 19:04:43          1         2        3    19
+## 6  71 15.01.2017 15:03:29          3         3        3    20
 <span class="kw">arrange</span>(stats_test, -score) %&gt;%<span class="st"> </span><span class="kw">head</span>() <span class="co"># liefert die *besten* Noten zurück</span>
-<span class="co">#&gt;    X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt; 1  3 05.01.2017 23:33:47          5        10        6    40</span>
-<span class="co">#&gt; 2  7 06.01.2017 14:25:49         NA        NA       NA    40</span>
-<span class="co">#&gt; 3 29 12.01.2017 09:48:16          4        10        3    40</span>
-<span class="co">#&gt; 4 41 13.01.2017 12:07:29          4        10        3    40</span>
-<span class="co">#&gt; 5 58 14.01.2017 15:43:01          3         8        2    40</span>
-<span class="co">#&gt; 6 83 16.01.2017 10:16:52         NA        NA       NA    40</span>
+##    X                 V_1 study_time self_eval interest score
+## 1  3 05.01.2017 23:33:47          5        10        6    40
+## 2  7 06.01.2017 14:25:49         NA        NA       NA    40
+## 3 29 12.01.2017 09:48:16          4        10        3    40
+## 4 41 13.01.2017 12:07:29          4        10        3    40
+## 5 58 14.01.2017 15:43:01          3         8        2    40
+## 6 83 16.01.2017 10:16:52         NA        NA       NA    40
 <span class="kw">arrange</span>(stats_test, interest, score) %&gt;%<span class="st"> </span><span class="kw">head</span>()
-<span class="co">#&gt;     X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt; 1 234 23.01.2017 18:13:15          3         1        1    17</span>
-<span class="co">#&gt; 2 142 19.01.2017 19:02:12          3         4        1    18</span>
-<span class="co">#&gt; 3 221 23.01.2017 11:40:30          1         1        1    23</span>
-<span class="co">#&gt; 4 230 23.01.2017 16:27:49          1         1        1    23</span>
-<span class="co">#&gt; 5  92 17.01.2017 17:18:55          1         1        1    24</span>
-<span class="co">#&gt; 6 107 18.01.2017 16:01:36          3         2        1    24</span></code></pre></div>
+##     X                 V_1 study_time self_eval interest score
+## 1 234 23.01.2017 18:13:15          3         1        1    17
+## 2 142 19.01.2017 19:02:12          3         4        1    18
+## 3 221 23.01.2017 11:40:30          1         1        1    23
+## 4 230 23.01.2017 16:27:49          1         1        1    23
+## 5  92 17.01.2017 17:18:55          1         1        1    24
+## 6 107 18.01.2017 16:01:36          3         2        1    24</code></pre></div>
 <p>Einige Anmerkungen. Die generelle Syntax lautet <code>arrange(df, Spalte1, ...)</code>, wobei <code>df</code> den Dataframe bezeichnet und <code>Spalte1</code> die erste zu sortierende Spalte; die Punkte <code>...</code> geben an, dass man weitere Parameter übergeben kann. Am wichtigsten ist hier, dass man weitere Spalten übergeben kann. Dazu gleich mehr.</p>
 <p>Standardmäßig sortiert <code>arrange</code> <em>aufsteigend</em> (weil kleine Zahlen im Zahlenstrahl vor den großen Zahlen kommen). Möchte man diese Reihenfolge umdrehen (große Werte zuert), so kann man ein Minuszeichen vor den Namen der Spalte setzen.</p>
 <p>Gibt man <em>zwei oder mehr</em> Spalten an, so werden pro Wert von <code>Spalte1</code> die Werte von <code>Spalte2</code> sortiert etc; man betrachte den Output des Beispiels oben dazu.</p>
@@ -369,37 +378,37 @@ df_nosmoke_nodrinks &lt;-<span class="st"> </span><span class="kw">filter</span>
 <p>Ein ähnliches Ergebnis erhält mit man <code>top_n()</code>, welches die <code>n</code> <em>größten</em> <em>Ränge</em> widergibt:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="kw">top_n</span>(stats_test, <span class="dv">3</span>)
-<span class="co">#&gt; Selecting by score</span>
-<span class="co">#&gt;      X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt; 1    3 05.01.2017 23:33:47          5        10        6    40</span>
-<span class="co">#&gt; 2    7 06.01.2017 14:25:49         NA        NA       NA    40</span>
-<span class="co">#&gt; 3   29 12.01.2017 09:48:16          4        10        3    40</span>
-<span class="co">#&gt; 4   41 13.01.2017 12:07:29          4        10        3    40</span>
-<span class="co">#&gt; 5   58 14.01.2017 15:43:01          3         8        2    40</span>
-<span class="co">#&gt; 6   83 16.01.2017 10:16:52         NA        NA       NA    40</span>
-<span class="co">#&gt; 7  116 18.01.2017 23:07:32          4         8        5    40</span>
-<span class="co">#&gt; 8  119 19.01.2017 09:05:01         NA        NA       NA    40</span>
-<span class="co">#&gt; 9  132 19.01.2017 18:22:32         NA        NA       NA    40</span>
-<span class="co">#&gt; 10 175 20.01.2017 23:03:36          5        10        5    40</span>
-<span class="co">#&gt; 11 179 21.01.2017 07:40:05          5         9        1    40</span>
-<span class="co">#&gt; 12 185 21.01.2017 15:01:26          4        10        5    40</span>
-<span class="co">#&gt; 13 196 22.01.2017 13:38:56          4        10        5    40</span>
-<span class="co">#&gt; 14 197 22.01.2017 14:55:17          4        10        5    40</span>
-<span class="co">#&gt; 15 248 24.01.2017 16:29:45          2        10        2    40</span>
-<span class="co">#&gt; 16 249 24.01.2017 17:19:54         NA        NA       NA    40</span>
-<span class="co">#&gt; 17 257 25.01.2017 10:44:34          2         9        3    40</span>
-<span class="co">#&gt; 18 306 27.01.2017 11:29:48          4         9        3    40</span>
+## Selecting by score
+##      X                 V_1 study_time self_eval interest score
+## 1    3 05.01.2017 23:33:47          5        10        6    40
+## 2    7 06.01.2017 14:25:49         NA        NA       NA    40
+## 3   29 12.01.2017 09:48:16          4        10        3    40
+## 4   41 13.01.2017 12:07:29          4        10        3    40
+## 5   58 14.01.2017 15:43:01          3         8        2    40
+## 6   83 16.01.2017 10:16:52         NA        NA       NA    40
+## 7  116 18.01.2017 23:07:32          4         8        5    40
+## 8  119 19.01.2017 09:05:01         NA        NA       NA    40
+## 9  132 19.01.2017 18:22:32         NA        NA       NA    40
+## 10 175 20.01.2017 23:03:36          5        10        5    40
+## 11 179 21.01.2017 07:40:05          5         9        1    40
+## 12 185 21.01.2017 15:01:26          4        10        5    40
+## 13 196 22.01.2017 13:38:56          4        10        5    40
+## 14 197 22.01.2017 14:55:17          4        10        5    40
+## 15 248 24.01.2017 16:29:45          2        10        2    40
+## 16 249 24.01.2017 17:19:54         NA        NA       NA    40
+## 17 257 25.01.2017 10:44:34          2         9        3    40
+## 18 306 27.01.2017 11:29:48          4         9        3    40
 <span class="kw">top_n</span>(stats_test, <span class="dv">3</span>, interest)
-<span class="co">#&gt;     X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt; 1   3 05.01.2017 23:33:47          5        10        6    40</span>
-<span class="co">#&gt; 2   5 06.01.2017 14:13:08          4         8        6    34</span>
-<span class="co">#&gt; 3  43 13.01.2017 14:14:16          4         8        6    36</span>
-<span class="co">#&gt; 4  65 15.01.2017 12:41:27          3         6        6    22</span>
-<span class="co">#&gt; 5 110 18.01.2017 18:53:02          5         8        6    37</span>
-<span class="co">#&gt; 6 136 19.01.2017 18:22:57          3         1        6    39</span>
-<span class="co">#&gt; 7 172 20.01.2017 20:42:46          5        10        6    34</span>
-<span class="co">#&gt; 8 214 22.01.2017 21:57:36          2         6        6    31</span>
-<span class="co">#&gt; 9 301 27.01.2017 08:17:59          4         8        6    33</span></code></pre></div>
+##     X                 V_1 study_time self_eval interest score
+## 1   3 05.01.2017 23:33:47          5        10        6    40
+## 2   5 06.01.2017 14:13:08          4         8        6    34
+## 3  43 13.01.2017 14:14:16          4         8        6    36
+## 4  65 15.01.2017 12:41:27          3         6        6    22
+## 5 110 18.01.2017 18:53:02          5         8        6    37
+## 6 136 19.01.2017 18:22:57          3         1        6    39
+## 7 172 20.01.2017 20:42:46          5        10        6    34
+## 8 214 22.01.2017 21:57:36          2         6        6    31
+## 9 301 27.01.2017 08:17:59          4         8        6    33</code></pre></div>
 <p>Gibt man <em>keine</em> Spalte an, so bezieht sich <code>top_n</code> auf die letzte Spalte im Datensatz.</p>
 <p>Da sich hier mehrere Personen den größten Rang (Wert 40) teilen, bekommen wir <em>nicht</em> 3 Zeilen zurückgeliefert, sondern entsprechend mehr.</p>
 </div>
@@ -411,15 +420,15 @@ df_nosmoke_nodrinks &lt;-<span class="st"> </span><span class="kw">filter</span>
 <p>In der Abbildung wurde der Datensatz anhand der Spalte <code>Fach</code> in mehrere Gruppen geteilt. Wir könnten uns als nächstes z.B. Mittelwerte pro Fach - d.h. pro Gruppe (pro Ausprägung von <code>Fach</code>) - ausgeben lassen; in diesem Fall vier Gruppen (Fach A bis D).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_gruppiert &lt;-<span class="st"> </span><span class="kw">group_by</span>(stats_test, interest)
 test_gruppiert
-<span class="co">#&gt; Source: local data frame [306 x 6]</span>
-<span class="co">#&gt; Groups: interest [7]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;       X                 V_1 study_time self_eval interest score</span>
-<span class="co">#&gt;   &lt;int&gt;              &lt;fctr&gt;      &lt;int&gt;     &lt;int&gt;    &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1     1 05.01.2017 13:57:01          5         8        5    29</span>
-<span class="co">#&gt; 2     2 05.01.2017 21:07:56          3         7        3    29</span>
-<span class="co">#&gt; 3     3 05.01.2017 23:33:47          5        10        6    40</span>
-<span class="co">#&gt; # ... with 303 more rows</span></code></pre></div>
+## Source: local data frame [306 x 6]
+## Groups: interest [7]
+## 
+##       X                 V_1 study_time self_eval interest score
+##   &lt;int&gt;              &lt;fctr&gt;      &lt;int&gt;     &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+## 1     1 05.01.2017 13:57:01          5         8        5    29
+## 2     2 05.01.2017 21:07:56          3         7        3    29
+## 3     3 05.01.2017 23:33:47          5        10        6    40
+## # ... with 303 more rows</code></pre></div>
 <p>Schaut man sich nun den Datensatz an, sieht man erstmal wenig Effekt der Gruppierung. R teilt uns lediglich mit <code>Groups: interest [7]</code>, dass es die Gruppen gibt, aber es gibt keine extra Spalte oder sonstige Anzeichen der Gruppierung. Aber keine Sorge, wenn wir gleich einen Mittelwert ausrechnen, bekommen wir den Mittelwert pro Gruppe!</p>
 <p>Merke:</p>
 <blockquote>
@@ -432,31 +441,31 @@ test_gruppiert
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;images/summarise.pdf&quot;</span>)</code></pre></div>
 <p><img src="images/summarise.pdf" width="70%" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(stats_test, <span class="kw">mean</span>(score))
-<span class="co">#&gt;   mean(score)</span>
-<span class="co">#&gt; 1        31.1</span></code></pre></div>
+##   mean(score)
+## 1        31.1</code></pre></div>
 <p>Man könnte diesen Befehl so ins Deutsche übersetzen: <code>Fasse aus Tabelle stats_test die Spalte score anhand des Mittelwerts zusammen</code>. Nicht vergessen, wenn die Spalte <code>score</code> fehlende Werte hat, wird der Befehl <code>mean</code> standardmäßig dies mit <code>NA</code> quittieren.</p>
 <p>Jetzt können wir auch die Gruppierung nutzen:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_gruppiert &lt;-<span class="st"> </span><span class="kw">group_by</span>(stats_test, interest)
 <span class="kw">summarise</span>(test_gruppiert, <span class="kw">mean</span>(score))
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   interest `mean(score)`</span>
-<span class="co">#&gt;      &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1        1          28.3</span>
-<span class="co">#&gt; 2        2          29.7</span>
-<span class="co">#&gt; 3        3          30.8</span>
-<span class="co">#&gt; # ... with 4 more rows</span></code></pre></div>
+## # A tibble: 7 × 2
+##   interest `mean(score)`
+##      &lt;int&gt;         &lt;dbl&gt;
+## 1        1          28.3
+## 2        2          29.7
+## 3        3          30.8
+## # ... with 4 more rows</code></pre></div>
 <p>Der Befehl <code>summarise</code> erkennt also, wenn eine (mit <code>group_by</code>) gruppierte Tabelle vorliegt. Jegliche Zusammenfassung, die wir anfordern, wird anhand der Gruppierungsinformation aufgeteilt werden. In dem Beispiel bekommen wir einen Mittelwert für jeden Wert von <code>interest</code>. Interessanterweise sehen wir, dass der Mittelwert tendenziell größer wird, je größer <code>interest</code> wird.</p>
 <p>Alle diese <code>dplyr</code>-Befehle geben einen Dataframe zurück, was praktisch ist für weitere Verarbeitung. In diesem Fall heißen die Spalten <code>interst</code> und <code>mean(score)</code>. Zweiter Name ist nicht so schön, daher ändern wir den wie folgt:</p>
 <p>Jetzt können wir auch die Gruppierung nutzen:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_gruppiert &lt;-<span class="st"> </span><span class="kw">group_by</span>(stats_test, interest)
 <span class="kw">summarise</span>(test_gruppiert, <span class="dt">mw_pro_gruppe =</span> <span class="kw">mean</span>(score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   interest mw_pro_gruppe</span>
-<span class="co">#&gt;      &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1        1          28.3</span>
-<span class="co">#&gt; 2        2          29.7</span>
-<span class="co">#&gt; 3        3          30.8</span>
-<span class="co">#&gt; # ... with 4 more rows</span></code></pre></div>
+## # A tibble: 7 × 2
+##   interest mw_pro_gruppe
+##      &lt;int&gt;         &lt;dbl&gt;
+## 1        1          28.3
+## 2        2          29.7
+## 3        3          30.8
+## # ... with 4 more rows</code></pre></div>
 <p>Nun heißt die zweite Spalte <code>mw_pro_Gruppe</code>. <code>na.rm = TRUE</code> veranlasst, bei fehlenden Werten trotzdem einen Mittelwert zurückzuliefern (die Zeilen mit fehlenden Werten werden in dem Fall ignoriert).</p>
 <p>Grundsätzlich ist die Philosophie der <code>dplyr</code>-Befehle: “Mach nur eine Sache, aber die dafür gut”. Entsprechend kann <code>summarise</code> nur <em>Spalten</em> zusammenfassen, aber keine <em>Zeilen</em>.</p>
 <p>Merke:</p>
@@ -468,48 +477,48 @@ test_gruppiert
 <h4><span class="header-section-number">6.2.3.6</span> Zeilen zählen mit <code>n</code> und <code>count</code></h4>
 <p>Ebenfalls nützlich ist es, Zeilen zu zählen. Im Gegensatz zum Standardbefehle <code>nrow</code> versteht der <code>dyplr</code>-Befehl <code>n</code>auch Gruppierungen. <code>n</code> darf nur innerhalb von <code>summarise</code> oder ähnlichen <code>dplyr</code>-Befehlen verwendet werden.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(stats_test, <span class="kw">n</span>())
-<span class="co">#&gt;   n()</span>
-<span class="co">#&gt; 1 306</span>
+##   n()
+## 1 306
 <span class="kw">summarise</span>(test_gruppiert, <span class="kw">n</span>())
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   interest `n()`</span>
-<span class="co">#&gt;      &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1        1    30</span>
-<span class="co">#&gt; 2        2    47</span>
-<span class="co">#&gt; 3        3    66</span>
-<span class="co">#&gt; # ... with 4 more rows</span>
+## # A tibble: 7 × 2
+##   interest `n()`
+##      &lt;int&gt; &lt;int&gt;
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 <span class="kw">nrow</span>(stats_test)
-<span class="co">#&gt; [1] 306</span></code></pre></div>
+## [1] 306</code></pre></div>
 <p>Außerhalb von gruppierten Datensätzen ist <code>nrow</code> meist praktischer.</p>
 <p>Praktischer ist der Befehl <code>count</code>, der nichts anderes ist als die Hintereinanderschaltung von <code>group_by</code> und <code>n</code>. Mit <code>count</code> zählen wir die Häufigkeiten nach Gruppen; Gruppen sind hier zumeist die Werte einer auszuzählenden Variablen (oder mehrerer auszuzählender Variablen). Das macht <code>count</code> zu einem wichtigen Helfer bei der Analyse von Häufigkeitsdaten.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dplyr::<span class="kw">count</span>(stats_test, interest)
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   interest     n</span>
-<span class="co">#&gt;      &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1        1    30</span>
-<span class="co">#&gt; 2        2    47</span>
-<span class="co">#&gt; 3        3    66</span>
-<span class="co">#&gt; # ... with 4 more rows</span>
+## # A tibble: 7 × 2
+##   interest     n
+##      &lt;int&gt; &lt;int&gt;
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 dplyr::<span class="kw">count</span>(stats_test, study_time)
-<span class="co">#&gt; # A tibble: 6 × 2</span>
-<span class="co">#&gt;   study_time     n</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1          1    31</span>
-<span class="co">#&gt; 2          2    49</span>
-<span class="co">#&gt; 3          3    85</span>
-<span class="co">#&gt; 4          4    56</span>
-<span class="co">#&gt; 5          5    17</span>
-<span class="co">#&gt; 6         NA    68</span>
+## # A tibble: 6 × 2
+##   study_time     n
+##        &lt;int&gt; &lt;int&gt;
+## 1          1    31
+## 2          2    49
+## 3          3    85
+## 4          4    56
+## 5          5    17
+## 6         NA    68
 dplyr::<span class="kw">count</span>(stats_test, interest, study_time)
-<span class="co">#&gt; Source: local data frame [29 x 3]</span>
-<span class="co">#&gt; Groups: interest [?]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   interest study_time     n</span>
-<span class="co">#&gt;      &lt;int&gt;      &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1        1          1    12</span>
-<span class="co">#&gt; 2        1          2     7</span>
-<span class="co">#&gt; 3        1          3     8</span>
-<span class="co">#&gt; # ... with 26 more rows</span></code></pre></div>
+## Source: local data frame [29 x 3]
+## Groups: interest [?]
+## 
+##   interest study_time     n
+##      &lt;int&gt;      &lt;int&gt; &lt;int&gt;
+## 1        1          1    12
+## 2        1          2     7
+## 3        1          3     8
+## # ... with 26 more rows</code></pre></div>
 <p>Allgemeiner formuliert lautet die Syntax: <code>count(df, Spalte1, ...)</code>, wobei <code>df</code> der Dataframe ist und <code>Spalte1</code> die erste (es können mehrere sein) auszuzählende Spalte. Gibt man z.B. zwei Spalten an, so wird pro Wert der 1. Spalte die Häufigkeiten der 2. Spalte ausgegeben.</p>
 <p>Merke:</p>
 <blockquote>
@@ -528,13 +537,13 @@ dplyr::<span class="kw">count</span>(stats_test, interest, study_time)
 <span class="st">  </span><span class="kw">group_by</span>(interest) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mw =</span> <span class="kw">mean</span>(score)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(mw &gt;<span class="st"> </span><span class="dv">30</span>)
-<span class="co">#&gt; # A tibble: 4 × 2</span>
-<span class="co">#&gt;   interest    mw</span>
-<span class="co">#&gt;      &lt;int&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1        3  30.8</span>
-<span class="co">#&gt; 2        5  32.5</span>
-<span class="co">#&gt; 3        6  34.0</span>
-<span class="co">#&gt; 4       NA  33.1</span></code></pre></div>
+## # A tibble: 4 × 2
+##   interest    mw
+##      &lt;int&gt; &lt;dbl&gt;
+## 1        3  30.8
+## 2        5  32.5
+## 3        6  34.0
+## 4       NA  33.1</code></pre></div>
 <p>Es ist hilfreich, diese “Pfeifen-Syntax” in deutschen Pseudo-Code zu übersetzen:</p>
 <pre><code>Nimm die Tabelle &quot;stats_test&quot; UND DANN  
 filtere alle nicht-fehlenden Werte UND DANN  
@@ -554,31 +563,31 @@ stats_test$score_fac &lt;-<span class="st"> </span>car::<span class="kw">recode<
 stats_test$study_time &lt;-<span class="st"> </span>car::<span class="kw">recode</span>(stats_test$study_time, <span class="st">&quot;5 = &#39;sehr viel&#39;; 4 = &#39;wenig&#39;; else = &#39;Hilfe&#39;&quot;</span>, <span class="dt">as.factor.result =</span> <span class="ot">TRUE</span>)
 
 <span class="kw">head</span>(stats_test$study_time)
-<span class="co">#&gt; [1] sehr viel Hilfe     sehr viel Hilfe     wenig     Hilfe    </span>
-<span class="co">#&gt; Levels: Hilfe sehr viel wenig</span></code></pre></div>
+## [1] sehr viel Hilfe     sehr viel Hilfe     wenig     Hilfe    
+## Levels: Hilfe sehr viel wenig</code></pre></div>
 <p>Der Befehle <code>recode</code> ist wirklich sehr prkatisch; mit <code>:</code> kann man “von bis” ansprechen (das ginge mit <code>c()</code> übrigens auch); <code>else</code> für “ansonsten” ist möglich und mit <code>as.factor.result</code> kann man entweder einen Faktor oder eine Text-Variable zurückgeliefert bekommen. Der ganze “Wechselterm” steht in Anführungsstrichen (<code>&quot;</code>). Einzelne Teile des Wechselterms sind mit einem Strichpunkt (<code>;</code>) voneinander getrennt.</p>
 <p>Das klassiche Umkodieren von Items aus Fragebögen kann man so anstellen; sagen wir <code>interest</code> soll umkodiert werden:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats_test$no_interest &lt;-<span class="st"> </span>car::<span class="kw">recode</span>(stats_test$interest, <span class="st">&quot;1 = 6; 2 = 5; 3 = 4; 4 = 3; 5 = 2; 6 = 1; else = NA&quot;</span>)
 <span class="kw">glimpse</span>(stats_test$no_interest)
-<span class="co">#&gt;  num [1:306] 2 4 1 5 1 NA NA 4 2 2 ...</span></code></pre></div>
+##  num [1:306] 2 4 1 5 1 NA NA 4 2 2 ...</code></pre></div>
 <p>Bei dem Wechselterm muss man aufpassen, nichts zu verwechseln; die Zahlen sehen alle ähnlich aus…</p>
 <p>Testen kann man den Erfolg des Umpolens mit</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dplyr::<span class="kw">count</span>(stats_test, interest)
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   interest     n</span>
-<span class="co">#&gt;      &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1        1    30</span>
-<span class="co">#&gt; 2        2    47</span>
-<span class="co">#&gt; 3        3    66</span>
-<span class="co">#&gt; # ... with 4 more rows</span>
+## # A tibble: 7 × 2
+##   interest     n
+##      &lt;int&gt; &lt;int&gt;
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 dplyr::<span class="kw">count</span>(stats_test, no_interest)
-<span class="co">#&gt; # A tibble: 7 × 2</span>
-<span class="co">#&gt;   no_interest     n</span>
-<span class="co">#&gt;         &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1           1     9</span>
-<span class="co">#&gt; 2           2    45</span>
-<span class="co">#&gt; 3           3    41</span>
-<span class="co">#&gt; # ... with 4 more rows</span></code></pre></div>
+## # A tibble: 7 × 2
+##   no_interest     n
+##         &lt;dbl&gt; &lt;int&gt;
+## 1           1     9
+## 2           2    45
+## 3           3    41
+## # ... with 4 more rows</code></pre></div>
 <p>Scheint zu passen. Noch praktischer ist, dass man so auch numerische Variablen in Bereiche aufteilen kann (“binnen”):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats_test$Ergebnis &lt;-<span class="st"> </span>car::<span class="kw">recode</span>(stats_test$score, <span class="st">&quot;1:38 = &#39;durchgefallen&#39;; else = &#39;bestanden&#39;&quot;</span>)</code></pre></div>
 <p>Natürlich gibt es auch eine Pfeifen komptatible Version, um Variablen umzukodieren bzw. zu binnen: <code>dplyr::recode</code><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>. Die Syntax ist allerdings etwas weniger komfortabel (da strenger), so dass wir an dieser Stelle bei <code>car::recode</code> bleiben.</p>
@@ -591,63 +600,63 @@ dplyr::<span class="kw">count</span>(stats_test, no_interest)
 <span class="kw">library</span>(nycflights13)
 <span class="kw">data</span>(flights)
 <span class="kw">glimpse</span>(flights)
-<span class="co">#&gt; Observations: 336,776</span>
-<span class="co">#&gt; Variables: 19</span>
-<span class="co">#&gt; $ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...</span>
-<span class="co">#&gt; $ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</span>
-<span class="co">#&gt; $ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</span>
-<span class="co">#&gt; $ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...</span>
-<span class="co">#&gt; $ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...</span>
-<span class="co">#&gt; $ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...</span>
-<span class="co">#&gt; $ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...</span>
-<span class="co">#&gt; $ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...</span>
-<span class="co">#&gt; $ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...</span>
-<span class="co">#&gt; $ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV&quot;,...</span>
-<span class="co">#&gt; $ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...</span>
-<span class="co">#&gt; $ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668DN...</span>
-<span class="co">#&gt; $ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EWR&quot;...</span>
-<span class="co">#&gt; $ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FLL&quot;...</span>
-<span class="co">#&gt; $ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...</span>
-<span class="co">#&gt; $ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...</span>
-<span class="co">#&gt; $ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...</span>
-<span class="co">#&gt; $ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...</span>
-<span class="co">#&gt; $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...</span></code></pre></div>
+## Observations: 336,776
+## Variables: 19
+## $ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
+## $ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...
+## $ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...
+## $ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...
+## $ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...
+## $ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...
+## $ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...
+## $ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV&quot;,...
+## $ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...
+## $ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668DN...
+## $ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EWR&quot;...
+## $ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FLL&quot;...
+## $ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...
+## $ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...
+## $ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...
+## $ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...</code></pre></div>
 <p>Der Befehl <code>data</code> lädt Daten aus einem zuvor gestarteten Paket.</p>
 <p>Achtung, Fallstudie. Sie sind der/die Assistent_in des Chefs der New Yorker Flughäfen. Ihr Chef kommt gut gelaunt ins Büro und sagt, dass er diesen Schnarchnasen einheizen wolle und sagt, sie sollen ihm mal schnell die Flüge mit der größten Verspätung raussuchen. Nix schickes, aber zacki-zacki…</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(arr_delay)
-<span class="co">#&gt; # A tibble: 336,776 × 19</span>
-<span class="co">#&gt;    year month   day dep_time sched_dep_time dep_delay arr_time</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;</span>
-<span class="co">#&gt; 1  2013     5     7     1715           1729       -14     1944</span>
-<span class="co">#&gt; 2  2013     5    20      719            735       -16      951</span>
-<span class="co">#&gt; 3  2013     5     2     1947           1949        -2     2209</span>
-<span class="co">#&gt; # ... with 3.368e+05 more rows, and 12 more variables:</span>
-<span class="co">#&gt; #   sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,</span>
-<span class="co">#&gt; #   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</span></code></pre></div>
+## # A tibble: 336,776 × 19
+##    year month   day dep_time sched_dep_time dep_delay arr_time
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+## 1  2013     5     7     1715           1729       -14     1944
+## 2  2013     5    20      719            735       -16      951
+## 3  2013     5     2     1947           1949        -2     2209
+## # ... with 3.368e+05 more rows, and 12 more variables:
+## #   sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
+## #   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;,
+## #   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre></div>
 <p>Hm, übersichtlicher wäre es wahrscheinllich, wenn wir weniger Spalten anschauen müssten. Am besten neben der Verspätung nur die Information, die wir zur Identifizierung der Schuldigen… will sagen der gesuchten Flüge benötigen</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(arr_delay) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
-<span class="co">#&gt; # A tibble: 336,776 × 8</span>
-<span class="co">#&gt;   arr_delay carrier month   day dep_time tailnum flight  dest</span>
-<span class="co">#&gt;       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1       -86      VX     5     7     1715  N843VA    193   SFO</span>
-<span class="co">#&gt; 2       -79      VX     5    20      719  N840VA     11   SFO</span>
-<span class="co">#&gt; 3       -75      UA     5     2     1947  N851UA    612   LAX</span>
-<span class="co">#&gt; # ... with 3.368e+05 more rows</span></code></pre></div>
+## # A tibble: 336,776 × 8
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
+## 1       -86      VX     5     7     1715  N843VA    193   SFO
+## 2       -79      VX     5    20      719  N840VA     11   SFO
+## 3       -75      UA     5     2     1947  N851UA    612   LAX
+## # ... with 3.368e+05 more rows</code></pre></div>
 <p>Da Zahlen in ihrer natürlichen Form von klein nach groß sortiert sind, sortiert <code>arrange</code> in ebendieser Richtung. Wir können das umdrehen mit einem Minuszeichen vor der zu sortierenden Spalte:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(-arr_delay) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
-<span class="co">#&gt; # A tibble: 336,776 × 8</span>
-<span class="co">#&gt;   arr_delay carrier month   day dep_time tailnum flight  dest</span>
-<span class="co">#&gt;       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1      1272      HA     1     9      641  N384HA     51   HNL</span>
-<span class="co">#&gt; 2      1127      MQ     6    15     1432  N504MQ   3535   CMH</span>
-<span class="co">#&gt; 3      1109      MQ     1    10     1121  N517MQ   3695   ORD</span>
-<span class="co">#&gt; # ... with 3.368e+05 more rows</span></code></pre></div>
+## # A tibble: 336,776 × 8
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
+## 1      1272      HA     1     9      641  N384HA     51   HNL
+## 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+## 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+## # ... with 3.368e+05 more rows</code></pre></div>
 <p>Eine kleine Zugabe: Mit dem Befehl <code>knitr::kable</code> kann man einen Dateframe automatisch in eine (einigermaßen) schöne Tabelle ausgeben lassen. Oh halt, wir wollen keine Tabelle mit 300.000 Zeilen (der Chef ist kein Freund von Details). Also begrenzen wir die Ausgabe auf die ersten 10 Plätze.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(knitr)  <span class="co"># muss installiert sein</span>
 
@@ -780,15 +789,15 @@ flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(carrier) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">row_number</span>() &lt;<span class="st"> </span><span class="dv">4</span>) 
-<span class="co">#&gt; Source: local data frame [48 x 8]</span>
-<span class="co">#&gt; Groups: carrier [16]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   arr_delay carrier month   day dep_time tailnum flight  dest</span>
-<span class="co">#&gt;       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1      1272      HA     1     9      641  N384HA     51   HNL</span>
-<span class="co">#&gt; 2      1127      MQ     6    15     1432  N504MQ   3535   CMH</span>
-<span class="co">#&gt; 3      1109      MQ     1    10     1121  N517MQ   3695   ORD</span>
-<span class="co">#&gt; # ... with 45 more rows</span></code></pre></div>
+## Source: local data frame [48 x 8]
+## Groups: carrier [16]
+## 
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
+## 1      1272      HA     1     9      641  N384HA     51   HNL
+## 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+## 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+## # ... with 45 more rows</code></pre></div>
 <p>Vielleicht gefällt dem Chef diese Darstellung (sortiert nach <code>carrier</code>) besser:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(-arr_delay) %&gt;%<span class="st"> </span>
@@ -796,15 +805,15 @@ flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(carrier) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">row_number</span>() &lt;<span class="st"> </span><span class="dv">4</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(carrier)
-<span class="co">#&gt; Source: local data frame [48 x 8]</span>
-<span class="co">#&gt; Groups: carrier [16]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   arr_delay carrier month   day dep_time tailnum flight  dest</span>
-<span class="co">#&gt;       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1       744      9E     2    16      757  N8940E   3798   CLT</span>
-<span class="co">#&gt; 2       458      9E     7    24     1525  N927XJ   3538   MSP</span>
-<span class="co">#&gt; 3       421      9E     7    10     2054  N937XJ   3325   DFW</span>
-<span class="co">#&gt; # ... with 45 more rows</span></code></pre></div>
+## Source: local data frame [48 x 8]
+## Groups: carrier [16]
+## 
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       &lt;dbl&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
+## 1       744      9E     2    16      757  N8940E   3798   CLT
+## 2       458      9E     7    24     1525  N927XJ   3538   MSP
+## 3       421      9E     7    10     2054  N937XJ   3325   DFW
+## # ... with 45 more rows</code></pre></div>
 <p>Da Sie den Chef gut kennen, berechnen Sie gleich noch die durchschnittliche Verspätung pro Fluggesellschaft.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %&gt;%<span class="st"> </span>
@@ -902,11 +911,11 @@ flights %&gt;%<span class="st"> </span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)  <span class="co"># muss installiert sein</span>
 
 <span class="kw">qplot</span>(<span class="dt">x =</span> carrier, <span class="dt">y =</span> arr_delay, <span class="dt">geom =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="dt">data =</span> flights)
-<span class="co">#&gt; Warning: Removed 9430 rows containing non-finite values (stat_boxplot).</span></code></pre></div>
+## Warning: Removed 9430 rows containing non-finite values (stat_boxplot).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-43-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Offenbar gibt es viele Extremwerte, was die Verspätung betriffr. Das erscheint mir nicht unplausibel (Schneesturm im Winter, Flugzeug verschwunden…). Vor dem Hintergrund der Extremwerte erscheinen die mittleren Verspätungen (Mediane) in den Boxplots als ähnlich. Vielleicht ist der Unterschied zwischen den Monaten ausgeprägter?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="kw">factor</span>(month), <span class="dt">y =</span> arr_delay, <span class="dt">geom =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="dt">data =</span> flights)
-<span class="co">#&gt; Warning: Removed 9430 rows containing non-finite values (stat_boxplot).</span></code></pre></div>
+## Warning: Removed 9430 rows containing non-finite values (stat_boxplot).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-44-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Kaum Unterschied; das spricht gegen die Schneesturm-Idee als Grund für Verspätung. Aber schauen wir uns zuerst die Syntax von <code>qplot</code> näher an. “q” in <code>qplot</code> steht für “quick”. Tatsächlich hat <code>qplot</code> einen großen Bruder, <code>ggplot</code><a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>, der deutlich mehr Funktionen aufweist - und daher auch die umfangreichere (=komplexere) Syntax. Fangen wir mit <code>qplot</code> an.</p>
 <p>Diese Syntax des letzten Beispiels ist recht einfach, nämlich:</p>
@@ -921,14 +930,14 @@ flights %&gt;%<span class="st"> </span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wo_men &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/wo_men.csv&quot;</span>)
 
 <span class="kw">qplot</span>(<span class="dt">x =</span> shoe_size, <span class="dt">data =</span> wo_men)
-<span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_bin).</span></code></pre></div>
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## Warning: Removed 1 rows containing non-finite values (stat_bin).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-46-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Weisen wir nur der X-Achse (aber nicht der Y-Achse) eine kontinuierliche Variable zu, so wählt <code>ggplot2</code> automatisch als Geom automatisch ein Histogramm; wir müssen daher nicht explizieren, dass wir ein Histogramm als Geom wünschen (aber wir könnten es hinzufügen). Alternativ wäre ein Dichtediagramm hier von Interesse:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># qplot(x = shoe_size, data = wo_men)  wie oben</span>
 
 <span class="kw">qplot</span>(<span class="dt">x =</span> shoe_size, <span class="dt">data =</span> wo_men, <span class="dt">geom =</span> <span class="st">&quot;density&quot;</span>)
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_density).</span></code></pre></div>
+## Warning: Removed 1 rows containing non-finite values (stat_density).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-47-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Was man sich merken muss, ist, dass hier nur das Geom mit Anführungsstrichen zu benennen ist, die übrigen Parameter <em>ohne</em>.</p>
 <p>Vielleicht wäre es noch schön, beide Geome zu kombinieren in einem Diagramm. Das ist etwas komplizierter; wir müssen zum großen Bruder <code>ggplot</code> umsteigen, da <code>qplot</code> nicht diese Funktionen anbietet.</p>
@@ -936,16 +945,16 @@ flights %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> shoe_size) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..), <span class="dt">alpha =</span> .<span class="dv">7</span>) +
 <span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)
-<span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_bin).</span>
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_density).</span></code></pre></div>
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+## Warning: Removed 1 rows containing non-finite values (stat_density).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-48-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Zuerst haben wir mit dem Parameter <code>data</code> den Dateframe benannt. <code>aes</code> definiert, welche Variablen welchen Achsen (oder auch z.B. Füllfarben) zugewiesen werden. Hier sagen wir, dass die Schuhgröße auf X-Achse stehen soll. Das <code>+</code>-Zeichen trennt die einzelnen Bestandteile des <code>ggplot</code>-Aufrufs voneinander. Als nächstes sagen wir, dass wir gerne ein Histogram hätten: <code>geom_histogram</code>. Dabei soll aber nicht wie gewöhnlich auf der X-Achse die Häufigkeit stehen, sondern die Dichte. <code>ggplot</code> berechnet selbständig die Dichte und nennt diese Variabl <code>..density..</code>; die vielen Punkte sollen wohl klar machen, dass es sich nicht um eine “normale” Variable aus dem eigenen Dateframe handelt, sondern um eine “interne” Varialbe von <code>ggplot</code> - die wir aber nichtsdestotrotz verwenden können. <code>alpha</code> bestimmt die “Durchsichtigkeit” eines Geoms; spielen Sie mal etwas damit herum. Schließlich malen wir noch ein blaues Dichtediagramm <em>übe</em>r das Histogramm.</p>
 <p>Wünsche sind ein Fass ohne Boden… Wäre es nicht schön, ein Diagramm für Männer und eines für Frauen zu haben, um die Verteilungen vergleichen zu können?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> shoe_size, <span class="dt">data =</span> wo_men, <span class="dt">geom =</span> <span class="st">&quot;density&quot;</span>, <span class="dt">color =</span> sex)
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_density).</span>
+## Warning: Removed 1 rows containing non-finite values (stat_density).
 <span class="kw">qplot</span>(<span class="dt">x =</span> shoe_size, <span class="dt">data =</span> wo_men, <span class="dt">geom =</span> <span class="st">&quot;density&quot;</span>, <span class="dt">fill =</span> sex, <span class="dt">alpha =</span> <span class="kw">I</span>(.<span class="dv">7</span>))
-<span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (stat_density).</span></code></pre></div>
+## Warning: Removed 1 rows containing non-finite values (stat_density).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-49-1.png" width="70%" style="display: block; margin: auto;" /><img src="Datenjudo_files/figure-html/unnamed-chunk-49-2.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Hier sollten vielleicht noch die Extremwerte entfernt werden, um den Blick auf das Gros der Werte nicht zu verstellen:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wo_men %&gt;%<span class="st"> </span>
@@ -966,7 +975,7 @@ flights %&gt;%<span class="st"> </span>
 <h3><span class="header-section-number">6.3.1</span> Zwei kontinuierliche Variablen</h3>
 <p>Ein Streudiagramm ist die klassiche Art, zwei metrische Variablen darzustellen. Das ist mit <code>qplot</code> einfach:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> height, <span class="dt">y =</span> shoe_size, <span class="dt">data =</span> wo_men)
-<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span></code></pre></div>
+## Warning: Removed 1 rows containing missing values (geom_point).</code></pre></div>
 <p><img src="Datenjudo_files/figure-html/unnamed-chunk-52-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Wir weisen wieder der X-Achse und der Y-Achse eine Variable zu; handelt es sich in beiden Fällen um Zahlen, so wählt <code>ggplot2</code> automatisch ein Streudiagramm - d.h. Punkte als Geom (<code>geom = &quot;point&quot;</code>). Wir sollten aber noch die Extremwerte herausnehmen:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wo_men %&gt;%<span class="st"> </span>
@@ -1033,11 +1042,11 @@ wo_men %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Groesse_MW =</span> <span class="kw">mean</span>(height)) -&gt;<span class="st"> </span>wo_men3
 
 wo_men3
-<span class="co">#&gt; # A tibble: 2 × 2</span>
-<span class="co">#&gt;      sex Groesse_MW</span>
-<span class="co">#&gt;   &lt;fctr&gt;      &lt;dbl&gt;</span>
-<span class="co">#&gt; 1    man        183</span>
-<span class="co">#&gt; 2  woman        167</span></code></pre></div>
+## # A tibble: 2 × 2
+##      sex Groesse_MW
+##   &lt;fctr&gt;      &lt;dbl&gt;
+## 1    man        183
+## 2  woman        167</code></pre></div>
 <p>Diese Tabelle schieben wir jetzt in <code>ggplot2</code>; natürlich hätten wir das gleich in einem Rutsch durchpfeifen können.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wo_men3 %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">qplot</span>(<span class="dt">x =</span> sex, <span class="dt">y =</span> Groesse_MW, <span class="dt">data =</span> .)</code></pre></div>

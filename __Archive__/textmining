@@ -308,7 +308,7 @@ round(pos_score/neg_score, 1)
 Hier schauen wir für jedes negative (positive) Token, ob es einen "Match" im Sentiment-Lexikon (`sentiment_df$Wort`) gibt; das geht mit `match`. `match` liefert `NA` zurück, wenn es keinen Match gibt (ansonsten die Nummer des Sentiment-Worts). Wir brauchen also nur die Anzahl der Nicht-Nas (`!is.na`) auszuzählen, um die Anzahl der Matches zu bekommen.
 
 
-Entgegen dem, was man vielleicht erwarten würde, ist der Text offenbar positiv geprägt. Der "Positiv-Wert" ist ca. 2.6 mal so groß wie der "Negativ-Wert". Fragt sich, wie sich dieser Wert mit anderen vergleichbaren Texten (z.B. andere Parteien) misst. Hier sei noch einmal betont, dass die Sentiment-Analyse bestenfalls grobe Abschätzungen liefern kann und keinesfalls sich zu einem hermeneutischen Verständnis aufschwingt.
+Entgegen dem, was man vielleicht erwarten würde, ist der Text offenbar positiv geprägt. Der "Positiv-Wert" ist fast 3 mal so groß wie der "Negativ-Wert". Fragt sich, wie sich dieser Wert mit anderen vergleichbaren Texten (z.B. andere Parteien) misst. Hier sei noch einmal betont, dass die Sentiment-Analyse bestenfalls grobe Abschätzungen liefern kann und keinesfalls sich zu einem hermeneutischen Verständnis aufschwingt.
 
 
 Welche negativen Wörter und welche positiven Wörter wurden wohl verwendet? Schauen wir uns ein paar an.
@@ -358,7 +358,7 @@ afd_df %>%
     summarise(n_distinct_pos = n_distinct(token))
 ```
 
-Dieses Ergebnis passt zum vorherigen: Die Anzahl der positiven Wörter (187) ist ca. doppelt so groß wie die Anzahl der negativen Wörter (96).
+Dieses Ergebnis passt zum vorherigen: Die Anzahl der positiven Wörter ist deutlich größer als die Anzahl der negativen Wörter (~2).
 
 
 ### Gewichtete Sentiment-Analyse
@@ -370,28 +370,14 @@ sentiment_df %>%
   rename(token = Wort) -> sentiment_df
 
 afd_df %>% 
-  left_join(sentiment_df, by = "token") -> afd_df 
+  left_join(sentiment_df) -> afd_df 
 
-
-
-afd_df %>% 
-  filter(!is.na(Wert)) %>% 
-  summarise(Sentimentwert = sum(Wert, na.rm = TRUE)) -> afd_sentiment_summe
-
-
-afd_sentiment_summe$Sentimentwert
-
-```
-
-
-```{r include = FALSE, echo = FALSE}
 afd_df %>% 
   group_by(neg_pos) %>% 
   filter(!is.na(Wert)) %>% 
   summarise(Sentimentwert = sum(Wert)) %>% 
   kable()
 ```
-
 
 Zuerst bennenen wir `Wort` in `token` um, damit es beiden Dataframes (`sentiment_df` und `afd_df`) eine Spalte mit gleichen Namen gibt. Diese Spalte können wir dann zum "Verheiraten" (`left_join`) der beiden Spalten nutzen. Dann summieren wir den Sentiment-Wert jeder nicht-leeren Zeile auf. 
 
@@ -433,53 +419,15 @@ Die Syntax kann hier so übersetzt werden:
      zeige eine schöne Tabelle.
      
      
-### Relativer Sentiments-Wert
-Nun könnte man noch den erzielten "Netto-Sentimentswert" des Corpus ins Verhältnis setzen Sentimentswert des Lexikons: Wenn es insgesamt im Sentiment-Lexikon sehr negativ zuginge, wäre ein negativer Sentimentwer in einem beliebigen Corpus nicht überraschend.  
+Nun könnte man noch den erzielten "Netto-Sentimentswert" des Corpus ins Verhältnis setzen zum "Brutto-Sentimentswert": Wenn es insgesamt im Sentiment-Lexikon sehr negativ zuinge, wäre ein negativer Sentimentwer in einem beliebigen Corpus nicht überraschend.  
      
 
-```{r}
 
-sentiment_df %>% 
-  filter(!is.na(Wert)) %>% 
-  ggplot() +
-  aes(x = Wert) +
-  geom_histogram()
-
-```
-
-Es scheint einen (leichten) Überhang an negativen Wörtern zu geben. Schauen wir auf die genauen Zahlen.
-
-```{r}
-sentiment_df %>% 
-  filter(!is.na(Wert)) %>% 
-  count(neg_pos)
-```
-
-Tatsächlich ist die Zahl negativ konnotierter Terme etwas größer als die Zahl der positiv konnotierten. Jetzt gewichten wir die Zahl mit dem Sentimentswert der Terme, in dem wir die Sentimentswerte (die ein negatives bzw. ein positives Vorzeichen aufweisen) aufaddieren.
-
-```{r}
-sentiment_df %>% 
-  filter(!is.na(Wert)) %>% 
-  summarise(sentiment_summe = sum(Wert)) -> sentiment_lexikon_sum
-
-sentiment_lexikon_sum$sentiment_summe
-```
-
-Im Vergleich zum Sentiment der Lexikons ist unser Corpus deutlich negativer. Um genau zu sein, um diesen Faktor:
-
-```{r}
-sentiment_lexikon_sum$sentiment_summe / afd_sentiment_summe$Sentimentwert
-```
-
-Der *relative Sentimentswert* (relativ zum Sentiment-Lexikon) beträgt also ~7.8.
-
-
-### Verknüpfung mit anderen Variablen
+## Verknüpfung mit anderen Variablen
 Kann man die Textdaten mit anderen Daten verknüpfen, so wird die Analyse reichhaltiger. So könnte man überprüfen, ob sich zwischen Sentiment-Gehalt und Zeit oder Autor ein Muster findet/bestätigt. Uns liegen in diesem Beispiel keine andere Daten vor, so dass wir dieses Beispiel nicht weiter verfolgen.
 
 ### Assoziationsanalyse
 
-Hier schauen wir, ob die einzelnen Terme miteinander in Verbindung stehen, d.h. 
 ```{r}
 library(tm)
 
@@ -491,8 +439,6 @@ afd_df %>%
 afd_dtm
 
 ```
-
-
 
 
 ```{r hide = TRUE}

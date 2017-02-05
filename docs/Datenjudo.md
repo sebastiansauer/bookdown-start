@@ -53,13 +53,13 @@ if (!file.exists("./data/wo_men.csv")){
   daten <- read.csv("./data/wo_men.csv")
 }
 head(daten)
-#>   X                time   sex height shoe_size
-#> 1 1 04.10.2016 17:58:51 woman    160        40
-#> 2 2 04.10.2016 17:58:59 woman    171        39
-#> 3 3 04.10.2016 18:00:15 woman    174        39
-#> 4 4 04.10.2016 18:01:17 woman    176        40
-#> 5 5 04.10.2016 18:01:22   man    195        46
-#> 6 6 04.10.2016 18:01:53 woman    157        37
+##   X                time   sex height shoe_size
+## 1 1 04.10.2016 17:58:51 woman    160        40
+## 2 2 04.10.2016 17:58:59 woman    171        39
+## 3 3 04.10.2016 18:00:15 woman    174        39
+## 4 4 04.10.2016 18:01:17 woman    176        40
+## 5 5 04.10.2016 18:01:22   man    195        46
+## 6 6 04.10.2016 18:01:53 woman    157        37
 ```
 
 Wir haben zuerst geprüft, ob die Datei (`wo_men.csv`) im entsprechenden Ordner existiert oder nicht (das `!`-Zeichen heißt auf Errisch "nicht"). Falls die Datei nicht im Ordner existiert, laden wir sie mit `read.csv` herunter und direkt ins R hinein. Andernfalls (`else`) lesen wir sie direkt ins R hinein.
@@ -274,29 +274,29 @@ Ein R-Befehl hierzu ist `arrange`; einige Beispiele zeigen die Funktionsweise am
 ```r
 
 arrange(stats_test, score)  %>% head() # liefert die *schlechtesten* Noten zurück
-#>     X                 V_1 study_time self_eval interest score
-#> 1 234 23.01.2017 18:13:15          3         1        1    17
-#> 2   4 06.01.2017 09:58:05          2         3        2    18
-#> 3 131 19.01.2017 18:03:45          2         3        4    18
-#> 4 142 19.01.2017 19:02:12          3         4        1    18
-#> 5  35 12.01.2017 19:04:43          1         2        3    19
-#> 6  71 15.01.2017 15:03:29          3         3        3    20
+##     X                 V_1 study_time self_eval interest score
+## 1 234 23.01.2017 18:13:15          3         1        1    17
+## 2   4 06.01.2017 09:58:05          2         3        2    18
+## 3 131 19.01.2017 18:03:45          2         3        4    18
+## 4 142 19.01.2017 19:02:12          3         4        1    18
+## 5  35 12.01.2017 19:04:43          1         2        3    19
+## 6  71 15.01.2017 15:03:29          3         3        3    20
 arrange(stats_test, -score) %>% head() # liefert die *besten* Noten zurück
-#>    X                 V_1 study_time self_eval interest score
-#> 1  3 05.01.2017 23:33:47          5        10        6    40
-#> 2  7 06.01.2017 14:25:49         NA        NA       NA    40
-#> 3 29 12.01.2017 09:48:16          4        10        3    40
-#> 4 41 13.01.2017 12:07:29          4        10        3    40
-#> 5 58 14.01.2017 15:43:01          3         8        2    40
-#> 6 83 16.01.2017 10:16:52         NA        NA       NA    40
+##    X                 V_1 study_time self_eval interest score
+## 1  3 05.01.2017 23:33:47          5        10        6    40
+## 2  7 06.01.2017 14:25:49         NA        NA       NA    40
+## 3 29 12.01.2017 09:48:16          4        10        3    40
+## 4 41 13.01.2017 12:07:29          4        10        3    40
+## 5 58 14.01.2017 15:43:01          3         8        2    40
+## 6 83 16.01.2017 10:16:52         NA        NA       NA    40
 arrange(stats_test, interest, score) %>% head()
-#>     X                 V_1 study_time self_eval interest score
-#> 1 234 23.01.2017 18:13:15          3         1        1    17
-#> 2 142 19.01.2017 19:02:12          3         4        1    18
-#> 3 221 23.01.2017 11:40:30          1         1        1    23
-#> 4 230 23.01.2017 16:27:49          1         1        1    23
-#> 5  92 17.01.2017 17:18:55          1         1        1    24
-#> 6 107 18.01.2017 16:01:36          3         2        1    24
+##     X                 V_1 study_time self_eval interest score
+## 1 234 23.01.2017 18:13:15          3         1        1    17
+## 2 142 19.01.2017 19:02:12          3         4        1    18
+## 3 221 23.01.2017 11:40:30          1         1        1    23
+## 4 230 23.01.2017 16:27:49          1         1        1    23
+## 5  92 17.01.2017 17:18:55          1         1        1    24
+## 6 107 18.01.2017 16:01:36          3         2        1    24
 ```
 
 
@@ -337,37 +337,37 @@ Ein ähnliches Ergebnis erhält mit man `top_n()`, welches die `n` *größten* *
 ```r
 
 top_n(stats_test, 3)
-#> Selecting by score
-#>      X                 V_1 study_time self_eval interest score
-#> 1    3 05.01.2017 23:33:47          5        10        6    40
-#> 2    7 06.01.2017 14:25:49         NA        NA       NA    40
-#> 3   29 12.01.2017 09:48:16          4        10        3    40
-#> 4   41 13.01.2017 12:07:29          4        10        3    40
-#> 5   58 14.01.2017 15:43:01          3         8        2    40
-#> 6   83 16.01.2017 10:16:52         NA        NA       NA    40
-#> 7  116 18.01.2017 23:07:32          4         8        5    40
-#> 8  119 19.01.2017 09:05:01         NA        NA       NA    40
-#> 9  132 19.01.2017 18:22:32         NA        NA       NA    40
-#> 10 175 20.01.2017 23:03:36          5        10        5    40
-#> 11 179 21.01.2017 07:40:05          5         9        1    40
-#> 12 185 21.01.2017 15:01:26          4        10        5    40
-#> 13 196 22.01.2017 13:38:56          4        10        5    40
-#> 14 197 22.01.2017 14:55:17          4        10        5    40
-#> 15 248 24.01.2017 16:29:45          2        10        2    40
-#> 16 249 24.01.2017 17:19:54         NA        NA       NA    40
-#> 17 257 25.01.2017 10:44:34          2         9        3    40
-#> 18 306 27.01.2017 11:29:48          4         9        3    40
+## Selecting by score
+##      X                 V_1 study_time self_eval interest score
+## 1    3 05.01.2017 23:33:47          5        10        6    40
+## 2    7 06.01.2017 14:25:49         NA        NA       NA    40
+## 3   29 12.01.2017 09:48:16          4        10        3    40
+## 4   41 13.01.2017 12:07:29          4        10        3    40
+## 5   58 14.01.2017 15:43:01          3         8        2    40
+## 6   83 16.01.2017 10:16:52         NA        NA       NA    40
+## 7  116 18.01.2017 23:07:32          4         8        5    40
+## 8  119 19.01.2017 09:05:01         NA        NA       NA    40
+## 9  132 19.01.2017 18:22:32         NA        NA       NA    40
+## 10 175 20.01.2017 23:03:36          5        10        5    40
+## 11 179 21.01.2017 07:40:05          5         9        1    40
+## 12 185 21.01.2017 15:01:26          4        10        5    40
+## 13 196 22.01.2017 13:38:56          4        10        5    40
+## 14 197 22.01.2017 14:55:17          4        10        5    40
+## 15 248 24.01.2017 16:29:45          2        10        2    40
+## 16 249 24.01.2017 17:19:54         NA        NA       NA    40
+## 17 257 25.01.2017 10:44:34          2         9        3    40
+## 18 306 27.01.2017 11:29:48          4         9        3    40
 top_n(stats_test, 3, interest)
-#>     X                 V_1 study_time self_eval interest score
-#> 1   3 05.01.2017 23:33:47          5        10        6    40
-#> 2   5 06.01.2017 14:13:08          4         8        6    34
-#> 3  43 13.01.2017 14:14:16          4         8        6    36
-#> 4  65 15.01.2017 12:41:27          3         6        6    22
-#> 5 110 18.01.2017 18:53:02          5         8        6    37
-#> 6 136 19.01.2017 18:22:57          3         1        6    39
-#> 7 172 20.01.2017 20:42:46          5        10        6    34
-#> 8 214 22.01.2017 21:57:36          2         6        6    31
-#> 9 301 27.01.2017 08:17:59          4         8        6    33
+##     X                 V_1 study_time self_eval interest score
+## 1   3 05.01.2017 23:33:47          5        10        6    40
+## 2   5 06.01.2017 14:13:08          4         8        6    34
+## 3  43 13.01.2017 14:14:16          4         8        6    36
+## 4  65 15.01.2017 12:41:27          3         6        6    22
+## 5 110 18.01.2017 18:53:02          5         8        6    37
+## 6 136 19.01.2017 18:22:57          3         1        6    39
+## 7 172 20.01.2017 20:42:46          5        10        6    34
+## 8 214 22.01.2017 21:57:36          2         6        6    31
+## 9 301 27.01.2017 08:17:59          4         8        6    33
 ```
 
 Gibt man *keine* Spalte an, so bezieht sich `top_n` auf die letzte Spalte im Datensatz.
@@ -393,15 +393,15 @@ In der Abbildung wurde der Datensatz anhand der Spalte `Fach` in mehrere Gruppen
 ```r
 test_gruppiert <- group_by(stats_test, interest)
 test_gruppiert
-#> Source: local data frame [306 x 6]
-#> Groups: interest [7]
-#> 
-#>       X                 V_1 study_time self_eval interest score
-#>   <int>              <fctr>      <int>     <int>    <int> <int>
-#> 1     1 05.01.2017 13:57:01          5         8        5    29
-#> 2     2 05.01.2017 21:07:56          3         7        3    29
-#> 3     3 05.01.2017 23:33:47          5        10        6    40
-#> # ... with 303 more rows
+## Source: local data frame [306 x 6]
+## Groups: interest [7]
+## 
+##       X                 V_1 study_time self_eval interest score
+##   <int>              <fctr>      <int>     <int>    <int> <int>
+## 1     1 05.01.2017 13:57:01          5         8        5    29
+## 2     2 05.01.2017 21:07:56          3         7        3    29
+## 3     3 05.01.2017 23:33:47          5        10        6    40
+## # ... with 303 more rows
 ```
 
 Schaut man sich nun den Datensatz an, sieht man erstmal wenig Effekt der Gruppierung. R teilt uns lediglich mit `Groups: interest [7]`, dass es die Gruppen gibt, aber es gibt keine extra Spalte oder sonstige Anzeichen der Gruppierung. Aber keine Sorge, wenn wir gleich einen Mittelwert ausrechnen, bekommen wir den Mittelwert pro Gruppe!
@@ -429,8 +429,8 @@ knitr::include_graphics("images/summarise.pdf")
 
 ```r
 summarise(stats_test, mean(score))
-#>   mean(score)
-#> 1        31.1
+##   mean(score)
+## 1        31.1
 ```
 
 Man könnte diesen Befehl so ins Deutsche übersetzen: `Fasse aus Tabelle stats_test die Spalte score anhand des Mittelwerts zusammen`. Nicht vergessen, wenn die Spalte `score` fehlende Werte hat, wird der Befehl `mean` standardmäßig dies mit `NA` quittieren.
@@ -440,13 +440,13 @@ Jetzt können wir auch die Gruppierung nutzen:
 ```r
 test_gruppiert <- group_by(stats_test, interest)
 summarise(test_gruppiert, mean(score))
-#> # A tibble: 7 × 2
-#>   interest `mean(score)`
-#>      <int>         <dbl>
-#> 1        1          28.3
-#> 2        2          29.7
-#> 3        3          30.8
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   interest `mean(score)`
+##      <int>         <dbl>
+## 1        1          28.3
+## 2        2          29.7
+## 3        3          30.8
+## # ... with 4 more rows
 ```
 
 Der Befehl `summarise` erkennt also, wenn eine (mit `group_by`) gruppierte Tabelle vorliegt. Jegliche Zusammenfassung, die wir anfordern, wird anhand der Gruppierungsinformation aufgeteilt werden. In dem Beispiel bekommen wir einen Mittelwert für jeden Wert von `interest`. Interessanterweise sehen wir, dass der Mittelwert tendenziell größer wird, je größer `interest` wird.
@@ -458,13 +458,13 @@ Jetzt können wir auch die Gruppierung nutzen:
 ```r
 test_gruppiert <- group_by(stats_test, interest)
 summarise(test_gruppiert, mw_pro_gruppe = mean(score, na.rm = TRUE))
-#> # A tibble: 7 × 2
-#>   interest mw_pro_gruppe
-#>      <int>         <dbl>
-#> 1        1          28.3
-#> 2        2          29.7
-#> 3        3          30.8
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   interest mw_pro_gruppe
+##      <int>         <dbl>
+## 1        1          28.3
+## 2        2          29.7
+## 3        3          30.8
+## # ... with 4 more rows
 ```
 
 Nun heißt die zweite Spalte `mw_pro_Gruppe`. `na.rm = TRUE` veranlasst, bei fehlenden Werten trotzdem einen Mittelwert zurückzuliefern (die Zeilen mit fehlenden Werten werden in dem Fall ignoriert).
@@ -484,18 +484,18 @@ Ebenfalls nützlich ist es, Zeilen zu zählen. Im Gegensatz zum Standardbefehle 
 
 ```r
 summarise(stats_test, n())
-#>   n()
-#> 1 306
+##   n()
+## 1 306
 summarise(test_gruppiert, n())
-#> # A tibble: 7 × 2
-#>   interest `n()`
-#>      <int> <int>
-#> 1        1    30
-#> 2        2    47
-#> 3        3    66
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   interest `n()`
+##      <int> <int>
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 nrow(stats_test)
-#> [1] 306
+## [1] 306
 ```
 
 Außerhalb von gruppierten Datensätzen ist `nrow` meist praktischer.
@@ -506,33 +506,33 @@ Praktischer ist der Befehl `count`, der nichts anderes ist als die Hintereinande
 
 ```r
 dplyr::count(stats_test, interest)
-#> # A tibble: 7 × 2
-#>   interest     n
-#>      <int> <int>
-#> 1        1    30
-#> 2        2    47
-#> 3        3    66
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   interest     n
+##      <int> <int>
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 dplyr::count(stats_test, study_time)
-#> # A tibble: 6 × 2
-#>   study_time     n
-#>        <int> <int>
-#> 1          1    31
-#> 2          2    49
-#> 3          3    85
-#> 4          4    56
-#> 5          5    17
-#> 6         NA    68
+## # A tibble: 6 × 2
+##   study_time     n
+##        <int> <int>
+## 1          1    31
+## 2          2    49
+## 3          3    85
+## 4          4    56
+## 5          5    17
+## 6         NA    68
 dplyr::count(stats_test, interest, study_time)
-#> Source: local data frame [29 x 3]
-#> Groups: interest [?]
-#> 
-#>   interest study_time     n
-#>      <int>      <int> <int>
-#> 1        1          1    12
-#> 2        1          2     7
-#> 3        1          3     8
-#> # ... with 26 more rows
+## Source: local data frame [29 x 3]
+## Groups: interest [?]
+## 
+##   interest study_time     n
+##      <int>      <int> <int>
+## 1        1          1    12
+## 2        1          2     7
+## 3        1          3     8
+## # ... with 26 more rows
 ```
 
 Allgemeiner formuliert lautet die Syntax: `count(df, Spalte1, ...)`, wobei `df` der Dataframe ist und `Spalte1` die erste (es können mehrere sein) auszuzählende Spalte. Gibt man z.B. zwei Spalten an, so wird pro Wert der 1. Spalte die Häufigkeiten der 2. Spalte ausgegeben.
@@ -564,13 +564,13 @@ stats_test %>%
   group_by(interest) %>% 
   summarise(mw = mean(score)) %>% 
   filter(mw > 30)
-#> # A tibble: 4 × 2
-#>   interest    mw
-#>      <int> <dbl>
-#> 1        3  30.8
-#> 2        5  32.5
-#> 3        6  34.0
-#> 4       NA  33.1
+## # A tibble: 4 × 2
+##   interest    mw
+##      <int> <dbl>
+## 1        3  30.8
+## 2        5  32.5
+## 3        6  34.0
+## 4       NA  33.1
 ```
 
 Es ist hilfreich, diese "Pfeifen-Syntax" in deutschen Pseudo-Code zu übersetzen:
@@ -602,8 +602,8 @@ stats_test$score_fac <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 2:4
 stats_test$study_time <- car::recode(stats_test$study_time, "5 = 'sehr viel'; 4 = 'wenig'; else = 'Hilfe'", as.factor.result = TRUE)
 
 head(stats_test$study_time)
-#> [1] sehr viel Hilfe     sehr viel Hilfe     wenig     Hilfe    
-#> Levels: Hilfe sehr viel wenig
+## [1] sehr viel Hilfe     sehr viel Hilfe     wenig     Hilfe    
+## Levels: Hilfe sehr viel wenig
 ```
 
 Der Befehle `recode` ist wirklich sehr prkatisch; mit `:` kann man "von bis" ansprechen (das ginge mit `c()` übrigens auch); `else` für "ansonsten" ist möglich und mit `as.factor.result` kann man entweder einen Faktor oder eine Text-Variable zurückgeliefert bekommen. Der ganze "Wechselterm" steht in Anführungsstrichen (`"`). Einzelne Teile des Wechselterms sind mit einem Strichpunkt (`;`) voneinander getrennt.
@@ -615,7 +615,7 @@ Das klassiche Umkodieren von Items aus Fragebögen kann man so anstellen; sagen 
 ```r
 stats_test$no_interest <- car::recode(stats_test$interest, "1 = 6; 2 = 5; 3 = 4; 4 = 3; 5 = 2; 6 = 1; else = NA")
 glimpse(stats_test$no_interest)
-#>  num [1:306] 2 4 1 5 1 NA NA 4 2 2 ...
+##  num [1:306] 2 4 1 5 1 NA NA 4 2 2 ...
 ```
 
 Bei dem Wechselterm muss man aufpassen, nichts zu verwechseln; die Zahlen sehen alle ähnlich aus...
@@ -625,21 +625,21 @@ Testen kann man den Erfolg des Umpolens mit
 
 ```r
 dplyr::count(stats_test, interest)
-#> # A tibble: 7 × 2
-#>   interest     n
-#>      <int> <int>
-#> 1        1    30
-#> 2        2    47
-#> 3        3    66
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   interest     n
+##      <int> <int>
+## 1        1    30
+## 2        2    47
+## 3        3    66
+## # ... with 4 more rows
 dplyr::count(stats_test, no_interest)
-#> # A tibble: 7 × 2
-#>   no_interest     n
-#>         <dbl> <int>
-#> 1           1     9
-#> 2           2    45
-#> 3           3    41
-#> # ... with 4 more rows
+## # A tibble: 7 × 2
+##   no_interest     n
+##         <dbl> <int>
+## 1           1     9
+## 2           2    45
+## 3           3    41
+## # ... with 4 more rows
 ```
 
 Scheint zu passen. Noch praktischer ist, dass man so auch numerische Variablen in Bereiche aufteilen kann ("binnen"):
@@ -666,27 +666,27 @@ Schauen wir uns einige Beispiele der Datenaufbereitung mittels `dplyr` an. Wir v
 library(nycflights13)
 data(flights)
 glimpse(flights)
-#> Observations: 336,776
-#> Variables: 19
-#> $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
-#> $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-#> $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-#> $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...
-#> $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...
-#> $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...
-#> $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...
-#> $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...
-#> $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...
-#> $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV",...
-#> $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...
-#> $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN...
-#> $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR"...
-#> $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL"...
-#> $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...
-#> $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...
-#> $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...
-#> $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...
-#> $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...
+## Observations: 336,776
+## Variables: 19
+## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
+## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...
+## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...
+## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...
+## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...
+## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...
+## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...
+## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV",...
+## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...
+## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN...
+## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR"...
+## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL"...
+## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...
+## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...
+## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...
+## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...
 ```
 
 Der Befehl `data` lädt Daten aus einem zuvor gestarteten Paket. 
@@ -697,16 +697,16 @@ Achtung, Fallstudie. Sie sind der/die Assistent_in des Chefs der New Yorker Flug
 ```r
 flights %>% 
   arrange(arr_delay)
-#> # A tibble: 336,776 × 19
-#>    year month   day dep_time sched_dep_time dep_delay arr_time
-#>   <int> <int> <int>    <int>          <int>     <dbl>    <int>
-#> 1  2013     5     7     1715           1729       -14     1944
-#> 2  2013     5    20      719            735       -16      951
-#> 3  2013     5     2     1947           1949        -2     2209
-#> # ... with 3.368e+05 more rows, and 12 more variables:
-#> #   sched_arr_time <int>, arr_delay <dbl>, carrier <chr>, flight <int>,
-#> #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
-#> #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+## # A tibble: 336,776 × 19
+##    year month   day dep_time sched_dep_time dep_delay arr_time
+##   <int> <int> <int>    <int>          <int>     <dbl>    <int>
+## 1  2013     5     7     1715           1729       -14     1944
+## 2  2013     5    20      719            735       -16      951
+## 3  2013     5     2     1947           1949        -2     2209
+## # ... with 3.368e+05 more rows, and 12 more variables:
+## #   sched_arr_time <int>, arr_delay <dbl>, carrier <chr>, flight <int>,
+## #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
+## #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 ```
 
 Hm, übersichtlicher wäre es wahrscheinllich, wenn wir weniger Spalten anschauen müssten. Am besten neben der Verspätung nur die Information, die wir zur Identifizierung der Schuldigen... will sagen der gesuchten Flüge benötigen
@@ -716,13 +716,13 @@ Hm, übersichtlicher wäre es wahrscheinllich, wenn wir weniger Spalten anschaue
 flights %>% 
   arrange(arr_delay) %>% 
   select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
-#> # A tibble: 336,776 × 8
-#>   arr_delay carrier month   day dep_time tailnum flight  dest
-#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
-#> 1       -86      VX     5     7     1715  N843VA    193   SFO
-#> 2       -79      VX     5    20      719  N840VA     11   SFO
-#> 3       -75      UA     5     2     1947  N851UA    612   LAX
-#> # ... with 3.368e+05 more rows
+## # A tibble: 336,776 × 8
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+## 1       -86      VX     5     7     1715  N843VA    193   SFO
+## 2       -79      VX     5    20      719  N840VA     11   SFO
+## 3       -75      UA     5     2     1947  N851UA    612   LAX
+## # ... with 3.368e+05 more rows
 ```
 
 Da Zahlen in ihrer natürlichen Form von klein nach groß sortiert sind, sortiert `arrange` in ebendieser Richtung. Wir können das umdrehen mit einem Minuszeichen vor der zu sortierenden Spalte:
@@ -732,13 +732,13 @@ Da Zahlen in ihrer natürlichen Form von klein nach groß sortiert sind, sortier
 flights %>% 
   arrange(-arr_delay) %>% 
   select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest)
-#> # A tibble: 336,776 × 8
-#>   arr_delay carrier month   day dep_time tailnum flight  dest
-#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
-#> 1      1272      HA     1     9      641  N384HA     51   HNL
-#> 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
-#> 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
-#> # ... with 3.368e+05 more rows
+## # A tibble: 336,776 × 8
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+## 1      1272      HA     1     9      641  N384HA     51   HNL
+## 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+## 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+## # ... with 3.368e+05 more rows
 ```
 
 Eine kleine Zugabe: Mit dem Befehl `knitr::kable` kann man einen Dateframe automatisch in eine (einigermaßen) schöne Tabelle ausgeben lassen. Oh halt, wir wollen keine Tabelle mit 300.000 Zeilen (der Chef ist kein Freund von Details). Also begrenzen wir die Ausgabe auf die ersten 10 Plätze.
@@ -781,15 +781,15 @@ flights %>%
   select(arr_delay, carrier, month, day, dep_time, tailnum, flight, dest) %>% 
   group_by(carrier) %>% 
   filter(row_number() < 4) 
-#> Source: local data frame [48 x 8]
-#> Groups: carrier [16]
-#> 
-#>   arr_delay carrier month   day dep_time tailnum flight  dest
-#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
-#> 1      1272      HA     1     9      641  N384HA     51   HNL
-#> 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
-#> 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
-#> # ... with 45 more rows
+## Source: local data frame [48 x 8]
+## Groups: carrier [16]
+## 
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+## 1      1272      HA     1     9      641  N384HA     51   HNL
+## 2      1127      MQ     6    15     1432  N504MQ   3535   CMH
+## 3      1109      MQ     1    10     1121  N517MQ   3695   ORD
+## # ... with 45 more rows
 ```
 
 Vielleicht gefällt dem Chef diese Darstellung (sortiert nach `carrier`) besser:
@@ -802,15 +802,15 @@ flights %>%
   group_by(carrier) %>% 
   filter(row_number() < 4) %>% 
   arrange(carrier)
-#> Source: local data frame [48 x 8]
-#> Groups: carrier [16]
-#> 
-#>   arr_delay carrier month   day dep_time tailnum flight  dest
-#>       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
-#> 1       744      9E     2    16      757  N8940E   3798   CLT
-#> 2       458      9E     7    24     1525  N927XJ   3538   MSP
-#> 3       421      9E     7    10     2054  N937XJ   3325   DFW
-#> # ... with 45 more rows
+## Source: local data frame [48 x 8]
+## Groups: carrier [16]
+## 
+##   arr_delay carrier month   day dep_time tailnum flight  dest
+##       <dbl>   <chr> <int> <int>    <int>   <chr>  <int> <chr>
+## 1       744      9E     2    16      757  N8940E   3798   CLT
+## 2       458      9E     7    24     1525  N927XJ   3538   MSP
+## 3       421      9E     7    10     2054  N937XJ   3325   DFW
+## # ... with 45 more rows
 ```
 
 Da Sie den Chef gut kennen, berechnen Sie gleich noch die durchschnittliche Verspätung pro Fluggesellschaft.
@@ -877,7 +877,7 @@ Es gibt viele Möglichkeiten, Daten zu visualieren (in R). Wir werden uns hier a
 library(ggplot2)  # muss installiert sein
 
 qplot(x = carrier, y = arr_delay, geom = "boxplot", data = flights)
-#> Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
+## Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-43-1.png" width="70%" style="display: block; margin: auto;" />
@@ -887,7 +887,7 @@ Offenbar gibt es viele Extremwerte, was die Verspätung betriffr. Das erscheint 
 
 ```r
 qplot(x = factor(month), y = arr_delay, geom = "boxplot", data = flights)
-#> Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
+## Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-44-1.png" width="70%" style="display: block; margin: auto;" />
@@ -918,8 +918,8 @@ Schauen wir uns die Verteilung der Schuhgrößen von Studierenden an.
 wo_men <- read.csv("data/wo_men.csv")
 
 qplot(x = shoe_size, data = wo_men)
-#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-#> Warning: Removed 1 rows containing non-finite values (stat_bin).
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-46-1.png" width="70%" style="display: block; margin: auto;" />
@@ -931,7 +931,7 @@ Weisen wir nur der X-Achse (aber nicht der Y-Achse) eine kontinuierliche Variabl
 # qplot(x = shoe_size, data = wo_men)  wie oben
 
 qplot(x = shoe_size, data = wo_men, geom = "density")
-#> Warning: Removed 1 rows containing non-finite values (stat_density).
+## Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-47-1.png" width="70%" style="display: block; margin: auto;" />
@@ -946,9 +946,9 @@ ggplot(data = wo_men) +
   aes(x = shoe_size) +
   geom_histogram(aes(y = ..density..), alpha = .7) +
   geom_density(color = "blue")
-#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-#> Warning: Removed 1 rows containing non-finite values (stat_bin).
-#> Warning: Removed 1 rows containing non-finite values (stat_density).
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+## Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-48-1.png" width="70%" style="display: block; margin: auto;" />
@@ -960,9 +960,9 @@ Wünsche sind ein Fass ohne Boden... Wäre es nicht schön, ein Diagramm für M�
 
 ```r
 qplot(x = shoe_size, data = wo_men, geom = "density", color = sex)
-#> Warning: Removed 1 rows containing non-finite values (stat_density).
+## Warning: Removed 1 rows containing non-finite values (stat_density).
 qplot(x = shoe_size, data = wo_men, geom = "density", fill = sex, alpha = I(.7))
-#> Warning: Removed 1 rows containing non-finite values (stat_density).
+## Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-49-1.png" width="70%" style="display: block; margin: auto;" /><img src="Datenjudo_files/figure-html/unnamed-chunk-49-2.png" width="70%" style="display: block; margin: auto;" />
@@ -1001,7 +1001,7 @@ Ein Streudiagramm ist die klassiche Art, zwei metrische Variablen darzustellen. 
 
 ```r
 qplot(x = height, y = shoe_size, data = wo_men)
-#> Warning: Removed 1 rows containing missing values (geom_point).
+## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 <img src="Datenjudo_files/figure-html/unnamed-chunk-52-1.png" width="70%" style="display: block; margin: auto;" />
@@ -1125,11 +1125,11 @@ wo_men2 %>%
   summarise(Groesse_MW = mean(height)) -> wo_men3
 
 wo_men3
-#> # A tibble: 2 × 2
-#>      sex Groesse_MW
-#>   <fctr>      <dbl>
-#> 1    man        183
-#> 2  woman        167
+## # A tibble: 2 × 2
+##      sex Groesse_MW
+##   <fctr>      <dbl>
+## 1    man        183
+## 2  woman        167
 ```
 
 
