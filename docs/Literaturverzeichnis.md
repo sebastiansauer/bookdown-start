@@ -1,3 +1,3 @@
 # Literaturverzeichnis
 
-# References {-}
+# Literaturverzeichnis {-}

@@ -60,10 +60,16 @@ sdkljf
 
 
 ## Datensätze
-Name des Datensatzes    | Quelle   | Beschreibung
-`profiles` | {okcupiddata} | Daten von einer Online-Singlebörse
-`Wage` | {ISLR} | Gehaltsdaten von US-amerikanischen Männern
-`inf_test_short` | <https://sebastiansauer.github.io/data/test_inf_short.csv> | Ergebnisse einer Statistikklausur
+
+Name des Datensatzes  Quelle            Beschreibung  
+--------------------  -----------       -----------------
+`profiles`            {okcupiddata}     Daten von einer Online-Singlebörse  
+`Wage`                {ISLR}       Gehaltsdaten von US-amerikanischen Männern  
+`inf_test_short`      <https://sebastiansauer.github.io/data/test_inf_short.csv>   Ergebnisse einer Statistikklausur  
+
+
+
+
 
 
 
