@@ -155,8 +155,7 @@ Pakete
 #>  [5] "car"          "nycflights13" "ISLR"         "pdftools"    
 #>  [9] "downloader"   "ggdendro"     "gridExtra"    "tm"          
 #> [13] "tidytext"     "lsa"          "SnowballC"    "wordcloud"   
-#> [17] "RColorBrewer" "okcupiddata"  "reshape2"     "wesanderson" 
-#> [21] "GGally"       "titanic"      "compute.es"
+#> [17] "RColorBrewer"
 ```
 
 Anstelle alle einzeln zu laden (`library` verdaut nur ein Paket auf einmal), können wir mit etwas R-Judo alle auf einen Haps laden:
@@ -211,27 +210,6 @@ lapply(Pakete, require, character.only = TRUE)
 #> 
 #> [[16]]
 #> [1] TRUE
-#> 
-#> [[17]]
-#> [1] TRUE
-#> 
-#> [[18]]
-#> [1] TRUE
-#> 
-#> [[19]]
-#> [1] TRUE
-#> 
-#> [[20]]
-#> [1] TRUE
-#> 
-#> [[21]]
-#> [1] TRUE
-#> 
-#> [[22]]
-#> [1] TRUE
-#> 
-#> [[23]]
-#> [1] TRUE
 ```
 
 Der Befehl heißt auf Deutsch: "Wende auf jedes Element von `Pakete` den Befehl `library` an"[^3].
@@ -248,7 +226,6 @@ Name des Datensatzes  Quelle            Beschreibung
 `flights`             {nycflights13}    Abflüge von den New Yorker Flughäfen
 `wo_men`              Hier[^11]         Größe von Studierenden
 `tips`                {reshape2}        Trinkgelder in einem Restaurant
-`extra`               Hier[^12]         Umfrage zu Extraversion
 
 
 
@@ -284,7 +261,6 @@ Traditionell ist die Statistik stark daran interessiert, Parameter von Populatio
 [^9]: Eine Vorhersage, die bei vielen Vorhersagemodellen komplett in die Grütze ging, wenn man sich die US-Präsidentenwahl 2016 anschaut.
 [^10]: https://sebastiansauer.github.io/data/test_inf_short.csv
 [^11]: https://sebastiansauer.github.io/data/wo_men.csv 
-[^12]: https://osf.io/meyhp/?action=download
 
 
 

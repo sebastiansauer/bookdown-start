@@ -29,6 +29,7 @@ data(flights, package = "nycflights13")
 library(tidyverse)  # muss installiert sein
 
 qplot(x = carrier, y = arr_delay, geom = "boxplot", data = flights)
+FALSE Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
@@ -38,6 +39,7 @@ Offenbar gibt es viele Extremwerte, was die Verspätung betrifft. Das erscheint 
 
 ```r
 qplot(x = factor(month), y = arr_delay, geom = "boxplot", data = flights)
+FALSE Warning: Removed 9430 rows containing non-finite values (stat_boxplot).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
@@ -67,6 +69,7 @@ Schauen wir uns die Verteilung der Schuhgrößen von Studierenden an.
 wo_men <- read.csv("data/wo_men.csv")
 
 qplot(x = shoe_size, data = wo_men)
+FALSE Warning: Removed 1 rows containing non-finite values (stat_bin).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
@@ -78,6 +81,7 @@ Weisen wir nur der X-Achse (aber nicht der Y-Achse) eine kontinuierliche Variabl
 # qplot(x = shoe_size, data = wo_men)  wie oben
 
 qplot(x = shoe_size, data = wo_men, geom = "density")
+FALSE Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
@@ -92,6 +96,8 @@ ggplot(data = wo_men) +
   aes(x = shoe_size) +
   geom_histogram(aes(y = ..density..), alpha = .7) +
   geom_density(color = "blue")
+FALSE Warning: Removed 1 rows containing non-finite values (stat_bin).
+FALSE Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
@@ -103,7 +109,9 @@ Wünsche sind ein Fass ohne Boden... Wäre es nicht schön, ein Diagramm für M�
 
 ```r
 qplot(x = shoe_size, data = wo_men, geom = "density", color = sex)
+FALSE Warning: Removed 1 rows containing non-finite values (stat_density).
 qplot(x = shoe_size, data = wo_men, geom = "density", fill = sex, alpha = I(.7))
+FALSE Warning: Removed 1 rows containing non-finite values (stat_density).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /><img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-11-2.png" width="70%" style="display: block; margin: auto;" />
@@ -143,6 +151,7 @@ Ein Streudiagramm ist die klassiche Art, zwei metrische Variablen darzustellen. 
 
 ```r
 qplot(x = height, y = shoe_size, data = wo_men)
+FALSE Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" />
@@ -266,11 +275,11 @@ wo_men2 %>%
   summarise(Groesse_MW = mean(height)) -> wo_men3
 
 wo_men3
-#> # A tibble: 2 × 2
-#>      sex Groesse_MW
-#>   <fctr>      <dbl>
-#> 1    man        183
-#> 2  woman        167
+FALSE # A tibble: 2 × 2
+FALSE      sex Groesse_MW
+FALSE   <fctr>      <dbl>
+FALSE 1    man        183
+FALSE 2  woman        167
 ```
 
 
@@ -313,7 +322,7 @@ library(RColorBrewer)
 display.brewer.all()
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-26-1.png" width="70%" style="display: block; margin: auto;" />
 
 In `ggplot2` können wir folgendermaßen Paletten ändern.
 
@@ -324,14 +333,14 @@ flights %>%
   group_by(dest) %>% 
   count(dest) %>% 
   top_n(5)
-#> # A tibble: 5 × 2
-#>    dest     n
-#>   <chr> <int>
-#> 1   ATL 17215
-#> 2   BOS 15508
-#> 3   LAX 16174
-#> 4   MCO 14082
-#> 5   ORD 17283
+FALSE # A tibble: 5 × 2
+FALSE    dest     n
+FALSE   <chr> <int>
+FALSE 1   ATL 17215
+FALSE 2   BOS 15508
+FALSE 3   LAX 16174
+FALSE 4   MCO 14082
+FALSE 5   ORD 17283
 
 p1 <- flights %>% 
   filter(dest %in% c("BOS", "ATL", "LAX")) %>% 
@@ -348,6 +357,8 @@ p2 <- flights %>%
   scale_fill_brewer(palette = "Set1")
 
 grid.arrange(p1, p2, ncol = 2)
+FALSE Warning: Removed 1012 rows containing non-finite values (stat_boxplot).
+FALSE Warning: Removed 1844 rows containing non-finite values (stat_boxplot).
 ```
 
 <img src="05_Daten_visualisieren_files/figure-html/brewerpal-1.png" width="100%" style="display: block; margin: auto;" />
@@ -445,36 +456,36 @@ Die Umfrage kann hier[^8] eingesehen werden. Schauen wir uns die Daten mal an:
 
 ```r
 glimpse(data)
-#> Observations: 501
-#> Variables: 28
-#> $ X                  <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ...
-#> $ timestamp          <fctr> 11.03.2015 19:17:48, 11.03.2015 19:18:05, ...
-#> $ code               <fctr> HSC, ERB, ADP, KHB, PTG, ABL, ber, hph, IH...
-#> $ i01                <int> 3, 2, 3, 3, 4, 3, 4, 3, 4, 4, 3, 3, 4, 4, 3...
-#> $ i02r               <int> 3, 2, 4, 3, 3, 2, 4, 3, 4, 4, 3, 4, 3, 3, 3...
-#> $ i03                <int> 3, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 4, 1...
-#> $ i04                <int> 3, 2, 4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 2, 4, 3...
-#> $ i05                <int> 4, 3, 4, 3, 4, 2, 3, 2, 3, 3, 3, 2, 3, 3, 3...
-#> $ i06r               <int> 4, 2, 1, 3, 3, 3, 3, 2, 4, 3, 3, 3, 3, 3, 3...
-#> $ i07                <int> 3, 2, 3, 3, 4, 4, 2, 3, 3, 3, 2, 4, 2, 3, 3...
-#> $ i08                <int> 2, 3, 2, 3, 2, 3, 3, 2, 3, 3, 3, 2, 3, 3, 4...
-#> $ i09                <int> 3, 3, 3, 3, 3, 3, 3, 4, 4, 3, 4, 2, 4, 4, 4...
-#> $ i10                <int> 1, 1, 1, 2, 4, 3, 2, 1, 2, 3, 1, 3, 2, 3, 2...
-#> $ n_facebook_friends <int> 250, 106, 215, 200, 100, 376, 180, 432, 200...
-#> $ n_hangover         <int> 1, 0, 0, 15, 0, 1, 1, 2, 5, 0, 1, 2, 20, 2,...
-#> $ age                <int> 24, 35, 25, 39, 29, 33, 24, 28, 29, 38, 25,...
-#> $ sex                <fctr> Frau, Frau, Frau, Frau, Frau, Mann, Frau, ...
-#> $ extra_single_item  <int> 4, 3, 4, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4...
-#> $ time_conversation  <dbl> 10, 15, 15, 5, 5, 20, 2, 15, 10, 10, 1, 5, ...
-#> $ presentation       <fctr> nein, nein, nein, nein, nein, ja, ja, ja, ...
-#> $ n_party            <int> 20, 5, 3, 25, 4, 4, 3, 6, 12, 5, 10, 5, 10,...
-#> $ clients            <fctr> , , , , , , , , , , , , , , , , , , , , , ...
-#> $ extra_vignette     <fctr> , , , , , , , , , , , , , , , , , , , , , ...
-#> $ extra_description  <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-#> $ prop_na_per_row    <dbl> 0.0435, 0.0435, 0.0435, 0.0435, 0.0435, 0.0...
-#> $ extra_mean         <dbl> 2.9, 2.1, 2.6, 2.9, 3.2, 2.8, 2.8, 2.5, 3.2...
-#> $ extra_median       <dbl> 3.0, 2.0, 3.0, 3.0, 3.5, 3.0, 3.0, 2.5, 3.5...
-#> $ client_freq        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+FALSE Observations: 501
+FALSE Variables: 28
+FALSE $ X                  <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ...
+FALSE $ timestamp          <fctr> 11.03.2015 19:17:48, 11.03.2015 19:18:05, ...
+FALSE $ code               <fctr> HSC, ERB, ADP, KHB, PTG, ABL, ber, hph, IH...
+FALSE $ i01                <int> 3, 2, 3, 3, 4, 3, 4, 3, 4, 4, 3, 3, 4, 4, 3...
+FALSE $ i02r               <int> 3, 2, 4, 3, 3, 2, 4, 3, 4, 4, 3, 4, 3, 3, 3...
+FALSE $ i03                <int> 3, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 4, 1...
+FALSE $ i04                <int> 3, 2, 4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 2, 4, 3...
+FALSE $ i05                <int> 4, 3, 4, 3, 4, 2, 3, 2, 3, 3, 3, 2, 3, 3, 3...
+FALSE $ i06r               <int> 4, 2, 1, 3, 3, 3, 3, 2, 4, 3, 3, 3, 3, 3, 3...
+FALSE $ i07                <int> 3, 2, 3, 3, 4, 4, 2, 3, 3, 3, 2, 4, 2, 3, 3...
+FALSE $ i08                <int> 2, 3, 2, 3, 2, 3, 3, 2, 3, 3, 3, 2, 3, 3, 4...
+FALSE $ i09                <int> 3, 3, 3, 3, 3, 3, 3, 4, 4, 3, 4, 2, 4, 4, 4...
+FALSE $ i10                <int> 1, 1, 1, 2, 4, 3, 2, 1, 2, 3, 1, 3, 2, 3, 2...
+FALSE $ n_facebook_friends <int> 250, 106, 215, 200, 100, 376, 180, 432, 200...
+FALSE $ n_hangover         <int> 1, 0, 0, 15, 0, 1, 1, 2, 5, 0, 1, 2, 20, 2,...
+FALSE $ age                <int> 24, 35, 25, 39, 29, 33, 24, 28, 29, 38, 25,...
+FALSE $ sex                <fctr> Frau, Frau, Frau, Frau, Frau, Mann, Frau, ...
+FALSE $ extra_single_item  <int> 4, 3, 4, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4...
+FALSE $ time_conversation  <dbl> 10, 15, 15, 5, 5, 20, 2, 15, 10, 10, 1, 5, ...
+FALSE $ presentation       <fctr> nein, nein, nein, nein, nein, ja, ja, ja, ...
+FALSE $ n_party            <int> 20, 5, 3, 25, 4, 4, 3, 6, 12, 5, 10, 5, 10,...
+FALSE $ clients            <fctr> , , , , , , , , , , , , , , , , , , , , , ...
+FALSE $ extra_vignette     <fctr> , , , , , , , , , , , , , , , , , , , , , ...
+FALSE $ extra_description  <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+FALSE $ prop_na_per_row    <dbl> 0.0435, 0.0435, 0.0435, 0.0435, 0.0435, 0.0...
+FALSE $ extra_mean         <dbl> 2.9, 2.1, 2.6, 2.9, 3.2, 2.8, 2.8, 2.5, 3.2...
+FALSE $ extra_median       <dbl> 3.0, 2.0, 3.0, 3.0, 3.5, 3.0, 3.0, 2.5, 3.5...
+FALSE $ client_freq        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
 ```
 
 
@@ -511,7 +522,7 @@ Man gewöhnt sich daran einerseits; und andererseits ist es vielleicht auch so, 
 
 Damit haben wir es schon! Jetzt wird gemalt.
 
-### Diagramme für Anteile
+### Diagramme für Häufigkeiten
 
 Wir nutzen `ggplot2`, wie gesagt, und davon die Funktion `qplot` (q wie quick, nehme ich an.).
 
@@ -621,7 +632,7 @@ ggplot(data = data_long) +
 <img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-40-1.png" width="70%" style="display: block; margin: auto;" />
 
 
-### Diagramm mit Häufigkeiten
+### Diagramm mit Häufigkeiten, nicht Anteilen
 Ach so, schön wäre noch die echten Zahlen an der Y-Achse, nicht Anteile. Dafür müssen wir unseren Diagrammtyp ändern, bzw. die Art der Anordnung ändern. Mit `position = "fill"` wird der Anteil (also mit einer Summe von 100%) dargestellt. Wir können auch einfach die Zahlen/Häufigkeiten anzeigen, in dem wir die Kategorien "aufeinander stapeln"
 
 
