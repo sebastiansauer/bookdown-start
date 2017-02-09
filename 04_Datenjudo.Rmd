@@ -488,7 +488,8 @@ Der Chef ist zufrieden. Sie können sich wieder wichtigeren Aufgaben zuwenden...
 
 
 ## Weiterführende Hinweise
-Eine schöne Demonstration der Mächtigkeit von `dplyr` findet sich hier[^8].
+- Eine schöne Demonstration der Mächtigkeit von `dplyr` findet sich hier[^8].
+- Die GUI "exploratory" ist ein "klickbare" Umsetzung von `dplyr`, mächtig, modern und sieht cool aus: https://exploratory.io.
 
 [^8]: <http://bit.ly/2kX9lvC>. 
 
