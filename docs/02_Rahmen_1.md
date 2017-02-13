@@ -252,6 +252,19 @@ Name des Datensatzes  Quelle            Beschreibung
 
 
 
+## Bildnachweise
+
+Die Bildnachweise sind in folgenden Muster aufgebaut:
+Nummer (Verweis) des Bildes, Names des Autors, Titel, Quelle (URL), Lizenz, Abrufdatum.
+
+
+- \@ref(fig:fig-Modell), Sebastian Unrau, ohne Titel, https://unsplash.com/photos/CoD2Q92UaEg, CC0,     2017-02-12
+ 
+
+
+
+
+
 
 
 

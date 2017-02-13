@@ -1,7 +1,7 @@
 --- 
 title: "Statistik_21"
 author: "Sebastian Sauer"
-date: "2017-02-09"
+date: "2017-02-13"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [Statistik_21.bib]
@@ -38,15 +38,15 @@ source("./source/libs.R")
 
 # Vorwort {-}
 
-
+Statistik heute; was ist das? Sicherlich haben sich die Schwerpunkte verschoben. Wenig überraschend spielt der Computer eine immer größere Rolle und die Daten werden vielseitiger und massiger. Entsprechend sind neue Verfahren nötig - und vorhanden, in Teilen - um auf diese neue Situation einzugehen. Einige Verfahren werden daher weniger wichtig, z.B. der p-Wert und der t-Test. Dieses Buch versucht, einen Brücke zu bauen, für diejenigen unter uns, die (vielleicht in der alten Welt aufgewachsen) sich in der neuen Welt umsehen möchten. Wir reiten sozusagen im Galopp (OK, eher Trapp) gen Westen...
 
 
 Es gibt noch kein gutes Buch in deutscher Sprache zu den Grundlagen moderner Statistik, auch "Data Science" genannt. Dieses Buch soll helfen, einen Teil dieser Lücke zu füllen. Die Zielgruppe sind Analysatoren mit praktischem, wirtschaftsnahem Hintergrund. Auf mathematische Hintergründe wird großteils verzichtet; Matheliebhaber werden kaum auf ihre Kosten kommen. Im Blick habe ich (hier spricht der Autor) Anwender, die einen Freischwimmer in der modernen Datenanalyse erlernen möchten (oder müssen, liebe Studierende). 
 
 
 
-
 Dieses Buch wurde mit dem Paket `bookdown` [bookdown] erstellt, welches wiederum stark auf den Paketen `knitr` [@xie2015] und `rmarkdown` [@rmarkdown] beruht. Diese Pakete stellen verblüffende Funktionalität zur Verfügung als freie Software (frei wie in Bier und frei wie in Freiheit).
+
 
 - Worum geht es in diesem Buch
     - Einführung in moderne Verfahren der Statistik

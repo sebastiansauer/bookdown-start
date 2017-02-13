@@ -255,6 +255,35 @@ wo_men2 %>%
 
 Die einzige Änderung in den Parametern ist `position = "fill"`. Dieser Parameter weist `ggplot` an, die Positionierung der Balken auf die Darstellung von Anteilen auszulegen. Damit haben alle Balken die gleiche Höhe, nämlich 100% (1). Aber die "Füllung" der Balken schwankt je nach der Häufigkeit der Werte von `groesse_gruppe` pro Balken (d.h. pro Wert von `sex`).
 
+### Zwei diskrete Variablen 
+Arbeitet man mit nominalen Variablen, so sind Kontingenztabellen Täglich Brot. Z.B.: Welche Produkte wurden wie häufig an welchem Standort verkauft? Wie ist die Verteilung von Alkoholkonsum und Körperform bei Menschen einer Single-Börse. Bleiben wir bei letztem Beispiel. 
+
+
+
+```r
+data(profiles, package = "okcupiddata")
+
+profiles %>% 
+  count(drinks, body_type) %>% 
+  ggplot +
+  aes(x = drinks, y = body_type, fill = n) +
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-23-1.png" width="70%" style="display: block; margin: auto;" />
+
+Was haben wir gemacht? Also:
+
+>    Nehme den Datensatz "profiles" UND DANN  
+     Zähle die Kombinationen von "drinks" und "body_type" UND DANN  
+     Erstelle ein ggplot-Plot UND DANN  
+     Weise der X-Achse "drinks" zu, der Y-Achse "body_type" und der Füllfarbe "n" UND DANN  
+     Male Fliesen UND DANN  
+     Passe das Thema so an, dass der Winkel für Text der X-Achse auf 90 Grad steht.  
+     
+     
+Was sofort ins Auge sticht, ist dass "soziales Trinken", nennen wir es mal so, am häfigsten ist, unabhängig von der Körperformm. Ansonsten scheinen die Zusammenhäng nicht sehr stark zu sein.     
 
 ### Zusammenfassungen zeigen
 Manchmal möchten wir *nicht* die Rohwerte einer Variablen darstellen, sondern z.B. die Mittelwerte pro Gruppe. Mittelwerte sind eine bestimmte *Zusammenfassung* einer Spalte; also fassen wir zuerst die Körpergröße zum Mittelwert zusammen - gruppiert nach Geschlecht.
@@ -282,7 +311,7 @@ wo_men3 %>%
   qplot(x = sex, y = Groesse_MW, data = .)
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" />
 
 Das Diagramm besticht nicht durch die Tiefe und Detaillierung. Wenn wir noch zusätzlich die Mittelwerte nach `Groesse_Gruppe` ausweisen, wird das noch überschaubar bleiben.
 
@@ -294,26 +323,88 @@ wo_men2 %>%
   qplot(x = sex, color = factor(groesse_gruppe), y = Groesse_MW, data = .)
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-26-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 
 ## Farblehre
-Erstens, nicht schaden - so könnte die Maßregel sein. Es ist leicht, zu grelle oder wenig kontrastierende Farben auszuwählen. Eine gute Farbauswahl (Palette) ist nicht so leicht und hängt vom Zweck der Darstellung ab:
+Erstens, nicht schaden - so könnte hier die Maßregel sein. Es ist leicht, zu grelle oder wenig kontrastierende Farben auszuwählen. Eine gute Farbauswahl (Palette) ist nicht so leicht und hängt vom Zweck der Darstellung ab.
 
-- Kontrastierende Darstellung (nominale Variablen) - z.B. Männer vs. Frauen
-- Sequenzielle Darstellung (unipolare numerische Variablen) - z.B. Preis oder Häufigkeit
-- Divergierende Darstellung (bipolare numerische Variablen) - z.B. semantische Potenziale oder Abstufung von "stimme überhaupt nicht zu" über "neutral" bis "stimme voll und ganz zu"
-
-Cynthia Brewer[^4] hat einige schöne Farbpaletten zusammengestellt; diese sind in R und in ggplot2 über das Paket `RcolorBrewer` verfügbar (leider ohne Paletten für Menschen mit Farbschwächen). 
+Cynthia Brewer[^4] hat einige schöne Farbpaletten zusammengestellt; diese sind in R und in ggplot2 über das Paket `RcolorBrewer` verfügbar. 
 
 
 ```r
 library(RColorBrewer)
-display.brewer.all()
+brewer.pal.info %>% rownames_to_column %>% rename(Name = rowname) %>% kable
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" />
+
+
+Name        maxcolors  category   colorblind 
+---------  ----------  ---------  -----------
+BrBG               11  div        TRUE       
+PiYG               11  div        TRUE       
+PRGn               11  div        TRUE       
+PuOr               11  div        TRUE       
+RdBu               11  div        TRUE       
+RdGy               11  div        FALSE      
+RdYlBu             11  div        TRUE       
+RdYlGn             11  div        FALSE      
+Spectral           11  div        FALSE      
+Accent              8  qual       FALSE      
+Dark2               8  qual       TRUE       
+Paired             12  qual       TRUE       
+Pastel1             9  qual       FALSE      
+Pastel2             8  qual       FALSE      
+Set1                9  qual       FALSE      
+Set2                8  qual       TRUE       
+Set3               12  qual       FALSE      
+Blues               9  seq        TRUE       
+BuGn                9  seq        TRUE       
+BuPu                9  seq        TRUE       
+GnBu                9  seq        TRUE       
+Greens              9  seq        TRUE       
+Greys               9  seq        TRUE       
+Oranges             9  seq        TRUE       
+OrRd                9  seq        TRUE       
+PuBu                9  seq        TRUE       
+PuBuGn              9  seq        TRUE       
+PuRd                9  seq        TRUE       
+Purples             9  seq        TRUE       
+RdPu                9  seq        TRUE       
+Reds                9  seq        TRUE       
+YlGn                9  seq        TRUE       
+YlGnBu              9  seq        TRUE       
+YlOrBr              9  seq        TRUE       
+YlOrRd              9  seq        TRUE       
+
+
+- Kontrastierende Darstellung (nominale/ qualitative Variablen) - z.B. Männer vs. Frauen
+
+
+```r
+display.brewer.all(type="qual")
+```
+
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-28-1.png" width="100%" style="display: block; margin: auto;" />
+
+- Sequenzielle Darstellung (unipolare numerische Variablen) - z.B. Preis oder Häufigkeit
+
+```r
+display.brewer.all(type="seq")
+```
+
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-29-1.png" width="100%" style="display: block; margin: auto;" />
+
+
+- Divergierende Darstellung (bipolare numerische Variablen) - z.B. semantische Potenziale oder Abstufung von "stimme überhaupt nicht zu" über "neutral" bis "stimme voll und ganz zu"
+
+
+```r
+display.brewer.all(type="div")
+```
+
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-30-1.png" width="100%" style="display: block; margin: auto;" />
 
 In `ggplot2` können wir folgendermaßen Paletten ändern.
 
@@ -391,7 +482,7 @@ p3 <- tips %>%
 grid.arrange(p1, p2, p3, ncol = 3)
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 Wer sich berufen fühlt, eigene Farben (oder die seiner Organisation zu verwenden), kommt auf ähnlichem Weg zu Ziel. Man definiere sich seine Palette, wobei ausreichend Farben definiert sein müssen. Diese weist man dann über `scale_XXX_manual` dann zu. Man kann einerseits aus den in R definierten Farben auswählen[^6] oder sich selber die RBG-Nummern (in Hexadezimal-Nummern) heraussuchen.
@@ -414,7 +505,7 @@ tips %>%
   ggpairs(aes(color = sex), columns = c("total_bill", "smoker", "tip"))
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-32-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dabei gibt man an, welche Variable (hier `sex`) für die Farben im Diagramm zuständig sein soll (wir ordnen den Werten von `sex` jeweils eine Farbe zu). Mit `columns` sagen wir, welche Spalten des Dataframes wir dargestellt haben möchten. Lassen wir diesen Parameter weg, so werden alle Spaltne des Dataframes dargestellt.
 
@@ -522,7 +613,7 @@ ggplot(data = data_long) +
   geom_bar(aes(fill = Antwort), position = "fill") 
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-33-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-37-1.png" width="70%" style="display: block; margin: auto;" />
 
 Was macht dieser `ggplot` Befehl? Schauen wir es uns in Einzelnen an:
 
@@ -549,7 +640,7 @@ ggplot(data = data_long) +
   geom_bar(aes(fill = Antwort), position = "fill") 
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-35-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-39-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 
@@ -564,7 +655,7 @@ ggplot(data = data_long) +
   coord_flip()
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-36-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-40-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 ### Text-Labels für die Items
@@ -590,7 +681,7 @@ ggplot(data = data_long) +
   scale_x_discrete(labels = item_labels)
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-38-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-42-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 Man kann auch einen Zeilenumbruch in den Item-Labels erzwingen... wobei das führt uns schon recht weit, aber gut, zum Abschluss :-)
@@ -618,7 +709,7 @@ ggplot(data = data_long) +
   scale_y_continuous(name = "Anteile")
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-40-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-44-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 ### Diagramm mit Häufigkeiten
@@ -634,7 +725,7 @@ ggplot(data = data_long) +
   scale_x_discrete(labels = item_labels) 
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-41-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-45-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Farbschema
 Ja, die Wünsche hören nicht auf... Also, noch ein anderes Farbschema:
@@ -649,7 +740,7 @@ ggplot(data = data_long) +
   scale_fill_brewer(palette = 17)
 ```
 
-<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-42-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="05_Daten_visualisieren_files/figure-html/unnamed-chunk-46-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 

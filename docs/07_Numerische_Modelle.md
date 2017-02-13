@@ -3,16 +3,18 @@
 
 # Numerische Modelle
 
-- Lineare Regression
-	- Grundlagen
-	- Multiple Regression
-	- Interaktion
-	- Eisberge
-	
-- Logistische Regression
+## Lineare Regression
 
-- Penalisierende Regression
+### Eine kurze Geschichte der linearen Regression
 
-- Baumbasierte Verfahre
+### Die lineare Regression als Schweizer Taschenmesser
 
-- Ausblick
+### Interaktion/ Moderation
+
+
+
+## Penalisierende Regression
+
+## Baumbasierte Verfahre
+
+## Ausblick

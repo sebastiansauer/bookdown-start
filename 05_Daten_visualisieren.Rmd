@@ -231,6 +231,33 @@ wo_men2 %>%
 
 Die einzige Änderung in den Parametern ist `position = "fill"`. Dieser Parameter weist `ggplot` an, die Positionierung der Balken auf die Darstellung von Anteilen auszulegen. Damit haben alle Balken die gleiche Höhe, nämlich 100% (1). Aber die "Füllung" der Balken schwankt je nach der Häufigkeit der Werte von `groesse_gruppe` pro Balken (d.h. pro Wert von `sex`).
 
+### Zwei diskrete Variablen 
+Arbeitet man mit nominalen Variablen, so sind Kontingenztabellen Täglich Brot. Z.B.: Welche Produkte wurden wie häufig an welchem Standort verkauft? Wie ist die Verteilung von Alkoholkonsum und Körperform bei Menschen einer Single-Börse. Bleiben wir bei letztem Beispiel. 
+
+
+```{r}
+data(profiles, package = "okcupiddata")
+
+profiles %>% 
+  count(drinks, body_type) %>% 
+  ggplot +
+  aes(x = drinks, y = body_type, fill = n) +
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+Was haben wir gemacht? Also:
+
+>    Nehme den Datensatz "profiles" UND DANN  
+     Zähle die Kombinationen von "drinks" und "body_type" UND DANN  
+     Erstelle ein ggplot-Plot UND DANN  
+     Weise der X-Achse "drinks" zu, der Y-Achse "body_type" und der Füllfarbe "n" UND DANN  
+     Male Fliesen UND DANN  
+     Passe das Thema so an, dass der Winkel für Text der X-Achse auf 90 Grad steht.  
+     
+     
+Was sofort ins Auge sticht, ist dass "soziales Trinken", nennen wir es mal so, am häfigsten ist, unabhängig von der Körperformm. Ansonsten scheinen die Zusammenhäng nicht sehr stark zu sein.     
 
 ### Zusammenfassungen zeigen
 Manchmal möchten wir *nicht* die Rohwerte einer Variablen darstellen, sondern z.B. die Mittelwerte pro Gruppe. Mittelwerte sind eine bestimmte *Zusammenfassung* einer Spalte; also fassen wir zuerst die Körpergröße zum Mittelwert zusammen - gruppiert nach Geschlecht.
@@ -263,17 +290,32 @@ wo_men2 %>%
 
 
 ## Farblehre
-Erstens, nicht schaden - so könnte die Maßregel sein. Es ist leicht, zu grelle oder wenig kontrastierende Farben auszuwählen. Eine gute Farbauswahl (Palette) ist nicht so leicht und hängt vom Zweck der Darstellung ab:
+Erstens, nicht schaden - so könnte hier die Maßregel sein. Es ist leicht, zu grelle oder wenig kontrastierende Farben auszuwählen. Eine gute Farbauswahl (Palette) ist nicht so leicht und hängt vom Zweck der Darstellung ab.
 
-- Kontrastierende Darstellung (nominale Variablen) - z.B. Männer vs. Frauen
-- Sequenzielle Darstellung (unipolare numerische Variablen) - z.B. Preis oder Häufigkeit
-- Divergierende Darstellung (bipolare numerische Variablen) - z.B. semantische Potenziale oder Abstufung von "stimme überhaupt nicht zu" über "neutral" bis "stimme voll und ganz zu"
+Cynthia Brewer[^4] hat einige schöne Farbpaletten zusammengestellt; diese sind in R und in ggplot2 über das Paket `RcolorBrewer` verfügbar. 
 
-Cynthia Brewer[^4] hat einige schöne Farbpaletten zusammengestellt; diese sind in R und in ggplot2 über das Paket `RcolorBrewer` verfügbar (leider ohne Paletten für Menschen mit Farbschwächen). 
+```{r}
+library(RColorBrewer)
+brewer.pal.info %>% rownames_to_column %>% rename(Name = rowname) %>% kable
+```
+
+
+- Kontrastierende Darstellung (nominale/ qualitative Variablen) - z.B. Männer vs. Frauen
 
 ```{r out.width = "100%"}
-library(RColorBrewer)
-display.brewer.all()
+display.brewer.all(type="qual")
+```
+
+- Sequenzielle Darstellung (unipolare numerische Variablen) - z.B. Preis oder Häufigkeit
+```{r out.width = "100%"}
+display.brewer.all(type="seq")
+```
+
+
+- Divergierende Darstellung (bipolare numerische Variablen) - z.B. semantische Potenziale oder Abstufung von "stimme überhaupt nicht zu" über "neutral" bis "stimme voll und ganz zu"
+
+```{r out.width = "100%"}
+display.brewer.all(type="div")
 ```
 
 In `ggplot2` können wir folgendermaßen Paletten ändern.
